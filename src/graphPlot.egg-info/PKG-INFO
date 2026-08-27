@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: graphPlot
+Version: 0.1.0
+Summary: Publication-quality scientific post-processing and visualization
+Requires-Python: >=3.8
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: pyvista
+Requires-Dist: pyyaml
