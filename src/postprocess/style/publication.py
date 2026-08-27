@@ -1,54 +1,178 @@
-from dataclasses import dataclass
+"""
+Central publication style definition.
+"""
 
-import matplotlib as mpl
+from .colors import get_colors
+from .lines import get_linestyles
+from .markers import get_markers
 
 
-@dataclass
 class PublicationStyle:
     """
-    Global publication plotting style.
+    Central visual style for scientific figures.
+
+    Parameters
+    ----------
+    color_scheme : str
+        Color scheme.
+
+    line_scheme : str
+        Line style scheme.
+
+    marker_scheme : str
+        Marker scheme.
     """
 
-    font_size: float = 10.0
+    def __init__(
+        self,
+        color_scheme="colorblind",
+        line_scheme="publication",
+        marker_scheme="publication",
+    ):
 
-    axes_linewidth: float = 0.8
-    tick_width: float = 0.8
-    tick_length: float = 3.0
+        self.color_scheme = color_scheme
+        self.line_scheme = line_scheme
+        self.marker_scheme = marker_scheme
 
-    line_width: float = 1.0
+        self.colors = get_colors(
+            color_scheme
+        )
 
-    use_latex: bool = True
+        self.linestyles = get_linestyles(
+            line_scheme
+        )
 
-    def apply(self):
+        self.markers = get_markers(
+            marker_scheme
+        )
+
+    # =====================================================
+    # Color
+    # =====================================================
+
+    def color(self, index):
         """
-        Apply the publication style globally.
+        Return a color according to index.
         """
 
-        mpl.rcParams.update(
-            {
-                "font.size": self.font_size,
+        return self.colors[
+            index % len(self.colors)
+        ]
 
-                "axes.labelsize": self.font_size,
-                "axes.titlesize": self.font_size,
+    # =====================================================
+    # Line style
+    # =====================================================
 
-                "xtick.labelsize": self.font_size,
-                "ytick.labelsize": self.font_size,
+    def linestyle(self, index):
+        """
+        Return a line style according to index.
+        """
 
-                "axes.linewidth": self.axes_linewidth,
+        return self.linestyles[
+            index % len(self.linestyles)
+        ]
 
-                "xtick.major.width": self.tick_width,
-                "ytick.major.width": self.tick_width,
+    # =====================================================
+    # Marker
+    # =====================================================
 
-                "xtick.major.size": self.tick_length,
-                "ytick.major.size": self.tick_length,
+    def marker(self, index):
+        """
+        Return a marker according to index.
+        """
 
-                "lines.linewidth": self.line_width,
+        return self.markers[
+            index % len(self.markers)
+        ]
 
-                "axes.grid": False,
+    # =====================================================
+    # Dataset role
+    # =====================================================
 
-                "text.usetex": self.use_latex,
+    def dataset_style(
+        self,
+        index,
+        role=None,
+    ):
+        """
+        Return the visual style for a dataset.
 
-                "pdf.fonttype": 42,
-                "ps.fonttype": 42,
+        Parameters
+        ----------
+        index : int
+            Dataset index.
+
+        role : str, optional
+            Dataset role.
+
+            Supported roles:
+
+            - numerical
+            - analytical
+            - experimental
+            - reference
+        """
+
+        if role is None:
+
+            return {
+                "color": self.color(index),
+                "linestyle": self.linestyle(index),
+                "marker": None,
             }
+
+        role = role.lower()
+
+        # -------------------------------------------------
+        # Numerical
+        # -------------------------------------------------
+
+        if role == "numerical":
+
+            return {
+                "color": self.color(index),
+                "linestyle": "-",
+                "marker": None,
+            }
+
+        # -------------------------------------------------
+        # Analytical
+        # -------------------------------------------------
+
+        if role == "analytical":
+
+            return {
+                "color": self.color(index),
+                "linestyle": "--",
+                "marker": None,
+            }
+
+        # -------------------------------------------------
+        # Experimental
+        # -------------------------------------------------
+
+        if role == "experimental":
+
+            return {
+                "color": self.color(index),
+                "linestyle": "None",
+                "marker": self.marker(index),
+            }
+
+        # -------------------------------------------------
+        # Reference
+        # -------------------------------------------------
+
+        if role == "reference":
+
+            return {
+                "color": self.color(index),
+                "linestyle": "-.",
+                "marker": self.marker(index),
+            }
+
+        raise ValueError(
+            "Unknown dataset role '{}'. "
+            "Available roles: numerical, analytical, "
+            "experimental, reference.".format(role)
         )

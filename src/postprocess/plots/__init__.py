@@ -4,3 +4,4 @@ from .annotation import AnnotationPlot
 from .geometry import GeometryPlot
 from .vector import VectorPlot
 from .streamline import StreamlinePlot
+from .line import LinePlot
