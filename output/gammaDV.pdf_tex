@@ -80,23 +80,25 @@
     \put(0.10357299,0.71666391){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}5\end{tabular}}}}%
     \put(0.05626591,0.43600131){\rotatebox{90}{\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$y$ (m)\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=13]{gammaDV.pdf}}%
-    \put(0.78757856,0.12644829){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.0002\end{tabular}}}}%
+    \put(0.35974676,0.22707377){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textsl{L}=3 m\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=14]{gammaDV.pdf}}%
-    \put(0.78757856,0.20514371){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.1292\end{tabular}}}}%
+    \put(0.78757856,0.12644829){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.0002\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=15]{gammaDV.pdf}}%
-    \put(0.78757856,0.28383913){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.2582\end{tabular}}}}%
+    \put(0.78757856,0.20514371){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.1292\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=16]{gammaDV.pdf}}%
-    \put(0.78757856,0.36253455){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.3872\end{tabular}}}}%
+    \put(0.78757856,0.28383913){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.2582\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=17]{gammaDV.pdf}}%
-    \put(0.78757856,0.44122996){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.5162\end{tabular}}}}%
+    \put(0.78757856,0.36253455){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.3872\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=18]{gammaDV.pdf}}%
-    \put(0.78757856,0.51992538){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.6453\end{tabular}}}}%
+    \put(0.78757856,0.44122996){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.5162\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=19]{gammaDV.pdf}}%
-    \put(0.78757856,0.59862079){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.7743\end{tabular}}}}%
+    \put(0.78757856,0.51992538){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.6453\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=20]{gammaDV.pdf}}%
-    \put(0.78757856,0.6773162){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.9033\end{tabular}}}}%
+    \put(0.78757856,0.59862079){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.7743\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=21]{gammaDV.pdf}}%
-    \put(0.96471723,0.43600133){\rotatebox{90}{\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$\gamma$ (1/s)\end{tabular}}}}}%
+    \put(0.78757856,0.6773162){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.9033\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=22]{gammaDV.pdf}}%
+    \put(0.96471723,0.43600133){\rotatebox{90}{\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$\gamma$ (1/s)\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=23]{gammaDV.pdf}}%
   \end{picture}%
 \endgroup%

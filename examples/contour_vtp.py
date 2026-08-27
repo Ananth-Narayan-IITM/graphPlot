@@ -18,6 +18,13 @@ from postprocess.style.publication import (
     PublicationStyle,
 )
 
+from postprocess.plots.annotation import (
+    AnnotationPlot,
+)
+
+from postprocess.plots.geometry import GeometryPlot
+
+from postprocess.plots.vector import VectorPlot
 
 # =========================================================
 # Configuration
@@ -220,7 +227,103 @@ if contour is not None:
         label=COLORBAR_LABEL,
     )
 
+# =========================================================
+# Annotations
+# =========================================================
 
+# AnnotationPlot.add_text(
+#     figure.axes,
+#     x=2.5,
+#     y=4.5,
+#     text=r"$\mathrm{Test}$",
+#     fontsize=10,
+# )
+
+# AnnotationPlot.add_arrow(
+#     figure.axes,
+#     start=(0.5, 2.5),
+#     end=(1.5, 2.5),
+#     linewidth=0.8,
+# )
+
+# AnnotationPlot.add_marker(
+#     figure.axes,
+#     position=(2.5, 2.5),
+#     marker="o",
+#     size=35,
+# )
+
+# AnnotationPlot.add_line(
+#     figure.axes,
+#     start=(0.5, 1.0),
+#     end=(4.5, 1.0),
+#     linewidth=0.8,
+#     linestyle="--",
+# )
+
+# AnnotationPlot.add_rectangle(
+#     figure.axes,
+#     xy=(1.0, 1.8),
+#     width=1.5,
+#     height=1.0,
+#     linewidth=0.8,
+# )
+
+# =========================================================
+# Geometry overlay test
+# =========================================================
+
+GeometryPlot.add_rectangle(
+    figure.axes,
+    xy=(0.0, 3.0),
+    width=1.5,
+    height=1.0,
+    linewidth=0.8,
+)
+
+GeometryPlot.add_polygon(
+    figure.axes,
+    points=[
+        (0.5, 2.0),
+        (1.0, 2.5),
+        (0.5, 3.0),
+    ],
+    linewidth=0.8,
+)
+
+GeometryPlot.add_line(
+    figure.axes,
+    start=(0.0, 2.5),
+    end=(5.0, 2.5),
+    linewidth=0.6,
+    linestyle="--",
+)
+
+GeometryPlot.add_dimension(
+    figure.axes,
+    start=(1.0, 1.0),
+    end=(4.0, 1.0),
+    offset=-0.25,
+    text=r"$L = 3$ m",
+)
+
+# =========================================================
+# Vector field
+# =========================================================
+
+vector_plot = VectorPlot(
+    data,
+    field="U",
+    association="cell",
+)
+vector_plot.plot(
+    figure.axes,
+    density=20,
+    scale=20,
+    width=0.002,
+    color="black",
+    normalize=False,
+)
 # =========================================================
 # Export
 # =========================================================
@@ -228,9 +331,9 @@ if contour is not None:
 figure.export(
     OUTPUT_FILE,
     formats=[
-        # "png",
+        "png",
         # "pdf",
-        "pdf_tex",
+        # "pdf_tex",
     ],
 )
 
