@@ -26,6 +26,7 @@ from postprocess.plots.geometry import GeometryPlot
 
 from postprocess.plots.vector import VectorPlot
 
+from postprocess.plots.streamline import StreamlinePlot
 # =========================================================
 # Configuration
 # =========================================================
@@ -273,56 +274,86 @@ if contour is not None:
 # Geometry overlay test
 # =========================================================
 
-GeometryPlot.add_rectangle(
-    figure.axes,
-    xy=(0.0, 3.0),
-    width=1.5,
-    height=1.0,
-    linewidth=0.8,
-)
+# GeometryPlot.add_rectangle(
+#     figure.axes,
+#     xy=(0.0, 3.0),
+#     width=1.5,
+#     height=1.0,
+#     linewidth=0.8,
+# )
 
-GeometryPlot.add_polygon(
-    figure.axes,
-    points=[
-        (0.5, 2.0),
-        (1.0, 2.5),
-        (0.5, 3.0),
-    ],
-    linewidth=0.8,
-)
+# GeometryPlot.add_polygon(
+#     figure.axes,
+#     points=[
+#         (0.5, 2.0),
+#         (1.0, 2.5),
+#         (0.5, 3.0),
+#     ],
+#     linewidth=0.8,
+# )
 
-GeometryPlot.add_line(
-    figure.axes,
-    start=(0.0, 2.5),
-    end=(5.0, 2.5),
-    linewidth=0.6,
-    linestyle="--",
-)
+# GeometryPlot.add_line(
+#     figure.axes,
+#     start=(0.0, 2.5),
+#     end=(5.0, 2.5),
+#     linewidth=0.6,
+#     linestyle="--",
+# )
 
-GeometryPlot.add_dimension(
-    figure.axes,
-    start=(1.0, 1.0),
-    end=(4.0, 1.0),
-    offset=-0.25,
-    text=r"$L = 3$ m",
-)
+# GeometryPlot.add_dimension(
+#     figure.axes,
+#     start=(1.0, 1.0),
+#     end=(4.0, 1.0),
+#     offset=-0.25,
+#     text=r"$L = 3$ m",
+# )
 
 # =========================================================
 # Vector field
 # =========================================================
 
-vector_plot = VectorPlot(
+# vector_plot = VectorPlot(
+#     data,
+#     field="U",
+#     association="cell",
+# )
+# vector_plot.plot(
+#     figure.axes,
+#     density=20,
+#     scale=20,
+#     width=0.002,
+#     color="black",
+#     normalize=False,
+# )
+
+# =========================================================
+# Streamlines
+# =========================================================
+
+streamline_plot = StreamlinePlot(
     data,
     field="U",
     association="cell",
 )
-vector_plot.plot(
+
+streamline_plot.plot(
     figure.axes,
-    density=20,
-    scale=20,
-    width=0.002,
-    color="black",
-    normalize=False,
+    n_seeds=50,
+    seed_axis="y",
+    seed_position=0.05,
+    seed_margin=0.05,
+    integration_direction="both",
+    integrator_type=45,
+    surface_streamlines=True,
+    initial_step_length=0.05,
+    min_step_length=0.005,
+    max_step_length=0.25,
+    max_steps=1000,
+    max_length=10.0,
+    interpolator_type="cell",
+    color="blue",
+    linewidth=0.8,
+    arrowsize=1.0,
 )
 # =========================================================
 # Export
