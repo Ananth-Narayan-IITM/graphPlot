@@ -10,7 +10,9 @@ from postprocess.layout.figure import (
     PublicationFigure,
 )
 
-from postprocess.layout.colorbar import add_colorbar
+from postprocess.layout.colors import (
+    ColorScale,
+)
 
 from postprocess.style.publication import (
     PublicationStyle,
@@ -31,16 +33,18 @@ OUTPUT_FILE = Path(
     f"output/{FIELD}"
 )
 
-# ---------------------------------------------------------
+
+# =========================================================
 # Visualization
-# ---------------------------------------------------------
+# =========================================================
 
 SHOW_CONTOURS = True
-SHOW_MESH = True
+SHOW_MESH = False
 
-# ---------------------------------------------------------
-# Contour configuration
-# ---------------------------------------------------------
+
+# =========================================================
+# Color scale
+# =========================================================
 
 LEVELS = 30
 CMAP = "viridis"
@@ -48,40 +52,55 @@ CMAP = "viridis"
 VMIN = None
 VMAX = None
 
-# ---------------------------------------------------------
-# Mesh configuration
-# ---------------------------------------------------------
+
+# =========================================================
+# Mesh
+# =========================================================
 
 MESH_COLOR = "black"
 MESH_LINEWIDTH = 0.25
 MESH_ALPHA = 0.5
 
-# ---------------------------------------------------------
-# Figure configuration
-# ---------------------------------------------------------
+
+# =========================================================
+# Figure
+# =========================================================
 
 FIGURE_WIDTH = 3.5
-FIGURE_HEIGHT = 2.8
+FIGURE_HEIGHT_RATIO = 0.8
 
 ASPECT = "equal"
 
-# ---------------------------------------------------------
+SHOW_GRID = False
+
+
+# =========================================================
 # Labels
-# ---------------------------------------------------------
+# =========================================================
 
 X_LABEL = r"$x$ (m)"
 Y_LABEL = r"$y$ (m)"
 
-COLORBAR_LABEL = r"$\gamma_{\mathrm{DV}}$ (1/s)"
+COLORBAR_LABEL = (
+    r"$\gamma$ (1/s)"
+)
 
 
 # =========================================================
 # Publication style
 # =========================================================
 
+# IMPORTANT:
+#
+# For PDF+TeX export, keep Matplotlib's external
+# LaTeX rendering disabled.
+#
+# The LaTeX text will be handled by the PDF_TeX
+# output instead.
+
 style = PublicationStyle(
     font_size=10,
-    use_latex=True,
+    use_latex=False,
 )
 
 style.apply()
@@ -113,13 +132,27 @@ print(
 
 
 # =========================================================
-# Create figure
+# Color scale
+# =========================================================
+
+scale = ColorScale(
+    levels=LEVELS,
+    cmap=CMAP,
+    vmin=VMIN,
+    vmax=VMAX,
+)
+
+
+# =========================================================
+# Figure
 # =========================================================
 
 figure_config = FigureConfig(
     width=FIGURE_WIDTH,
-    height=FIGURE_HEIGHT,
+    height_ratio=FIGURE_HEIGHT_RATIO,
     aspect=ASPECT,
+    show_grid=SHOW_GRID,
+    dpi=600,
 )
 
 figure = PublicationFigure(
@@ -143,10 +176,8 @@ if SHOW_CONTOURS:
 
     contour = contour_plot.plot(
         figure.axes,
-        levels=LEVELS,
-        cmap=CMAP,
-        vmin=VMIN,
-        vmax=VMAX,
+        scale=scale,
+        rasterize=True,
     )
 
 
@@ -169,15 +200,12 @@ if SHOW_MESH:
 
 
 # =========================================================
-# Axes labels
+# Labels
 # =========================================================
 
-figure.axes.set_xlabel(
-    X_LABEL
-)
-
-figure.axes.set_ylabel(
-    Y_LABEL
+figure.set_labels(
+    xlabel=X_LABEL,
+    ylabel=Y_LABEL,
 )
 
 
@@ -187,9 +215,7 @@ figure.axes.set_ylabel(
 
 if contour is not None:
 
-    add_colorbar(
-        figure.figure,
-        figure.axes,
+    figure.add_colorbar(
         contour,
         label=COLORBAR_LABEL,
     )
@@ -199,12 +225,13 @@ if contour is not None:
 # Export
 # =========================================================
 
-figure.save(
-    OUTPUT_FILE.with_suffix(".png")
-)
-
-figure.save(
-    OUTPUT_FILE.with_suffix(".pdf")
+figure.export(
+    OUTPUT_FILE,
+    formats=[
+        # "png",
+        # "pdf",
+        "pdf_tex",
+    ],
 )
 
 

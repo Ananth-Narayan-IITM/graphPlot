@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import cm
 from matplotlib.collections import PolyCollection
 from matplotlib.colors import BoundaryNorm
-
+from postprocess.layout.colors import ColorScale
 
 class ContourPlot:
     """
@@ -48,10 +48,8 @@ class ContourPlot:
     def plot(
         self,
         axes,
-        levels=30,
-        cmap="viridis",
-        vmin=None,
-        vmax=None,
+        scale=None,
+        rasterize=True,
     ):
         """
         Plot the scalar field.
@@ -79,7 +77,12 @@ class ContourPlot:
         # -------------------------------------------------
         # Validate field
         # -------------------------------------------------
+        if scale is None:
+            scale = ColorScale()
 
+        scale.resolve(
+            self.values
+        )
         if self.association != "cell":
             raise NotImplementedError(
                 "ContourPlot currently supports "
@@ -101,58 +104,21 @@ class ContourPlot:
         polygons = self.mesh.polygons
 
         # -------------------------------------------------
-        # Determine color limits
-        # -------------------------------------------------
-
-        if vmin is None:
-            vmin = np.nanmin(self.values)
-
-        if vmax is None:
-            vmax = np.nanmax(self.values)
-
-        if vmin >= vmax:
-            raise ValueError(
-                f"Invalid color limits: "
-                f"vmin={vmin}, vmax={vmax}"
-            )
-
-        # -------------------------------------------------
-        # Create contour levels
-        # -------------------------------------------------
-
-        levels_array = np.linspace(
-            vmin,
-            vmax,
-            levels + 1,
-        )
-
-        # -------------------------------------------------
-        # Create colormap
-        # -------------------------------------------------
-
-        colormap = cm.get_cmap(
-            cmap,
-            levels,
-        )
-
-        norm = BoundaryNorm(
-            levels_array,
-            colormap.N,
-        )
-
-        # -------------------------------------------------
         # Create polygon collection
         # -------------------------------------------------
 
         collection = PolyCollection(
             polygons,
             array=self.values,
-            cmap=colormap,
-            norm=norm,
+            cmap=scale.colormap,
+            norm=scale.norm,
             edgecolors="none",
             linewidths=0.0,
-            antialiased=True,
+            antialiased=False,
         )
+
+        if rasterize:
+            collection.set_rasterized(True)
 
         # -------------------------------------------------
         # Add to axes
