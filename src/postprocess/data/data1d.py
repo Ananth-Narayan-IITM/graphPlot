@@ -189,3 +189,129 @@ class Data1D:
                 self.y_max,
             )
         )
+    # =====================================================
+    # Scaling
+    # =====================================================
+
+    def scale_x(
+        self,
+        scale,
+        label=None,
+        unit=None,
+    ):
+        """
+        Return a new Data1D with x scaled by `scale`.
+
+        x_new = x / scale
+
+        The original dataset is not modified.
+
+        Parameters
+        ----------
+        scale : float
+            Scaling reference.
+
+        label : str, optional
+            New x-axis label.
+
+        unit : str, optional
+            New x-axis unit.
+
+        Returns
+        -------
+        Data1D
+            Scaled dataset.
+        """
+
+        scale = float(scale)
+
+        if scale == 0.0:
+            raise ValueError(
+                "x scale cannot be zero."
+            )
+
+        return Data1D(
+            x=self.x / scale,
+            y=self.y.copy(),
+
+            label=self.label,
+
+            x_label=(
+                self.x_label
+                if label is None
+                else label
+            ),
+
+            y_label=self.y_label,
+
+            x_unit=(
+                self.x_unit
+                if unit is None
+                else unit
+            ),
+
+            y_unit=self.y_unit,
+
+            metadata=self.metadata.copy(),
+        )
+    def scale_y(
+        self,
+        scale,
+        label=None,
+        unit=None,
+    ):
+        """
+        Return a new Data1D with y scaled by `scale`.
+
+        y_new = y / scale
+
+        The original dataset is not modified.
+
+        Parameters
+        ----------
+        scale : float
+            Scaling reference.
+
+        label : str, optional
+            New y-axis label.
+
+        unit : str, optional
+            New y-axis unit.
+
+        Returns
+        -------
+        Data1D
+            Scaled dataset.
+        """
+
+        scale = float(scale)
+
+        if scale == 0.0:
+            raise ValueError(
+                "y scale cannot be zero."
+            )
+
+        return Data1D(
+            x=self.x.copy(),
+            y=self.y / scale,
+
+            label=self.label,
+
+            x_label=self.x_label,
+
+            y_label=(
+                self.y_label
+                if label is None
+                else label
+            ),
+
+            x_unit=self.x_unit,
+
+            y_unit=(
+                self.y_unit
+                if unit is None
+                else unit
+            ),
+
+            metadata=self.metadata.copy(),
+        )

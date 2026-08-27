@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, Tuple
-
+import numpy as np
 import matplotlib.pyplot as plt
 
 from postprocess.layout.colorbar import add_colorbar
@@ -41,13 +41,16 @@ class PublicationFigure:
     def __init__(
         self,
         config,
+        nrows=1,
+        ncols=1,
+        sharex=False,
+        sharey=False,
     ):
 
         self.config = config
 
-        # -------------------------------------------------
-        # Figure dimensions
-        # -------------------------------------------------
+        self.nrows = nrows
+        self.ncols = ncols
 
         width = float(config.width)
 
@@ -62,57 +65,302 @@ class PublicationFigure:
 
             height = float(config.height)
 
-        # -------------------------------------------------
-        # Create figure
-        # -------------------------------------------------
-
-        self.figure, self.axes = plt.subplots(
+        self.figure, axes = plt.subplots(
+            nrows=nrows,
+            ncols=ncols,
             figsize=(width, height),
-            dpi=int(config.dpi),
+            sharex=sharex,
+            sharey=sharey,
         )
 
-        # -------------------------------------------------
-        # Aspect
-        # -------------------------------------------------
-
-        self.axes.set_aspect(
-            config.aspect
+        self._axes_array = np.asarray(
+            axes,
+            dtype=object,
         )
 
-        # -------------------------------------------------
-        # Limits
-        # -------------------------------------------------
+        if nrows == 1 and ncols == 1:
 
-        if config.xlim is not None:
-
-            self.axes.set_xlim(
-                config.xlim
+            self._axes_array = (
+                self._axes_array.reshape(1, 1)
             )
 
-        if config.ylim is not None:
+        elif nrows == 1:
 
-            self.axes.set_ylim(
-                config.ylim
+            self._axes_array = (
+                self._axes_array.reshape(1, ncols)
             )
 
-        # -------------------------------------------------
-        # Grid
-        # -------------------------------------------------
+        elif ncols == 1:
 
-        self.axes.grid(
-            config.show_grid
+            self._axes_array = (
+                self._axes_array.reshape(nrows, 1)
+            )
+
+        self.axes = axes
+
+    def panel(
+        self,
+        row,
+        column,
+    ):
+        """
+        Return the axes corresponding to a panel.
+
+        Parameters
+        ----------
+        row : int
+            Zero-based row index.
+
+        column : int
+            Zero-based column index.
+
+        Returns
+        -------
+        matplotlib.axes.Axes
+            Requested panel.
+        """
+
+        if row < 0 or row >= self.nrows:
+            raise IndexError(
+                f"Panel row {row} is out of range."
+            )
+
+        if column < 0 or column >= self.ncols:
+            raise IndexError(
+                f"Panel column {column} is out of range."
+            )
+
+        return self._axes_array[row, column]
+    def set_common_xlabel(
+        self,
+        label,
+        x=0.5,
+        y=0.02,
+    ):
+        """
+        Add a common x-axis label for the entire figure.
+
+        Parameters
+        ----------
+        label : str
+            Common x-axis label.
+
+        x : float, optional
+            Horizontal figure coordinate.
+
+        y : float, optional
+            Vertical figure coordinate.
+        """
+
+        self.figure.text(
+            x,
+            y,
+            label,
+            ha="center",
+            va="center",
+        )
+    def set_common_ylabel(
+        self,
+        label,
+        x=0.02,
+        y=0.5,
+    ):
+        """
+        Add a common y-axis label for the entire figure.
+
+        Parameters
+        ----------
+        label : str
+            Common y-axis label.
+
+        x : float, optional
+            Horizontal figure coordinate.
+
+        y : float, optional
+            Vertical figure coordinate.
+        """
+
+        self.figure.text(
+            x,
+            y,
+            label,
+            ha="center",
+            va="center",
+            rotation="vertical",
+        )
+    def label_panels(
+        self,
+        labels=None,
+        x=0.02,
+        y=0.98,
+        fontsize=None,
+    ):
+        """
+        Add labels such as (a), (b), (c), ... to each panel.
+
+        Parameters
+        ----------
+        labels : list, optional
+            Custom panel labels.
+
+        x : float, optional
+            Position inside each axes in axes coordinates.
+
+        y : float, optional
+            Position inside each axes in axes coordinates.
+
+        fontsize : float, optional
+            Panel-label font size.
+        """
+
+        if labels is None:
+
+            labels = []
+
+            for i in range(
+                self.nrows * self.ncols
+            ):
+
+                labels.append(
+                    "({})".format(
+                        chr(ord("a") + i)
+                    )
+                )
+
+        expected = (
+            self.nrows *
+            self.ncols
         )
 
-        # -------------------------------------------------
-        # LaTeX registry
-        # -------------------------------------------------
+        if len(labels) != expected:
 
-        self.latex_registry = (
-            LaTeXTextRegistry()
+            raise ValueError(
+                "Number of panel labels must "
+                f"be {expected}."
+            )
+
+        index = 0
+
+        for row in range(self.nrows):
+
+            for column in range(self.ncols):
+
+                ax = self.panel(
+                    row,
+                    column,
+                )
+
+                ax.text(
+                    x,
+                    y,
+                    labels[index],
+                    transform=ax.transAxes,
+                    ha="left",
+                    va="top",
+                    fontsize=fontsize,
+                )
+
+                index += 1
+    def adjust_layout(
+        self,
+        left=None,
+        right=None,
+        bottom=None,
+        top=None,
+        wspace=None,
+        hspace=None,
+    ):
+        """
+        Adjust spacing between figure panels.
+        """
+
+        self.figure.subplots_adjust(
+            left=left,
+            right=right,
+            bottom=bottom,
+            top=top,
+            wspace=wspace,
+            hspace=hspace,
+        )
+    def add_shared_colorbar(
+        self,
+        mappable,
+        axes,
+        label=None,
+        orientation="vertical",
+        fraction=0.046,
+        pad=0.04,
+        shrink=1.0,
+    ):
+        """
+        Add one colorbar shared by multiple panels.
+
+        Parameters
+        ----------
+        mappable : matplotlib.cm.ScalarMappable
+            Contour/mappable returned by a plotting routine.
+
+        axes : list
+            Axes sharing the colorbar.
+
+        label : str, optional
+            Colorbar label.
+
+        orientation : {"vertical", "horizontal"}
+            Colorbar orientation.
+
+        fraction : float
+            Fraction of the axes width/height used by the colorbar.
+
+        pad : float
+            Padding between the axes and colorbar.
+
+        shrink : float
+            Colorbar length scaling.
+
+        Returns
+        -------
+        matplotlib.colorbar.Colorbar
+            Created colorbar.
+        """
+
+        if not isinstance(
+            axes,
+            (list, tuple, np.ndarray),
+        ):
+            axes = [axes]
+
+        if len(axes) == 0:
+            raise ValueError(
+                "At least one axes is required "
+                "for a shared colorbar."
+            )
+
+        if orientation not in (
+            "vertical",
+            "horizontal",
+        ):
+            raise ValueError(
+                "orientation must be either "
+                "'vertical' or 'horizontal'."
+            )
+
+        colorbar = self.figure.colorbar(
+            mappable,
+            ax=list(axes),
+            orientation=orientation,
+            fraction=fraction,
+            pad=pad,
+            shrink=shrink,
         )
 
-        self._latex_artists = []
+        if label is not None:
 
+            colorbar.set_label(
+                label
+            )
+
+        return colorbar
     # =====================================================
     # Labels
     # =====================================================
