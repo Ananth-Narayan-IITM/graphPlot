@@ -3026,7 +3026,6 @@ def test_color_schemes_and_custom_palettes_workflow(
     """
 
     import numpy as np
-
     from matplotlib.colors import (
         LinearSegmentedColormap,
     )
@@ -3034,18 +3033,15 @@ def test_color_schemes_and_custom_palettes_workflow(
     from postprocess.data.data1d import (
         Data1D,
     )
-
     from postprocess.layout.figure import (
         FigureConfig,
         PublicationFigure,
     )
-
-    from postprocess.style.publication import (
-        PublicationStyle,
-    )
-
     from postprocess.plots.line import (
         LinePlot,
+    )
+    from postprocess.style.publication import (
+        PublicationStyle,
     )
 
     # -----------------------------------------------------
@@ -3221,5 +3217,970 @@ def test_color_schemes_and_custom_palettes_workflow(
     # -----------------------------------------------------
     # Close
     # -----------------------------------------------------
+
+    figure.close()
+
+
+def test_multiple_scalar_fields_workflow(
+    tmp_path,
+):
+    """
+    Regression test for Example 18.
+
+    Verifies:
+
+        - one common scalar scale
+        - independent scalar scale
+        - two shared colorbars
+        - 2x2 publication layout
+        - PDF export
+    """
+
+    import numpy as np
+    from matplotlib.collections import (
+        PolyCollection,
+    )
+
+    from postprocess.io.vtp import (
+        read_vtp,
+    )
+    from postprocess.layout.colors import (
+        ColorScale,
+    )
+    from postprocess.layout.figure import (
+        FigureConfig,
+        PublicationFigure,
+    )
+    from postprocess.plots.contour import (
+        ContourPlot,
+    )
+    from postprocess.plots.mesh import (
+        MeshPlot,
+    )
+
+    # -----------------------------------------------------
+    # Read
+    # -----------------------------------------------------
+
+    data = read_vtp("data/zNormal.vtp")
+
+    # -----------------------------------------------------
+    # Figure
+    # -----------------------------------------------------
+
+    figure_config = FigureConfig(
+        width=7.0,
+        height=7.2,
+        dpi=600,
+        aspect="equal",
+    )
+
+    figure = PublicationFigure(
+        figure_config,
+        nrows=2,
+        ncols=2,
+        sharex=True,
+        sharey=True,
+    )
+
+    ax00 = figure.panel(
+        0,
+        0,
+    )
+
+    ax01 = figure.panel(
+        0,
+        1,
+    )
+
+    ax10 = figure.panel(
+        1,
+        0,
+    )
+
+    ax11 = figure.panel(
+        1,
+        1,
+    )
+
+    # -----------------------------------------------------
+    # Primary scalar
+    # -----------------------------------------------------
+
+    gamma = np.asarray(
+        data.get_field(
+            "gammaDV",
+            "cell",
+        )
+    )
+
+    gamma_scale = ColorScale(
+        levels=30,
+        cmap="viridis",
+    )
+
+    gamma_scale.resolve(gamma)
+
+    contour_a = ContourPlot(
+        data,
+        field="gammaDV",
+        association="cell",
+    ).plot(
+        ax00,
+        scale=gamma_scale,
+    )
+
+    contour_b = ContourPlot(
+        data,
+        field="gammaDV",
+        association="cell",
+    ).plot(
+        ax01,
+        scale=gamma_scale,
+    )
+
+    assert contour_a is not None
+    assert contour_b is not None
+
+    # -----------------------------------------------------
+    # Derived scalar
+    # -----------------------------------------------------
+
+    gamma_min = np.nanmin(gamma)
+
+    gamma_max = np.nanmax(gamma)
+
+    gamma_normalized = (gamma - gamma_min) / (gamma_max - gamma_min)
+
+    phi = gamma_normalized**2
+
+    phi_scale = ColorScale(
+        levels=30,
+        cmap="plasma",
+    )
+
+    phi_scale.resolve(phi)
+
+    polygons = data.mesh.polygons
+
+    phi_c = ax10.add_collection(
+        PolyCollection(
+            polygons,
+            array=phi,
+            cmap=phi_scale.colormap,
+            norm=phi_scale.norm,
+            edgecolors="none",
+        )
+    )
+
+    phi_d = ax11.add_collection(
+        PolyCollection(
+            polygons,
+            array=phi,
+            cmap=phi_scale.colormap,
+            norm=phi_scale.norm,
+            edgecolors="none",
+        )
+    )
+
+    assert phi_c is not None
+    assert phi_d is not None
+
+    # -----------------------------------------------------
+    # Mesh
+    # -----------------------------------------------------
+
+    mesh = MeshPlot(data)
+
+    assert (
+        mesh.plot(
+            ax01,
+            edgecolor="black",
+            facecolor="none",
+            linewidth=0.15,
+            alpha=0.35,
+        )
+        is not None
+    )
+
+    assert (
+        mesh.plot(
+            ax11,
+            edgecolor="black",
+            facecolor="none",
+            linewidth=0.15,
+            alpha=0.35,
+        )
+        is not None
+    )
+
+    # -----------------------------------------------------
+    # Colorbars
+    # -----------------------------------------------------
+
+    gamma_cb = figure.add_shared_colorbar(
+        contour_a,
+        axes=[
+            ax00,
+            ax01,
+        ],
+        label=r"$\gamma_{\mathrm{DV}}$",
+        orientation="horizontal",
+        fraction=0.045,
+        pad=0.08,
+        shrink=0.75,
+    )
+
+    phi_cb = figure.add_shared_colorbar(
+        phi_c,
+        axes=[
+            ax10,
+            ax11,
+        ],
+        label=r"$\phi$",
+        orientation="horizontal",
+        fraction=0.045,
+        pad=0.18,
+        shrink=0.75,
+    )
+
+    assert gamma_cb is not None
+    assert phi_cb is not None
+
+    # -----------------------------------------------------
+    # Panel labels
+    # -----------------------------------------------------
+
+    figure.label_panels(
+        labels=[
+            "(a)",
+            "(b)",
+            "(c)",
+            "(d)",
+        ]
+    )
+
+    # -----------------------------------------------------
+    # Common labels
+    # -----------------------------------------------------
+
+    figure.set_common_xlabel(r"$x\;(\mathrm{m})$")
+
+    figure.set_common_ylabel(r"$y\;(\mathrm{m})$")
+
+    # -----------------------------------------------------
+    # Layout
+    # -----------------------------------------------------
+
+    figure.adjust_layout(
+        left=0.09,
+        right=0.97,
+        bottom=0.23,
+        top=0.97,
+        wspace=0.08,
+        hspace=0.08,
+    )
+
+    # -----------------------------------------------------
+    # Export
+    # -----------------------------------------------------
+
+    output = tmp_path / "multiple_scalar_fields"
+
+    figure.export(
+        str(output),
+        formats=[
+            "pdf",
+        ],
+    )
+
+    assert output.with_suffix(".pdf").exists()
+
+    figure.close()
+
+
+def test_example_18_multiple_scalar_fields(
+    tmp_path,
+):
+
+    import numpy as np
+    from matplotlib.collections import (
+        PolyCollection,
+    )
+
+    from postprocess.io.vtp import (
+        read_vtp,
+    )
+    from postprocess.layout.colors import (
+        ColorScale,
+    )
+    from postprocess.layout.figure import (
+        FigureConfig,
+        PublicationFigure,
+    )
+    from postprocess.plots.contour import (
+        ContourPlot,
+    )
+    from postprocess.plots.mesh import (
+        MeshPlot,
+    )
+
+    # =====================================================
+    # Read input
+    # =====================================================
+
+    data = read_vtp("data/zNormal.vtp")
+
+    # =====================================================
+    # Geometry
+    # =====================================================
+
+    x_min, x_max, y_min, y_max = data.mesh.bounds
+
+    # =====================================================
+    # gammaDV
+    # =====================================================
+
+    gamma = np.asarray(
+        data.get_field(
+            "gammaDV",
+            "cell",
+        )
+    )
+
+    gamma_min = np.nanmin(gamma)
+
+    gamma_max = np.nanmax(gamma)
+
+    gamma_scale = ColorScale(
+        levels=30,
+        cmap="viridis",
+        vmin=gamma_min,
+        vmax=gamma_max,
+    )
+
+    gamma_scale.resolve(gamma)
+
+    # =====================================================
+    # Derived scalar
+    # =====================================================
+
+    gamma_normalized = (gamma - gamma_min) / (gamma_max - gamma_min)
+
+    phi = gamma_normalized**2
+
+    phi_min = np.nanmin(phi)
+
+    phi_max = np.nanmax(phi)
+
+    phi_scale = ColorScale(
+        levels=30,
+        cmap="plasma",
+        vmin=phi_min,
+        vmax=phi_max,
+    )
+
+    phi_scale.resolve(phi)
+
+    # =====================================================
+    # Verify independent scales
+    # =====================================================
+
+    assert gamma_scale.limits == (
+        gamma_min,
+        gamma_max,
+    )
+
+    assert phi_scale.limits == (
+        phi_min,
+        phi_max,
+    )
+
+    assert gamma_scale.colormap.name == "viridis"
+
+    assert phi_scale.colormap.name == "plasma"
+
+    # =====================================================
+    # Figure
+    # =====================================================
+
+    figure_config = FigureConfig(
+        width=7.0,
+        height=8.0,
+        dpi=600,
+        aspect="equal",
+    )
+
+    figure = PublicationFigure(
+        figure_config,
+        nrows=2,
+        ncols=2,
+        sharex=True,
+        sharey=True,
+    )
+
+    axes = [
+        figure.panel(0, 0),
+        figure.panel(0, 1),
+        figure.panel(1, 0),
+        figure.panel(1, 1),
+    ]
+
+    ax00 = axes[0]
+    ax01 = axes[1]
+    ax10 = axes[2]
+    ax11 = axes[3]
+
+    # =====================================================
+    # gammaDV panels
+    # =====================================================
+
+    contour_a = ContourPlot(
+        data,
+        field="gammaDV",
+        association="cell",
+    ).plot(
+        ax00,
+        scale=gamma_scale,
+    )
+
+    contour_b = ContourPlot(
+        data,
+        field="gammaDV",
+        association="cell",
+    ).plot(
+        ax01,
+        scale=gamma_scale,
+    )
+
+    assert contour_a is not None
+    assert contour_b is not None
+
+    # =====================================================
+    # Mesh
+    # =====================================================
+
+    mesh = MeshPlot(data)
+
+    assert (
+        mesh.plot(
+            ax01,
+            edgecolor="black",
+            facecolor="none",
+            linewidth=0.15,
+            alpha=0.35,
+        )
+        is not None
+    )
+
+    # =====================================================
+    # phi panels
+    # =====================================================
+
+    polygons = data.mesh.polygons
+
+    phi_collection_c = ax10.add_collection(
+        PolyCollection(
+            polygons,
+            array=phi,
+            cmap=phi_scale.colormap,
+            norm=phi_scale.norm,
+            edgecolors="none",
+            linewidths=0.0,
+            antialiased=True,
+        )
+    )
+
+    phi_collection_d = ax11.add_collection(
+        PolyCollection(
+            polygons,
+            array=phi,
+            cmap=phi_scale.colormap,
+            norm=phi_scale.norm,
+            edgecolors="none",
+            linewidths=0.0,
+            antialiased=True,
+        )
+    )
+
+    assert phi_collection_c is not None
+    assert phi_collection_d is not None
+
+    # =====================================================
+    # Mesh on phi panel
+    # =====================================================
+
+    assert (
+        mesh.plot(
+            ax11,
+            edgecolor="black",
+            facecolor="none",
+            linewidth=0.15,
+            alpha=0.35,
+        )
+        is not None
+    )
+
+    # =====================================================
+    # Axes
+    # =====================================================
+
+    for ax in axes:
+        ax.set_xlim(
+            x_min,
+            x_max,
+        )
+
+        ax.set_ylim(
+            y_min,
+            y_max,
+        )
+
+        ax.set_aspect(
+            "equal",
+            adjustable="box",
+        )
+
+        ax.grid(False)
+
+    # =====================================================
+    # Layout
+    # =====================================================
+
+    figure.adjust_layout(
+        left=0.09,
+        right=0.97,
+        bottom=0.17,
+        top=0.97,
+        wspace=0.08,
+        hspace=0.42,
+    )
+
+    # =====================================================
+    # Colorbar axes
+    # =====================================================
+
+    gamma_cbar_ax = figure.figure.add_axes(
+        [
+            0.20,
+            0.45,
+            0.60,
+            0.018,
+        ]
+    )
+
+    phi_cbar_ax = figure.figure.add_axes(
+        [
+            0.20,
+            0.08,
+            0.60,
+            0.018,
+        ]
+    )
+
+    # =====================================================
+    # Colorbars
+    # =====================================================
+
+    gamma_colorbar = figure.figure.colorbar(
+        contour_a,
+        cax=gamma_cbar_ax,
+        orientation="horizontal",
+    )
+
+    phi_colorbar = figure.figure.colorbar(
+        phi_collection_c,
+        cax=phi_cbar_ax,
+        orientation="horizontal",
+    )
+
+    gamma_colorbar.set_ticks(
+        np.linspace(
+            gamma_min,
+            gamma_max,
+            5,
+        )
+    )
+
+    phi_colorbar.set_ticks(
+        np.linspace(
+            phi_min,
+            phi_max,
+            5,
+        )
+    )
+
+    gamma_colorbar.set_label(r"$\gamma_{\mathrm{DV}}$")
+
+    phi_colorbar.set_label(r"$\phi$")
+
+    # =====================================================
+    # Assertions
+    # =====================================================
+
+    assert gamma_colorbar.orientation == "horizontal"
+
+    assert phi_colorbar.orientation == "horizontal"
+
+    assert gamma_cbar_ax is gamma_colorbar.ax
+
+    assert phi_cbar_ax is phi_colorbar.ax
+
+    assert gamma_cbar_ax.get_position().y0 != phi_cbar_ax.get_position().y0
+
+    # =====================================================
+    # Export
+    # =====================================================
+
+    output = tmp_path / "example_18_multiple_scalar_fields"
+
+    figure.export(
+        str(output),
+        formats=[
+            "png",
+        ],
+    )
+
+    assert output.with_suffix(".png").exists()
+
+    figure.close()
+
+
+def test_example_19_final_publication_figure(
+    tmp_path,
+):
+
+    import numpy as np
+
+    from postprocess.data.data1d import (
+        Data1D,
+    )
+    from postprocess.io.vtp import (
+        read_vtp,
+    )
+    from postprocess.layout.colors import (
+        ColorScale,
+    )
+    from postprocess.layout.figure import (
+        FigureConfig,
+        PublicationFigure,
+    )
+    from postprocess.plots.contour import (
+        ContourPlot,
+    )
+    from postprocess.plots.line import (
+        LinePlot,
+    )
+    from postprocess.plots.mesh import (
+        MeshPlot,
+    )
+    from postprocess.style.publication import (
+        PublicationStyle,
+    )
+
+    # =====================================================
+    # Input
+    # =====================================================
+
+    vtp = read_vtp("data/zNormal.vtp")
+
+    numerical = np.loadtxt("data/numerical.dat")
+
+    analytical = np.loadtxt("data/analytical.dat")
+
+    experiment = np.loadtxt("data/experiment.dat")
+
+    # =====================================================
+    # Data1D
+    # =====================================================
+
+    numerical_data = Data1D(
+        x=numerical[:, 0],
+        y=numerical[:, 1],
+    )
+
+    analytical_data = Data1D(
+        x=analytical[:, 0],
+        y=analytical[:, 1],
+    )
+
+    experiment_data = Data1D(
+        x=experiment[:, 0],
+        y=experiment[:, 1],
+    )
+
+    # =====================================================
+    # gammaDV
+    # =====================================================
+
+    gamma = np.asarray(
+        vtp.get_field(
+            "gammaDV",
+            "cell",
+        )
+    )
+
+    gamma_min = np.nanmin(gamma)
+
+    gamma_max = np.nanmax(gamma)
+
+    gamma_scale = ColorScale(
+        levels=30,
+        cmap="viridis",
+        vmin=gamma_min,
+        vmax=gamma_max,
+    )
+
+    gamma_scale.resolve(gamma)
+
+    # =====================================================
+    # Figure
+    # =====================================================
+
+    figure_config = FigureConfig(
+        width=7.0,
+        height=7.2,
+        dpi=600,
+        aspect="auto",
+    )
+
+    figure = PublicationFigure(
+        figure_config,
+        nrows=2,
+        ncols=2,
+        sharex=False,
+        sharey=False,
+    )
+
+    ax00 = figure.panel(
+        0,
+        0,
+    )
+
+    ax01 = figure.panel(
+        0,
+        1,
+    )
+
+    ax10 = figure.panel(
+        1,
+        0,
+    )
+
+    ax11 = figure.panel(
+        1,
+        1,
+    )
+
+    # =====================================================
+    # Panel (a)
+    # =====================================================
+
+    contour_a = ContourPlot(
+        vtp,
+        field="gammaDV",
+        association="cell",
+    ).plot(
+        ax00,
+        scale=gamma_scale,
+    )
+
+    assert contour_a is not None
+
+    # =====================================================
+    # Panel (b)
+    # =====================================================
+
+    contour_b = ContourPlot(
+        vtp,
+        field="gammaDV",
+        association="cell",
+    ).plot(
+        ax01,
+        scale=gamma_scale,
+    )
+
+    assert contour_b is not None
+
+    mesh = MeshPlot(vtp)
+
+    assert (
+        mesh.plot(
+            ax01,
+            edgecolor="black",
+            facecolor="none",
+            linewidth=0.15,
+            alpha=0.35,
+        )
+        is not None
+    )
+
+    # =====================================================
+    # Panel (c)
+    # =====================================================
+
+    style = PublicationStyle(
+        color_scheme="colorblind",
+    )
+
+    comparison_plot = LinePlot(
+        style=style,
+    )
+
+    comparison_plot.add(
+        numerical_data,
+        label="Numerical",
+    )
+
+    comparison_plot.add(
+        experiment_data,
+        label="Experiment",
+    )
+
+    comparison_artists = comparison_plot.plot(ax10)
+
+    assert len(comparison_artists) == 2
+
+    legend_c = comparison_plot.legend(
+        ax10,
+        location="best",
+        frameon=False,
+        ncol=1,
+        fontsize=8,
+    )
+
+    assert legend_c is not None
+
+    # =====================================================
+    # Panel (d)
+    # =====================================================
+
+    analytical_plot = LinePlot(
+        style=style,
+    )
+
+    analytical_plot.add(
+        numerical_data,
+        label="Numerical",
+    )
+
+    analytical_plot.add(
+        analytical_data,
+        label="Analytical",
+    )
+
+    analytical_artists = analytical_plot.plot(ax11)
+
+    assert len(analytical_artists) == 2
+
+    legend_d = analytical_plot.legend(
+        ax11,
+        location="best",
+        frameon=False,
+        ncol=1,
+        fontsize=8,
+    )
+
+    assert legend_d is not None
+
+    # =====================================================
+    # CFD geometry
+    # =====================================================
+
+    x_min, x_max, y_min, y_max = vtp.mesh.bounds
+
+    for ax in (
+        ax00,
+        ax01,
+    ):
+        ax.set_xlim(
+            x_min,
+            x_max,
+        )
+
+        ax.set_ylim(
+            y_min,
+            y_max,
+        )
+
+        ax.set_aspect(
+            "equal",
+            adjustable="box",
+        )
+
+    # =====================================================
+    # Panel labels
+    # =====================================================
+
+    figure.label_panels(
+        labels=[
+            "(a)",
+            "(b)",
+            "(c)",
+            "(d)",
+        ],
+        x=0.02,
+        y=0.97,
+        fontsize=10,
+    )
+
+    # =====================================================
+    # Shared colorbar
+    # =====================================================
+
+    colorbar = figure.add_shared_colorbar(
+        contour_a,
+        axes=[
+            ax00,
+            ax01,
+        ],
+        label=r"$\gamma_{\mathrm{DV}}$",
+        orientation="horizontal",
+        fraction=0.045,
+        pad=0.08,
+        shrink=0.75,
+    )
+
+    assert colorbar is not None
+
+    colorbar.set_ticks(
+        np.linspace(
+            gamma_min,
+            gamma_max,
+            5,
+        )
+    )
+
+    # =====================================================
+    # Layout
+    # =====================================================
+
+    figure.adjust_layout(
+        left=0.10,
+        right=0.97,
+        bottom=0.10,
+        top=0.97,
+        wspace=0.25,
+        hspace=0.35,
+    )
+
+    # =====================================================
+    # Export
+    # =====================================================
+
+    output = tmp_path / "example_19_final_publication_figure"
+
+    figure.export(
+        str(output),
+        formats=[
+            "png",
+        ],
+    )
+
+    assert output.with_suffix(".png").exists()
+
+    # =====================================================
+    # Close
+    # =====================================================
 
     figure.close()

@@ -1,0 +1,113 @@
+\hypertarget{classpostprocess_1_1plots_1_1vector_1_1VectorPlot}{}\doxysection{postprocess.\+plots.\+vector.\+Vector\+Plot Class Reference}
+\label{classpostprocess_1_1plots_1_1vector_1_1VectorPlot}\index{postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}}
+
+
+Collaboration diagram for postprocess.\+plots.\+vector.\+Vector\+Plot\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classpostprocess_1_1plots_1_1vector_1_1VectorPlot__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_aebd21292e778a449fc58c100ad39b0a0}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a58534a0781f60ef452b903f12c5d854e}{data}}, \mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_ab447071ac18845469a69127958e446e3}{field}}, \mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a883ad4b9945c61f7e42fa99f6445a6d0}{association}}=\char`\"{}auto\char`\"{})
+\item 
+def \mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a98baea07aa42b4a6ecd5cf30b48ae424}{plot}} (self, axes, density=20, scale=1.\+0, width=0.\+002, color=\char`\"{}black\char`\"{}, alpha=1.\+0, normalize=False, magnitude\+\_\+color=False, cmap=\char`\"{}viridis\char`\"{}, pivot=\char`\"{}mid\char`\"{}, zorder=5, $\ast$$\ast$kwargs)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a58534a0781f60ef452b903f12c5d854e}{data}}
+\item 
+\mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_ab447071ac18845469a69127958e446e3}{field}}
+\item 
+\mbox{\hyperlink{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a883ad4b9945c61f7e42fa99f6445a6d0}{association}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Plot 2D vector fields from a PyVista dataset.
+
+Supports point-data and cell-data vector fields.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_aebd21292e778a449fc58c100ad39b0a0}\label{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_aebd21292e778a449fc58c100ad39b0a0}} 
+\index{postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def postprocess.\+plots.\+vector.\+Vector\+Plot.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{data,  }\item[{}]{field,  }\item[{}]{association = {\ttfamily \char`\"{}auto\char`\"{}} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a98baea07aa42b4a6ecd5cf30b48ae424}\label{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a98baea07aa42b4a6ecd5cf30b48ae424}} 
+\index{postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}!plot@{plot}}
+\index{plot@{plot}!postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}}
+\doxysubsubsection{\texorpdfstring{plot()}{plot()}}
+{\footnotesize\ttfamily def postprocess.\+plots.\+vector.\+Vector\+Plot.\+plot (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{axes,  }\item[{}]{density = {\ttfamily 20},  }\item[{}]{scale = {\ttfamily 1.0},  }\item[{}]{width = {\ttfamily 0.002},  }\item[{}]{color = {\ttfamily \char`\"{}black\char`\"{}},  }\item[{}]{alpha = {\ttfamily 1.0},  }\item[{}]{normalize = {\ttfamily False},  }\item[{}]{magnitude\+\_\+color = {\ttfamily False},  }\item[{}]{cmap = {\ttfamily \char`\"{}viridis\char`\"{}},  }\item[{}]{pivot = {\ttfamily \char`\"{}mid\char`\"{}},  }\item[{}]{zorder = {\ttfamily 5},  }\item[{$\ast$$\ast$}]{kwargs }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Plot a 2D vector field.
+
+Parameters
+----------
+axes:
+    Matplotlib Axes.
+
+density:
+    Approximate number of arrows along the
+    smaller spatial dimension.
+
+scale:
+    Quiver scale parameter.
+
+width:
+    Arrow shaft width.
+
+normalize:
+    Normalize all vectors to unit magnitude.
+
+magnitude_color:
+    Color arrows according to vector magnitude.
+
+cmap:
+    Colormap used when magnitude_color=True.
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a98baea07aa42b4a6ecd5cf30b48ae424_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a883ad4b9945c61f7e42fa99f6445a6d0}\label{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a883ad4b9945c61f7e42fa99f6445a6d0}} 
+\index{postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}!association@{association}}
+\index{association@{association}!postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}}
+\doxysubsubsection{\texorpdfstring{association}{association}}
+{\footnotesize\ttfamily postprocess.\+plots.\+vector.\+Vector\+Plot.\+association}
+
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a58534a0781f60ef452b903f12c5d854e}\label{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_a58534a0781f60ef452b903f12c5d854e}} 
+\index{postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}!data@{data}}
+\index{data@{data}!postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily postprocess.\+plots.\+vector.\+Vector\+Plot.\+data}
+
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_ab447071ac18845469a69127958e446e3}\label{classpostprocess_1_1plots_1_1vector_1_1VectorPlot_ab447071ac18845469a69127958e446e3}} 
+\index{postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}!field@{field}}
+\index{field@{field}!postprocess.plots.vector.VectorPlot@{postprocess.plots.vector.VectorPlot}}
+\doxysubsubsection{\texorpdfstring{field}{field}}
+{\footnotesize\ttfamily postprocess.\+plots.\+vector.\+Vector\+Plot.\+field}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/postprocess/plots/\mbox{\hyperlink{vector_8py}{vector.\+py}}\end{DoxyCompactItemize}

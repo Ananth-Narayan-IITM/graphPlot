@@ -1,0 +1,162 @@
+\hypertarget{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot}{}\doxysection{postprocess.\+plots.\+streamline.\+Streamline\+Plot Class Reference}
+\label{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot}\index{postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}}
+
+
+Collaboration diagram for postprocess.\+plots.\+streamline.\+Streamline\+Plot\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=241pt]{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a9b68697f08cb7620998a0f597c8d36cc}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aebb5f3410a485a6d48ad22b939119c6c}{data}}, \mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a1fbcf4d74a39b8143e025cb99ec3669a}{field}}, \mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aeae3a7e720fe41ca0ace599f19152594}{association}}=\char`\"{}auto\char`\"{})
+\item 
+def \mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_ace279dec157473cabc01257970fcd888}{plot}} (self, axes, n\+\_\+seeds=25, seed\+\_\+axis=\char`\"{}y\char`\"{}, seed\+\_\+position=None, seed\+\_\+margin=0.\+01, seed\+\_\+points=None, integration\+\_\+direction=\char`\"{}forward\char`\"{}, integrator\+\_\+type=45, surface\+\_\+streamlines=True, initial\+\_\+step\+\_\+length=0.\+1, min\+\_\+step\+\_\+length=0.\+01, max\+\_\+step\+\_\+length=0.\+5, max\+\_\+steps=2000, max\+\_\+length=None, terminal\+\_\+speed=1e-\/12, max\+\_\+error=1e-\/6, interpolator\+\_\+type=\char`\"{}cell\char`\"{}, color=\char`\"{}black\char`\"{}, linewidth=0.\+8, arrowsize=1.\+0, zorder=6)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aebb5f3410a485a6d48ad22b939119c6c}{data}}
+\item 
+\mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a1fbcf4d74a39b8143e025cb99ec3669a}{field}}
+\item 
+\mbox{\hyperlink{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aeae3a7e720fe41ca0ace599f19152594}{association}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Scientific streamline visualization using the VTK
+streamline integrator through PyVista.
+
+Supports:
+    - point or cell vector fields
+    - explicit seed points
+    - regularly distributed seeds
+    - forward/backward/both integration
+    - RK2/RK4/RK45 integration
+    - surface-constrained integration
+    - physical maximum streamline length
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a9b68697f08cb7620998a0f597c8d36cc}\label{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a9b68697f08cb7620998a0f597c8d36cc}} 
+\index{postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def postprocess.\+plots.\+streamline.\+Streamline\+Plot.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{data,  }\item[{}]{field,  }\item[{}]{association = {\ttfamily \char`\"{}auto\char`\"{}} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_ace279dec157473cabc01257970fcd888}\label{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_ace279dec157473cabc01257970fcd888}} 
+\index{postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}!plot@{plot}}
+\index{plot@{plot}!postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}}
+\doxysubsubsection{\texorpdfstring{plot()}{plot()}}
+{\footnotesize\ttfamily def postprocess.\+plots.\+streamline.\+Streamline\+Plot.\+plot (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{axes,  }\item[{}]{n\+\_\+seeds = {\ttfamily 25},  }\item[{}]{seed\+\_\+axis = {\ttfamily \char`\"{}y\char`\"{}},  }\item[{}]{seed\+\_\+position = {\ttfamily None},  }\item[{}]{seed\+\_\+margin = {\ttfamily 0.01},  }\item[{}]{seed\+\_\+points = {\ttfamily None},  }\item[{}]{integration\+\_\+direction = {\ttfamily \char`\"{}forward\char`\"{}},  }\item[{}]{integrator\+\_\+type = {\ttfamily 45},  }\item[{}]{surface\+\_\+streamlines = {\ttfamily True},  }\item[{}]{initial\+\_\+step\+\_\+length = {\ttfamily 0.1},  }\item[{}]{min\+\_\+step\+\_\+length = {\ttfamily 0.01},  }\item[{}]{max\+\_\+step\+\_\+length = {\ttfamily 0.5},  }\item[{}]{max\+\_\+steps = {\ttfamily 2000},  }\item[{}]{max\+\_\+length = {\ttfamily None},  }\item[{}]{terminal\+\_\+speed = {\ttfamily 1e-\/12},  }\item[{}]{max\+\_\+error = {\ttfamily 1e-\/6},  }\item[{}]{interpolator\+\_\+type = {\ttfamily \char`\"{}cell\char`\"{}},  }\item[{}]{color = {\ttfamily \char`\"{}black\char`\"{}},  }\item[{}]{linewidth = {\ttfamily 0.8},  }\item[{}]{arrowsize = {\ttfamily 1.0},  }\item[{}]{zorder = {\ttfamily 6} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Generate and plot streamlines using VTK.
+
+Parameters
+----------
+axes:
+    Matplotlib Axes.
+
+n_seeds:
+    Number of automatically generated seed points.
+
+seed_axis:
+    Axis along which automatic seeds are distributed.
+
+seed_position:
+    Position of the seed line.
+
+seed_margin:
+    Fraction of the seed line excluded at both ends.
+
+seed_points:
+    Explicit list/array of seed coordinates.
+    If provided, this overrides automatic seeding.
+
+integration_direction:
+    "forward", "backward", or "both".
+
+integrator_type:
+    2  -> Runge-Kutta 2
+    4  -> Runge-Kutta 4
+    45 -> Runge-Kutta 45
+
+surface_streamlines:
+    Constrain integration to the 2-D surface.
+
+initial_step_length:
+    Initial integration step.
+
+min_step_length:
+    Minimum adaptive step.
+
+max_step_length:
+    Maximum adaptive step.
+
+max_steps:
+    Maximum number of integration steps.
+
+max_length:
+    Maximum physical streamline length.
+
+terminal_speed:
+    Integration terminates below this speed.
+
+max_error:
+    Maximum RK45 integration error.
+
+interpolator_type:
+    "point" or "cell".
+
+color:
+    Streamline color.
+
+linewidth:
+    Streamline width.
+
+arrowsize:
+    Direction-arrow size.
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_ace279dec157473cabc01257970fcd888_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aeae3a7e720fe41ca0ace599f19152594}\label{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aeae3a7e720fe41ca0ace599f19152594}} 
+\index{postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}!association@{association}}
+\index{association@{association}!postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}}
+\doxysubsubsection{\texorpdfstring{association}{association}}
+{\footnotesize\ttfamily postprocess.\+plots.\+streamline.\+Streamline\+Plot.\+association}
+
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aebb5f3410a485a6d48ad22b939119c6c}\label{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_aebb5f3410a485a6d48ad22b939119c6c}} 
+\index{postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}!data@{data}}
+\index{data@{data}!postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily postprocess.\+plots.\+streamline.\+Streamline\+Plot.\+data}
+
+\mbox{\Hypertarget{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a1fbcf4d74a39b8143e025cb99ec3669a}\label{classpostprocess_1_1plots_1_1streamline_1_1StreamlinePlot_a1fbcf4d74a39b8143e025cb99ec3669a}} 
+\index{postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}!field@{field}}
+\index{field@{field}!postprocess.plots.streamline.StreamlinePlot@{postprocess.plots.streamline.StreamlinePlot}}
+\doxysubsubsection{\texorpdfstring{field}{field}}
+{\footnotesize\ttfamily postprocess.\+plots.\+streamline.\+Streamline\+Plot.\+field}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/postprocess/plots/\mbox{\hyperlink{streamline_8py}{streamline.\+py}}\end{DoxyCompactItemize}

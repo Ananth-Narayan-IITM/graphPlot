@@ -1,4 +1,3 @@
-from postprocess.style import PublicationStyle
 from matplotlib.lines import Line2D
 from matplotlib.offsetbox import (
     AnchoredOffsetbox,
@@ -7,6 +6,8 @@ from matplotlib.offsetbox import (
     TextArea,
     VPacker,
 )
+
+from postprocess.style import PublicationStyle
 
 
 class LinePlot:
@@ -476,8 +477,7 @@ class LinePlot:
             for label in labels_in_group:
                 if label not in artist_map:
                     raise ValueError(
-                        "Legend label '{}' was not "
-                        "found among plotted datasets.".format(label)
+                        f"Legend label '{label}' was not found among plotted datasets."
                     )
 
                 grouped_handles.append(artist_map[label])

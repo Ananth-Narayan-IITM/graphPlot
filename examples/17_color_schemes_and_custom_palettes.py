@@ -21,28 +21,19 @@ The example intentionally separates:
 """
 
 import numpy as np
-
 from matplotlib.colors import LinearSegmentedColormap
 
 from postprocess.data.data1d import Data1D
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
-from postprocess.layout.colors import (
-    ColorScale,
-)
-
 from postprocess.plots.line import (
     LinePlot,
 )
-
 from postprocess.style.publication import (
     PublicationStyle,
 )
-
 
 # =========================================================
 # Data

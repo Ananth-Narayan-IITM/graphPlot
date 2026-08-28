@@ -2,8 +2,23 @@ Metadata-Version: 2.1
 Name: graphPlot
 Version: 0.1.0
 Summary: Publication-quality scientific post-processing and visualization
+Author: Ananth Narayan
+License: MIT
+Keywords: scientific visualization,scientific plotting,CFD,post-processing,OpenFOAM,DAFoam,VTP,PyVista,Matplotlib
 Requires-Python: >=3.8
-Requires-Dist: numpy
-Requires-Dist: matplotlib
-Requires-Dist: pyvista
-Requires-Dist: pyyaml
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.21
+Requires-Dist: matplotlib>=3.5
+Requires-Dist: pyvista>=0.34
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7.0; extra == "docs"
+
+`python3 -m pip install -e .`
+`python3 -m pytest -v`
+`python3 -m pytest <file> -v`
+`ruff format .`
+`doxygen Doxyfile && cd docs/api/latex/ && make && cd ../../../`

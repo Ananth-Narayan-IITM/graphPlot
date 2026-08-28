@@ -1,0 +1,7 @@
+#!/bin/bash
+rm -rf output/example_*
+for f in examples/*.py; do
+    echo "========================================"
+    echo "Running $f"
+    python3 "$f" || exit 1
+done

@@ -1,0 +1,16 @@
+var searchData=
+[
+  ['add_257',['add',['../classpostprocess_1_1plots_1_1line_1_1LinePlot.html#a9c98a7fb05ce87bced4cf8e0ab129ae2',1,'postprocess::plots::line::LinePlot']]],
+  ['add_5farrow_258',['add_arrow',['../classpostprocess_1_1plots_1_1annotation_1_1AnnotationPlot.html#a848887e1a4f7cc732600f30803af119d',1,'postprocess::plots::annotation::AnnotationPlot']]],
+  ['add_5fcolorbar_259',['add_colorbar',['../classpostprocess_1_1layout_1_1figure_1_1PublicationFigure.html#aca21e290e389a60204acd9916dc8fdbc',1,'postprocess.layout.figure.PublicationFigure.add_colorbar()'],['../namespacepostprocess_1_1layout_1_1colorbar.html#a98f3717872ea343b54cc301e650d2e12',1,'postprocess.layout.colorbar.add_colorbar()']]],
+  ['add_5fdimension_260',['add_dimension',['../classpostprocess_1_1plots_1_1geometry_1_1GeometryPlot.html#aa51ae66e05cd7aa8a605150744f32c66',1,'postprocess::plots::geometry::GeometryPlot']]],
+  ['add_5ferrorbar_261',['add_errorbar',['../classpostprocess_1_1plots_1_1line_1_1LinePlot.html#a3ef454ba7730e13a9eb955bf363492a2',1,'postprocess::plots::line::LinePlot']]],
+  ['add_5fline_262',['add_line',['../classpostprocess_1_1plots_1_1annotation_1_1AnnotationPlot.html#a21379455d3e203cada35fa80b276ee60',1,'postprocess.plots.annotation.AnnotationPlot.add_line()'],['../classpostprocess_1_1plots_1_1geometry_1_1GeometryPlot.html#afa4dd8dc4fd3957e8d5a789b4ea21499',1,'postprocess.plots.geometry.GeometryPlot.add_line()']]],
+  ['add_5fmarker_263',['add_marker',['../classpostprocess_1_1plots_1_1annotation_1_1AnnotationPlot.html#a338d669d8aba33e4b3ce5e975604d925',1,'postprocess::plots::annotation::AnnotationPlot']]],
+  ['add_5fpolygon_264',['add_polygon',['../classpostprocess_1_1plots_1_1geometry_1_1GeometryPlot.html#a23c7a65f349e9ec0f9c72511f8ec0570',1,'postprocess::plots::geometry::GeometryPlot']]],
+  ['add_5frectangle_265',['add_rectangle',['../classpostprocess_1_1plots_1_1annotation_1_1AnnotationPlot.html#a1f21e9aaf4185f73589a10fd8383f10b',1,'postprocess.plots.annotation.AnnotationPlot.add_rectangle()'],['../classpostprocess_1_1plots_1_1geometry_1_1GeometryPlot.html#a0637ebd26f73487df3bcb15dcfe84253',1,'postprocess.plots.geometry.GeometryPlot.add_rectangle()']]],
+  ['add_5freference_266',['add_reference',['../classpostprocess_1_1style_1_1legend_1_1LegendManager.html#a157947d5508e6a4f6cc720ca8e7b4d6d',1,'postprocess::style::legend::LegendManager']]],
+  ['add_5fshared_5fcolorbar_267',['add_shared_colorbar',['../classpostprocess_1_1layout_1_1figure_1_1PublicationFigure.html#a50159186e47930e24b7b2d55357bc0bc',1,'postprocess::layout::figure::PublicationFigure']]],
+  ['add_5ftext_268',['add_text',['../classpostprocess_1_1plots_1_1annotation_1_1AnnotationPlot.html#a86bac8c7ac2f322aef59be0501bcfb12',1,'postprocess::plots::annotation::AnnotationPlot']]],
+  ['adjust_5flayout_269',['adjust_layout',['../classpostprocess_1_1layout_1_1figure_1_1PublicationFigure.html#a14bd84d0387e2a352e90351b863bb511',1,'postprocess::layout::figure::PublicationFigure']]]
+];

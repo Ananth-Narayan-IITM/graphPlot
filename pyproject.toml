@@ -1,32 +1,168 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = [
+    "setuptools>=61",
+]
 build-backend = "setuptools.build_meta"
+
+
+# ============================================================
+# Project metadata
+# ============================================================
 
 [project]
 name = "graphPlot"
-version = "0.1.0"
+version = "1.0"
+
 description = "Publication-quality scientific post-processing and visualization"
+
+readme = "README.md"
+
 requires-python = ">=3.8"
 
-dependencies = [
-    "numpy",
-    "matplotlib",
-    "pyvista",
-    "pyyaml",
+license = { text = "MIT" }
+
+authors = [
+    { name = "Ananth Narayan" },
 ]
 
+keywords = [
+    "scientific visualization",
+    "scientific plotting",
+    "CFD",
+    "post-processing",
+    "OpenFOAM",
+    "DAFoam",
+    "VTP",
+    "PyVista",
+    "Matplotlib",
+]
+
+
+# ============================================================
+# Runtime dependencies
+# ============================================================
+
+dependencies = [
+    "numpy>=1.21",
+    "matplotlib>=3.5",
+    "pyvista>=0.34",
+    "pyyaml>=6.0",
+]
+
+
+# ============================================================
+# Optional dependencies
+# ============================================================
+
+[project.optional-dependencies]
+
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.6",
+]
+
+docs = [
+    "sphinx>=7.0",
+]
+
+
+# ============================================================
+# Package discovery
+# ============================================================
+
 [tool.setuptools.packages.find]
-where = ["src"]
+where = [
+    "src",
+]
+
+
+# ============================================================
+# Pytest
+# ============================================================
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_functions = ["test_*"]
-addopts = "-ra"
+
+testpaths = [
+    "tests",
+]
+
+python_files = [
+    "test_*.py",
+]
+
+python_functions = [
+    "test_*",
+]
+
+addopts = [
+    "-ra",
+]
+
+filterwarnings = [
+    "error",
+]
+
+
+# ============================================================
+# Ruff
+# ============================================================
 
 [tool.ruff]
+
 line-length = 88
 
+target-version = "py38"
+
+exclude = [
+    ".git",
+    ".pytest_cache",
+    "__pycache__",
+    "build",
+    "dist",
+    "*.egg-info",
+    "docs",
+]
+
+
+# ============================================================
+# Ruff linting
+# ============================================================
+
+[tool.ruff.lint]
+
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "UP",
+    "B",
+]
+
+ignore = [
+    "E501",
+]
+
+
+# ============================================================
+# Ruff import sorting
+# ============================================================
+
+[tool.ruff.lint.isort]
+
+combine-as-imports = true
+
+force-single-line = false
+
+
+# ============================================================
+# Ruff formatter
+# ============================================================
+
 [tool.ruff.format]
+
 quote-style = "double"
 indent-style = "space"
+line-ending = "auto"
+skip-magic-trailing-comma = false
+docstring-code-format = true

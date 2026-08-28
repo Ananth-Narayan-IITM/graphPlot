@@ -19,12 +19,11 @@ Panel (b):
 import numpy as np
 
 from postprocess.data.data1d import Data1D
-from postprocess.plots.line import LinePlot
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.line import LinePlot
 
 # =========================================================
 # Data

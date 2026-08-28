@@ -1,16 +1,16 @@
 import pytest
-from postprocess.style.publication import (
-    PublicationStyle,
-)
+
 from postprocess.style.colors import (
-    DEFAULT_COLORS,
-    COLORBLIND_COLORS,
-    GRAYSCALE_COLORS,
     BLACKWHITE_COLORS,
+    COLORBLIND_COLORS,
+    DEFAULT_COLORS,
+    GRAYSCALE_COLORS,
     get_colors,
     validate_palette,
 )
-
+from postprocess.style.publication import (
+    PublicationStyle,
+)
 
 # =========================================================
 # Built-in schemes

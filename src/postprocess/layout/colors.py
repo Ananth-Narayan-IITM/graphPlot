@@ -1,6 +1,5 @@
-import numpy as np
-
 import matplotlib
+import numpy as np
 from matplotlib.colors import BoundaryNorm
 
 

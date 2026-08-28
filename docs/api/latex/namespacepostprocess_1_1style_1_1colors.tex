@@ -1,0 +1,164 @@
+\hypertarget{namespacepostprocess_1_1style_1_1colors}{}\doxysection{postprocess.\+style.\+colors Namespace Reference}
+\label{namespacepostprocess_1_1style_1_1colors}\index{postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacepostprocess_1_1style_1_1colors_aecb76e9eb07edd4a6b34199fbb481a68}{get\+\_\+colors}} (scheme)
+\item 
+def \mbox{\hyperlink{namespacepostprocess_1_1style_1_1colors_a1f101960c7e1c393d720532a41a10231}{validate\+\_\+palette}} (colors)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+list \mbox{\hyperlink{namespacepostprocess_1_1style_1_1colors_a6c297ed391bbd0b45a4288d5b9e54983}{C\+O\+L\+O\+R\+B\+L\+I\+N\+D\+\_\+\+C\+O\+L\+O\+RS}}
+\item 
+list \mbox{\hyperlink{namespacepostprocess_1_1style_1_1colors_add5f2d1900e42038d0489bb5b35d4e51}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+L\+O\+RS}}
+\item 
+list \mbox{\hyperlink{namespacepostprocess_1_1style_1_1colors_ad33a5cec5539b527d5fb2f7e5eb6a587}{G\+R\+A\+Y\+S\+C\+A\+L\+E\+\_\+\+C\+O\+L\+O\+RS}}
+\item 
+list \mbox{\hyperlink{namespacepostprocess_1_1style_1_1colors_afc851fd62965fefa12b7f63f74b809f5}{B\+L\+A\+C\+K\+W\+H\+I\+T\+E\+\_\+\+C\+O\+L\+O\+RS}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Color schemes for publication figures.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacepostprocess_1_1style_1_1colors_aecb76e9eb07edd4a6b34199fbb481a68}\label{namespacepostprocess_1_1style_1_1colors_aecb76e9eb07edd4a6b34199fbb481a68}} 
+\index{postprocess.style.colors@{postprocess.style.colors}!get\_colors@{get\_colors}}
+\index{get\_colors@{get\_colors}!postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsubsection{\texorpdfstring{get\_colors()}{get\_colors()}}
+{\footnotesize\ttfamily def postprocess.\+style.\+colors.\+get\+\_\+colors (\begin{DoxyParamCaption}\item[{}]{scheme }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return the requested color scheme.
+
+Parameters
+----------
+scheme : str or sequence
+    Available named schemes:
+
+        - default
+        - colorblind
+        - grayscale
+        - blackwhite
+
+    A list or tuple may also be supplied to define
+    a custom categorical palette.
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacepostprocess_1_1style_1_1colors_aecb76e9eb07edd4a6b34199fbb481a68_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacepostprocess_1_1style_1_1colors_a1f101960c7e1c393d720532a41a10231}\label{namespacepostprocess_1_1style_1_1colors_a1f101960c7e1c393d720532a41a10231}} 
+\index{postprocess.style.colors@{postprocess.style.colors}!validate\_palette@{validate\_palette}}
+\index{validate\_palette@{validate\_palette}!postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsubsection{\texorpdfstring{validate\_palette()}{validate\_palette()}}
+{\footnotesize\ttfamily def postprocess.\+style.\+colors.\+validate\+\_\+palette (\begin{DoxyParamCaption}\item[{}]{colors }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Validate a custom categorical color palette.
+
+Parameters
+----------
+colors : sequence
+    Sequence of Matplotlib-compatible colors.
+
+Returns
+-------
+list
+    Validated copy of the palette.
+
+Raises
+------
+ValueError
+    If the palette is empty.
+TypeError
+    If colors is not a sequence.
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacepostprocess_1_1style_1_1colors_a1f101960c7e1c393d720532a41a10231_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacepostprocess_1_1style_1_1colors_afc851fd62965fefa12b7f63f74b809f5}\label{namespacepostprocess_1_1style_1_1colors_afc851fd62965fefa12b7f63f74b809f5}} 
+\index{postprocess.style.colors@{postprocess.style.colors}!BLACKWHITE\_COLORS@{BLACKWHITE\_COLORS}}
+\index{BLACKWHITE\_COLORS@{BLACKWHITE\_COLORS}!postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsubsection{\texorpdfstring{BLACKWHITE\_COLORS}{BLACKWHITE\_COLORS}}
+{\footnotesize\ttfamily list postprocess.\+style.\+colors.\+B\+L\+A\+C\+K\+W\+H\+I\+T\+E\+\_\+\+C\+O\+L\+O\+RS}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  [}
+\DoxyCodeLine{2     \textcolor{stringliteral}{"\#000000"},}
+\DoxyCodeLine{3 ]}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespacepostprocess_1_1style_1_1colors_a6c297ed391bbd0b45a4288d5b9e54983}\label{namespacepostprocess_1_1style_1_1colors_a6c297ed391bbd0b45a4288d5b9e54983}} 
+\index{postprocess.style.colors@{postprocess.style.colors}!COLORBLIND\_COLORS@{COLORBLIND\_COLORS}}
+\index{COLORBLIND\_COLORS@{COLORBLIND\_COLORS}!postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsubsection{\texorpdfstring{COLORBLIND\_COLORS}{COLORBLIND\_COLORS}}
+{\footnotesize\ttfamily list postprocess.\+style.\+colors.\+C\+O\+L\+O\+R\+B\+L\+I\+N\+D\+\_\+\+C\+O\+L\+O\+RS}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  [}
+\DoxyCodeLine{2     \textcolor{stringliteral}{"\#0072B2"},  \textcolor{comment}{\# blue}}
+\DoxyCodeLine{3     \textcolor{stringliteral}{"\#E69F00"},  \textcolor{comment}{\# orange}}
+\DoxyCodeLine{4     \textcolor{stringliteral}{"\#009E73"},  \textcolor{comment}{\# green}}
+\DoxyCodeLine{5     \textcolor{stringliteral}{"\#D55E00"},  \textcolor{comment}{\# vermillion}}
+\DoxyCodeLine{6     \textcolor{stringliteral}{"\#CC79A7"},  \textcolor{comment}{\# purple}}
+\DoxyCodeLine{7     \textcolor{stringliteral}{"\#56B4E9"},  \textcolor{comment}{\# sky blue}}
+\DoxyCodeLine{8     \textcolor{stringliteral}{"\#F0E442"},  \textcolor{comment}{\# yellow}}
+\DoxyCodeLine{9     \textcolor{stringliteral}{"\#000000"},  \textcolor{comment}{\# black}}
+\DoxyCodeLine{10 ]}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespacepostprocess_1_1style_1_1colors_add5f2d1900e42038d0489bb5b35d4e51}\label{namespacepostprocess_1_1style_1_1colors_add5f2d1900e42038d0489bb5b35d4e51}} 
+\index{postprocess.style.colors@{postprocess.style.colors}!DEFAULT\_COLORS@{DEFAULT\_COLORS}}
+\index{DEFAULT\_COLORS@{DEFAULT\_COLORS}!postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_COLORS}{DEFAULT\_COLORS}}
+{\footnotesize\ttfamily list postprocess.\+style.\+colors.\+D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+L\+O\+RS}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  [}
+\DoxyCodeLine{2     \textcolor{stringliteral}{"\#1f77b4"},}
+\DoxyCodeLine{3     \textcolor{stringliteral}{"\#ff7f0e"},}
+\DoxyCodeLine{4     \textcolor{stringliteral}{"\#2ca02c"},}
+\DoxyCodeLine{5     \textcolor{stringliteral}{"\#d62728"},}
+\DoxyCodeLine{6     \textcolor{stringliteral}{"\#9467bd"},}
+\DoxyCodeLine{7     \textcolor{stringliteral}{"\#8c564b"},}
+\DoxyCodeLine{8     \textcolor{stringliteral}{"\#e377c2"},}
+\DoxyCodeLine{9     \textcolor{stringliteral}{"\#7f7f7f"},}
+\DoxyCodeLine{10 ]}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespacepostprocess_1_1style_1_1colors_ad33a5cec5539b527d5fb2f7e5eb6a587}\label{namespacepostprocess_1_1style_1_1colors_ad33a5cec5539b527d5fb2f7e5eb6a587}} 
+\index{postprocess.style.colors@{postprocess.style.colors}!GRAYSCALE\_COLORS@{GRAYSCALE\_COLORS}}
+\index{GRAYSCALE\_COLORS@{GRAYSCALE\_COLORS}!postprocess.style.colors@{postprocess.style.colors}}
+\doxysubsubsection{\texorpdfstring{GRAYSCALE\_COLORS}{GRAYSCALE\_COLORS}}
+{\footnotesize\ttfamily list postprocess.\+style.\+colors.\+G\+R\+A\+Y\+S\+C\+A\+L\+E\+\_\+\+C\+O\+L\+O\+RS}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  [}
+\DoxyCodeLine{2     \textcolor{stringliteral}{"\#000000"},}
+\DoxyCodeLine{3     \textcolor{stringliteral}{"\#404040"},}
+\DoxyCodeLine{4     \textcolor{stringliteral}{"\#707070"},}
+\DoxyCodeLine{5     \textcolor{stringliteral}{"\#999999"},}
+\DoxyCodeLine{6     \textcolor{stringliteral}{"\#BFBFBF"},}
+\DoxyCodeLine{7     \textcolor{stringliteral}{"\#D9D9D9"},}
+\DoxyCodeLine{8 ]}
+
+\end{DoxyCode}

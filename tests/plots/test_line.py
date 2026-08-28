@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from postprocess.data.data1d import Data1D
 from postprocess.plots.line import LinePlot
@@ -260,3 +260,68 @@ def test_grouped_legend_preserves_groups_and_markers():
     assert legend in (axes.figure.artists)
 
     plt.close(figure)
+
+
+def test_final_validation_comparison():
+
+    import numpy as np
+
+    from postprocess.data.data1d import (
+        Data1D,
+    )
+    from postprocess.plots.line import (
+        LinePlot,
+    )
+    from postprocess.style.publication import (
+        PublicationStyle,
+    )
+
+    x_numerical = np.linspace(
+        0.0,
+        1.0,
+        20,
+    )
+
+    y_numerical = np.sin(x_numerical)
+
+    x_experiment = np.linspace(
+        0.0,
+        1.0,
+        10,
+    )
+
+    y_experiment = np.sin(x_experiment)
+
+    numerical = Data1D(
+        x=x_numerical,
+        y=y_numerical,
+    )
+
+    experiment = Data1D(
+        x=x_experiment,
+        y=y_experiment,
+    )
+
+    style = PublicationStyle(
+        color_scheme="colorblind",
+    )
+
+    plot = LinePlot(
+        style=style,
+    )
+
+    plot.add(
+        numerical,
+        label="Numerical",
+    )
+
+    plot.add(
+        experiment,
+        label="Experiment",
+    )
+
+    assert len(plot.datasets) == 2
+
+    assert plot.datasets[0]["label"] == "Numerical"
+
+    assert plot.datasets[1]["label"] == "Experiment"

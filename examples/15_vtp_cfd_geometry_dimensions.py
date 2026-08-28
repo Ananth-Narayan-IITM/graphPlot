@@ -20,32 +20,25 @@ The dimensions are based on the physical geometry bounds.
 from pathlib import Path
 
 from postprocess.io.vtp import read_vtp
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
-from postprocess.plots.contour import (
-    ContourPlot,
-)
-
-from postprocess.plots.mesh import (
-    MeshPlot,
-)
-
-from postprocess.plots.vector import (
-    VectorPlot,
-)
-
-from postprocess.plots.streamline import (
-    StreamlinePlot,
-)
-
 from postprocess.plots.annotation import (
     AnnotationPlot,
 )
-
+from postprocess.plots.contour import (
+    ContourPlot,
+)
+from postprocess.plots.mesh import (
+    MeshPlot,
+)
+from postprocess.plots.streamline import (
+    StreamlinePlot,
+)
+from postprocess.plots.vector import (
+    VectorPlot,
+)
 
 # =========================================================
 # Input

@@ -22,12 +22,11 @@ The datasets are plotted on the same axes.
 import numpy as np
 
 from postprocess.data.data1d import Data1D
-from postprocess.plots.line import LinePlot
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.line import LinePlot
 
 # =========================================================
 # Independent variable
