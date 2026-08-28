@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class VectorPlot:
@@ -23,10 +22,7 @@ class VectorPlot:
             "point",
             "cell",
         ):
-            raise ValueError(
-                "association must be 'auto', "
-                "'point', or 'cell'."
-            )
+            raise ValueError("association must be 'auto', 'point', or 'cell'.")
 
         self.association = association
 
@@ -49,22 +45,14 @@ class VectorPlot:
         # -------------------------------------------------
 
         if self.association == "point":
-
             if self.field not in data.point_data:
                 raise KeyError(
-                    "Vector field '{}' is not available "
-                    "as point data.".format(
-                        self.field
-                    )
+                    f"Vector field '{self.field}' is not available as point data."
                 )
 
-            vectors = np.asarray(
-                data.point_data[self.field]
-            )
+            vectors = np.asarray(data.point_data[self.field])
 
-            coordinates = np.asarray(
-                data.points
-            )
+            coordinates = np.asarray(data.points)
 
             return coordinates, vectors
 
@@ -73,22 +61,14 @@ class VectorPlot:
         # -------------------------------------------------
 
         if self.association == "cell":
-
             if self.field not in data.cell_data:
                 raise KeyError(
-                    "Vector field '{}' is not available "
-                    "as cell data.".format(
-                        self.field
-                    )
+                    f"Vector field '{self.field}' is not available as cell data."
                 )
 
-            vectors = np.asarray(
-                data.cell_data[self.field]
-            )
+            vectors = np.asarray(data.cell_data[self.field])
 
-            coordinates = np.asarray(
-                data.cell_centers().points
-            )
+            coordinates = np.asarray(data.cell_centers().points)
 
             return coordinates, vectors
 
@@ -97,35 +77,23 @@ class VectorPlot:
         # -------------------------------------------------
 
         if self.field in data.point_data:
+            vectors = np.asarray(data.point_data[self.field])
 
-            vectors = np.asarray(
-                data.point_data[self.field]
-            )
-
-            coordinates = np.asarray(
-                data.points
-            )
+            coordinates = np.asarray(data.points)
 
             return coordinates, vectors
 
         if self.field in data.cell_data:
+            vectors = np.asarray(data.cell_data[self.field])
 
-            vectors = np.asarray(
-                data.cell_data[self.field]
-            )
-
-            coordinates = np.asarray(
-                data.cell_centers().points
-            )
+            coordinates = np.asarray(data.cell_centers().points)
 
             return coordinates, vectors
 
         raise KeyError(
-            "Vector field '{}' was not found "
-            "in point or cell data.".format(
-                self.field
-            )
+            f"Vector field '{self.field}' was not found in point or cell data."
         )
+
     # =====================================================
     # Validate vectors
     # =====================================================
@@ -136,23 +104,16 @@ class VectorPlot:
         Validate vector array shape.
         """
 
-        vectors = np.asarray(
-            vectors
-        )
+        vectors = np.asarray(vectors)
 
         if vectors.ndim != 2:
-            raise ValueError(
-                "Vector field must be a 2D array."
-            )
+            raise ValueError("Vector field must be a 2D array.")
 
         if vectors.shape[1] not in (
             2,
             3,
         ):
-            raise ValueError(
-                "Vector field must have 2 or 3 "
-                "components."
-            )
+            raise ValueError("Vector field must have 2 or 3 components.")
 
         return vectors
 
@@ -177,9 +138,7 @@ class VectorPlot:
             return coordinates, vectors
 
         if density <= 0:
-            raise ValueError(
-                "density must be greater than zero."
-            )
+            raise ValueError("density must be greater than zero.")
 
         x = coordinates[:, 0]
         y = coordinates[:, 1]
@@ -201,27 +160,17 @@ class VectorPlot:
         # -------------------------------------------------
 
         if width >= height:
-
             nx = density
             ny = max(
                 1,
-                int(
-                    density
-                    * height
-                    / width
-                ),
+                int(density * height / width),
             )
 
         else:
-
             ny = density
             nx = max(
                 1,
-                int(
-                    density
-                    * width
-                    / height
-                ),
+                int(density * width / height),
             )
 
         dx = width / nx
@@ -230,13 +179,9 @@ class VectorPlot:
         if dx == 0 or dy == 0:
             return coordinates, vectors
 
-        ix = np.floor(
-            (x - xmin) / dx
-        ).astype(int)
+        ix = np.floor((x - xmin) / dx).astype(int)
 
-        iy = np.floor(
-            (y - ymin) / dy
-        ).astype(int)
+        iy = np.floor((y - ymin) / dy).astype(int)
 
         ix = np.clip(
             ix,
@@ -254,13 +199,8 @@ class VectorPlot:
 
         selected = []
 
-        for identifier in np.unique(
-            cell_id
-        ):
-
-            indices = np.where(
-                cell_id == identifier
-            )[0]
+        for identifier in np.unique(cell_id):
+            indices = np.where(cell_id == identifier)[0]
 
             if len(indices) == 0:
                 continue
@@ -280,15 +220,12 @@ class VectorPlot:
                         :2,
                     ]
                     - center
-                ) ** 2,
+                )
+                ** 2,
                 axis=1,
             )
 
-            selected.append(
-                indices[
-                    np.argmin(distance)
-                ]
-            )
+            selected.append(indices[np.argmin(distance)])
 
         selected = np.asarray(
             selected,
@@ -347,13 +284,9 @@ class VectorPlot:
             Colormap used when magnitude_color=True.
         """
 
-        coordinates, vectors = (
-            self._get_vectors()
-        )
+        coordinates, vectors = self._get_vectors()
 
-        vectors = self._validate_vectors(
-            vectors
-        )
+        vectors = self._validate_vectors(vectors)
 
         # -------------------------------------------------
         # Keep only x/y components
@@ -369,75 +302,47 @@ class VectorPlot:
         # Remove invalid vectors
         # -------------------------------------------------
 
-        valid = (
-            np.isfinite(x)
-            & np.isfinite(y)
-            & np.isfinite(u)
-            & np.isfinite(v)
-        )
+        valid = np.isfinite(x) & np.isfinite(y) & np.isfinite(u) & np.isfinite(v)
 
         x = x[valid]
         y = y[valid]
         u = u[valid]
         v = v[valid]
 
-        coordinates = np.column_stack(
-            [x, y]
-        )
+        coordinates = np.column_stack([x, y])
 
-        vectors = np.column_stack(
-            [u, v]
-        )
+        vectors = np.column_stack([u, v])
 
         # -------------------------------------------------
         # Normalize
         # -------------------------------------------------
 
         if normalize:
+            magnitude = np.sqrt(u**2 + v**2)
 
-            magnitude = np.sqrt(
-                u ** 2 + v ** 2
-            )
+            nonzero = magnitude > 0
 
-            nonzero = (
-                magnitude > 0
-            )
+            u_normalized = np.zeros_like(u)
 
-            u_normalized = np.zeros_like(
-                u
-            )
+            v_normalized = np.zeros_like(v)
 
-            v_normalized = np.zeros_like(
-                v
-            )
+            u_normalized[nonzero] = u[nonzero] / magnitude[nonzero]
 
-            u_normalized[nonzero] = (
-                u[nonzero]
-                / magnitude[nonzero]
-            )
-
-            v_normalized[nonzero] = (
-                v[nonzero]
-                / magnitude[nonzero]
-            )
+            v_normalized[nonzero] = v[nonzero] / magnitude[nonzero]
 
             u = u_normalized
             v = v_normalized
 
-            vectors = np.column_stack(
-                [u, v]
-            )
+            vectors = np.column_stack([u, v])
 
         # -------------------------------------------------
         # Downsample
         # -------------------------------------------------
 
-        coordinates, vectors = (
-            self._downsample(
-                coordinates,
-                vectors,
-                density,
-            )
+        coordinates, vectors = self._downsample(
+            coordinates,
+            vectors,
+            density,
         )
 
         x = coordinates[:, 0]
@@ -451,10 +356,7 @@ class VectorPlot:
         # -------------------------------------------------
 
         if magnitude_color:
-
-            magnitude = np.sqrt(
-                u ** 2 + v ** 2
-            )
+            magnitude = np.sqrt(u**2 + v**2)
 
             quiver = axes.quiver(
                 x,
@@ -472,7 +374,6 @@ class VectorPlot:
             )
 
         else:
-
             quiver = axes.quiver(
                 x,
                 y,
@@ -488,6 +389,7 @@ class VectorPlot:
             )
 
         return quiver
+
     # =====================================================
     # Underlying dataset
     # =====================================================

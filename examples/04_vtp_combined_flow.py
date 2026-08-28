@@ -15,18 +15,15 @@ publication-quality CFD figures.
 """
 
 from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import ContourPlot
-from postprocess.plots.mesh import MeshPlot
-from postprocess.plots.vector import VectorPlot
-from postprocess.plots.streamline import StreamlinePlot
-from postprocess.plots.annotation import AnnotationPlot
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.annotation import AnnotationPlot
+from postprocess.plots.contour import ContourPlot
+from postprocess.plots.mesh import MeshPlot
+from postprocess.plots.streamline import StreamlinePlot
+from postprocess.plots.vector import VectorPlot
 
 # =========================================================
 # Configuration
@@ -37,29 +34,21 @@ INPUT_FILE = "data/zNormal.vtp"
 FIELD = "gammaDV"
 VECTOR_FIELD = "U"
 
-TITLE = (
-    r"$\gamma_{\mathrm{DV}}$ distribution"
-)
+TITLE = r"$\gamma_{\mathrm{DV}}$ distribution"
 
 X_LABEL = r"$x\;(m)$"
 Y_LABEL = r"$y\;(m)$"
 
-COLORBAR_LABEL = (
-    r"$\gamma_{\mathrm{DV}}\;(1/s)$"
-)
+COLORBAR_LABEL = r"$\gamma_{\mathrm{DV}}\;(1/s)$"
 
-OUTPUT_FILE = (
-    "output/example_04_vtp_combined_flow"
-)
+OUTPUT_FILE = "output/example_04_vtp_combined_flow"
 
 
 # =========================================================
 # Read data
 # =========================================================
 
-data = read_vtp(
-    INPUT_FILE
-)
+data = read_vtp(INPUT_FILE)
 
 
 # =========================================================
@@ -72,9 +61,7 @@ figure_config = FigureConfig(
     dpi=600,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -96,9 +83,7 @@ contour = contour_plot.plot(
 # Mesh
 # =========================================================
 
-mesh_plot = MeshPlot(
-    data
-)
+mesh_plot = MeshPlot(data)
 
 mesh = mesh_plot.plot(
     figure.axes,
@@ -143,37 +128,27 @@ streamline_plot = StreamlinePlot(
 
 streamlines = streamline_plot.plot(
     figure.axes,
-
     # Number of automatically generated seeds.
     n_seeds=50,
-
     # Distribute seeds along the y direction.
     seed_axis="y",
-
     # Keep a small margin from the boundaries.
     seed_margin=0.01,
-
     # Use the accurate adaptive RK45 integrator.
     integrator_type=45,
-
     # Constrain streamlines to the 2-D surface.
     surface_streamlines=True,
-
     # Integration controls.
     initial_step_length=0.1,
     min_step_length=0.01,
     max_step_length=0.5,
     max_steps=2000,
-
     # Stop integration when velocity becomes negligible.
     terminal_speed=1e-12,
-
     # RK45 error tolerance.
     max_error=1e-6,
-
     # Interpolate velocity from cells.
     interpolator_type="cell",
-
     # Publication styling.
     color="black",
     linewidth=0.7,
@@ -210,9 +185,7 @@ figure.set_labels(
     ylabel=Y_LABEL,
 )
 
-figure.set_title(
-    TITLE
-)
+figure.set_title(TITLE)
 
 
 # =========================================================
@@ -238,6 +211,4 @@ figure.export(
 )
 
 
-print(
-    "Example 04 completed successfully."
-)
+print("Example 04 completed successfully.")

@@ -34,17 +34,11 @@ class PublicationStyle:
         self.line_scheme = line_scheme
         self.marker_scheme = marker_scheme
 
-        self.colors = get_colors(
-            color_scheme
-        )
+        self.colors = get_colors(color_scheme)
 
-        self.linestyles = get_linestyles(
-            line_scheme
-        )
+        self.linestyles = get_linestyles(line_scheme)
 
-        self.markers = get_markers(
-            marker_scheme
-        )
+        self.markers = get_markers(marker_scheme)
 
     # =====================================================
     # Color
@@ -55,9 +49,7 @@ class PublicationStyle:
         Return a color according to index.
         """
 
-        return self.colors[
-            index % len(self.colors)
-        ]
+        return self.colors[index % len(self.colors)]
 
     # =====================================================
     # Line style
@@ -68,9 +60,7 @@ class PublicationStyle:
         Return a line style according to index.
         """
 
-        return self.linestyles[
-            index % len(self.linestyles)
-        ]
+        return self.linestyles[index % len(self.linestyles)]
 
     # =====================================================
     # Marker
@@ -81,9 +71,7 @@ class PublicationStyle:
         Return a marker according to index.
         """
 
-        return self.markers[
-            index % len(self.markers)
-        ]
+        return self.markers[index % len(self.markers)]
 
     # =====================================================
     # Dataset role
@@ -114,7 +102,6 @@ class PublicationStyle:
         """
 
         if role is None:
-
             return {
                 "color": self.color(index),
                 "linestyle": self.linestyle(index),
@@ -128,7 +115,6 @@ class PublicationStyle:
         # -------------------------------------------------
 
         if role == "numerical":
-
             return {
                 "color": self.color(index),
                 "linestyle": "-",
@@ -140,7 +126,6 @@ class PublicationStyle:
         # -------------------------------------------------
 
         if role == "analytical":
-
             return {
                 "color": self.color(index),
                 "linestyle": "--",
@@ -152,7 +137,6 @@ class PublicationStyle:
         # -------------------------------------------------
 
         if role == "experimental":
-
             return {
                 "color": self.color(index),
                 "linestyle": "None",
@@ -164,7 +148,6 @@ class PublicationStyle:
         # -------------------------------------------------
 
         if role == "reference":
-
             return {
                 "color": self.color(index),
                 "linestyle": "-.",
@@ -172,7 +155,7 @@ class PublicationStyle:
             }
 
         raise ValueError(
-            "Unknown dataset role '{}'. "
+            f"Unknown dataset role '{role}'. "
             "Available roles: numerical, analytical, "
-            "experimental, reference.".format(role)
+            "experimental, reference."
         )

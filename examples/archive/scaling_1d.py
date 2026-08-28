@@ -20,16 +20,12 @@ This example demonstrates:
 # =========================================================
 
 from postprocess.io.tabular import read_1d
-
-from postprocess.plots.line import LinePlot
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.line import LinePlot
 from postprocess.style import PublicationStyle
-
 
 # =========================================================
 # 1. Read the original dataset
@@ -58,15 +54,9 @@ print(data)
 
 print("Number of points :", data.size)
 
-print("x range          :",
-      data.x_min,
-      "to",
-      data.x_max)
+print("x range          :", data.x_min, "to", data.x_max)
 
-print("y range          :",
-      data.y_min,
-      "to",
-      data.y_max)
+print("y range          :", data.y_min, "to", data.y_max)
 
 print("x label          :", data.x_label)
 print("y label          :", data.y_label)
@@ -142,15 +132,9 @@ print("\n" + "=" * 60)
 print("Original dataset after scaling")
 print("=" * 60)
 
-print("x range :",
-      data.x_min,
-      "to",
-      data.x_max)
+print("x range :", data.x_min, "to", data.x_max)
 
-print("y range :",
-      data.y_min,
-      "to",
-      data.y_max)
+print("y range :", data.y_min, "to", data.y_max)
 
 print("Original x label :", data.x_label)
 print("Original y label :", data.y_label)
@@ -165,27 +149,21 @@ figure_config = FigureConfig(
     height=2.6,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
 # 7. Publication style
 # =========================================================
 
-style = PublicationStyle(
-    color_scheme="colorblind"
-)
+style = PublicationStyle(color_scheme="colorblind")
 
 
 # =========================================================
 # 8. Plot
 # =========================================================
 
-plot = LinePlot(
-    style=style
-)
+plot = LinePlot(style=style)
 
 plot.add(
     scaled,
@@ -193,34 +171,24 @@ plot.add(
     role="numerical",
 )
 
-plot.plot(
-    figure.axes
-)
+plot.plot(figure.axes)
 
 
 # =========================================================
 # 9. Axis labels
 # =========================================================
 
-figure.axes.set_xlabel(
-    scaled.x_label
-)
+figure.axes.set_xlabel(scaled.x_label)
 
-figure.axes.set_ylabel(
-    scaled.y_label
-)
+figure.axes.set_ylabel(scaled.y_label)
 
 
 # =========================================================
 # 10. Export
 # =========================================================
 
-figure.save(
-    "output/scaling_1d"
-)
+figure.save("output/scaling_1d")
 
 
 print("\nFigure generated successfully.")
-print(
-    "Output: output/scaling_1d"
-)
+print("Output: output/scaling_1d")

@@ -20,11 +20,7 @@ class LaTeXTextRegistry:
 
         self._counter += 1
 
-        placeholder = (
-            "GRAPHPlotLabel{:04d}".format(
-                self._counter
-            )
-        )
+        placeholder = f"GRAPHPlotLabel{self._counter:04d}"
 
         self._labels[placeholder] = text
 
@@ -41,13 +37,9 @@ class LaTeXTextRegistry:
             "r",
             encoding="utf-8",
         ) as file:
-
             content = file.read()
 
-        for placeholder, latex_text in (
-            self._labels.items()
-        ):
-
+        for placeholder, latex_text in self._labels.items():
             content = content.replace(
                 placeholder,
                 latex_text,
@@ -58,7 +50,6 @@ class LaTeXTextRegistry:
             "w",
             encoding="utf-8",
         ) as file:
-
             file.write(content)
 
     @property
@@ -67,6 +58,4 @@ class LaTeXTextRegistry:
         Return the registered labels.
         """
 
-        return dict(
-            self._labels
-        )
+        return dict(self._labels)

@@ -1,40 +1,35 @@
 import matplotlib
 
-matplotlib.use(
-    "Agg"
-)
+matplotlib.use("Agg")
 
 from pathlib import Path
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 
-from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import ContourPlot
-from postprocess.plots.mesh import MeshPlot
-from postprocess.plots.vector import VectorPlot
-from postprocess.plots.streamline import StreamlinePlot
-from postprocess.plots.annotation import AnnotationPlot
 from postprocess.data.data1d import Data1D
-from postprocess.plots.line import LinePlot
+from postprocess.io.vtp import read_vtp
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
+from postprocess.plots.annotation import AnnotationPlot
+from postprocess.plots.contour import ContourPlot
+from postprocess.plots.line import LinePlot
+from postprocess.plots.mesh import MeshPlot
+from postprocess.plots.streamline import StreamlinePlot
+from postprocess.plots.vector import VectorPlot
+
 INPUT_FILE = "data/zNormal.vtp"
 
 
-def test_vtp_contour_workflow(
-    tmp_path
-):
+def test_vtp_contour_workflow(tmp_path):
 
     # -----------------------------------------------------
     # Read
     # -----------------------------------------------------
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     # -----------------------------------------------------
     # Figure
@@ -45,9 +40,7 @@ def test_vtp_contour_workflow(
         height=3.0,
     )
 
-    figure = PublicationFigure(
-        figure_config
-    )
+    figure = PublicationFigure(figure_config)
 
     # -----------------------------------------------------
     # Contour
@@ -58,9 +51,7 @@ def test_vtp_contour_workflow(
         field="gammaDV",
     )
 
-    contour = contour_plot.plot(
-        figure.axes
-    )
+    contour = contour_plot.plot(figure.axes)
 
     assert contour is not None
 
@@ -68,10 +59,7 @@ def test_vtp_contour_workflow(
     # Export
     # -----------------------------------------------------
 
-    output = (
-        tmp_path /
-        "example_01_vtp_contour"
-    )
+    output = tmp_path / "example_01_vtp_contour"
 
     figure.export(
         str(output),
@@ -85,13 +73,9 @@ def test_vtp_contour_workflow(
     # Verify output
     # -----------------------------------------------------
 
-    pdf = Path(
-        str(output) + ".pdf"
-    )
+    pdf = Path(str(output) + ".pdf")
 
-    pdf_tex = Path(
-        str(output) + ".pdf_tex"
-    )
+    pdf_tex = Path(str(output) + ".pdf_tex")
 
     assert pdf.exists()
     assert pdf.stat().st_size > 0
@@ -99,17 +83,14 @@ def test_vtp_contour_workflow(
     assert pdf_tex.exists()
     assert pdf_tex.stat().st_size > 0
 
-def test_vtp_contour_mesh_workflow(
-    tmp_path
-):
+
+def test_vtp_contour_mesh_workflow(tmp_path):
 
     # -----------------------------------------------------
     # Read
     # -----------------------------------------------------
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     # -----------------------------------------------------
     # Figure
@@ -121,9 +102,7 @@ def test_vtp_contour_mesh_workflow(
         dpi=600,
     )
 
-    figure = PublicationFigure(
-        figure_config
-    )
+    figure = PublicationFigure(figure_config)
 
     # -----------------------------------------------------
     # Contour
@@ -145,9 +124,7 @@ def test_vtp_contour_mesh_workflow(
     # Mesh
     # -----------------------------------------------------
 
-    mesh_plot = MeshPlot(
-        data
-    )
+    mesh_plot = MeshPlot(data)
 
     mesh = mesh_plot.plot(
         figure.axes,
@@ -161,9 +138,7 @@ def test_vtp_contour_mesh_workflow(
 
     assert mesh.get_rasterized() is False
 
-    mesh.set_rasterized(
-        True
-    )
+    mesh.set_rasterized(True)
 
     assert mesh.get_rasterized() is True
 
@@ -176,9 +151,7 @@ def test_vtp_contour_mesh_workflow(
         ylabel=r"$y\;(m)$",
     )
 
-    figure.set_title(
-        r"$\gamma_{\mathrm{DV}}$ distribution"
-    )
+    figure.set_title(r"$\gamma_{\mathrm{DV}}$ distribution")
 
     # -----------------------------------------------------
     # Colorbar
@@ -195,10 +168,7 @@ def test_vtp_contour_mesh_workflow(
     # Export
     # -----------------------------------------------------
 
-    output = (
-        tmp_path /
-        "example_02_vtp_contour_mesh"
-    )
+    output = tmp_path / "example_02_vtp_contour_mesh"
 
     figure.export(
         str(output),
@@ -212,13 +182,9 @@ def test_vtp_contour_mesh_workflow(
     # Verify output
     # -----------------------------------------------------
 
-    pdf = Path(
-        str(output) + ".pdf"
-    )
+    pdf = Path(str(output) + ".pdf")
 
-    pdf_tex = Path(
-        str(output) + ".pdf_tex"
-    )
+    pdf_tex = Path(str(output) + ".pdf_tex")
 
     assert pdf.exists()
     assert pdf.stat().st_size > 0
@@ -226,17 +192,14 @@ def test_vtp_contour_mesh_workflow(
     assert pdf_tex.exists()
     assert pdf_tex.stat().st_size > 0
 
-def test_vtp_contour_vector_workflow(
-    tmp_path
-):
+
+def test_vtp_contour_vector_workflow(tmp_path):
 
     # -----------------------------------------------------
     # Read
     # -----------------------------------------------------
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     # -----------------------------------------------------
     # Figure
@@ -248,9 +211,7 @@ def test_vtp_contour_vector_workflow(
         dpi=600,
     )
 
-    figure = PublicationFigure(
-        figure_config
-    )
+    figure = PublicationFigure(figure_config)
 
     # -----------------------------------------------------
     # Contour
@@ -318,10 +279,7 @@ def test_vtp_contour_vector_workflow(
     # Export
     # -----------------------------------------------------
 
-    output = (
-        tmp_path /
-        "example_03_vtp_contour_vector"
-    )
+    output = tmp_path / "example_03_vtp_contour_vector"
 
     figure.export(
         str(output),
@@ -335,19 +293,16 @@ def test_vtp_contour_vector_workflow(
     # Verify output
     # -----------------------------------------------------
 
-    pdf = Path(
-        str(output) + ".pdf"
-    )
+    pdf = Path(str(output) + ".pdf")
 
-    pdf_tex = Path(
-        str(output) + ".pdf_tex"
-    )
+    pdf_tex = Path(str(output) + ".pdf_tex")
 
     assert pdf.exists()
     assert pdf.stat().st_size > 0
 
     assert pdf_tex.exists()
     assert pdf_tex.stat().st_size > 0
+
 
 def test_vtp_combined_flow_workflow(
     tmp_path,
@@ -357,9 +312,7 @@ def test_vtp_combined_flow_workflow(
     # Read
     # -----------------------------------------------------
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     # -----------------------------------------------------
     # Figure
@@ -370,9 +323,7 @@ def test_vtp_combined_flow_workflow(
         height=3.0,
     )
 
-    figure = PublicationFigure(
-        figure_config
-    )
+    figure = PublicationFigure(figure_config)
 
     # -----------------------------------------------------
     # Contour
@@ -384,9 +335,7 @@ def test_vtp_combined_flow_workflow(
         association="cell",
     )
 
-    contour = contour_plot.plot(
-        figure.axes
-    )
+    contour = contour_plot.plot(figure.axes)
 
     assert contour is not None
 
@@ -394,9 +343,7 @@ def test_vtp_combined_flow_workflow(
     # Mesh
     # -----------------------------------------------------
 
-    mesh_plot = MeshPlot(
-        data
-    )
+    mesh_plot = MeshPlot(data)
 
     mesh = mesh_plot.plot(
         figure.axes,
@@ -451,9 +398,7 @@ def test_vtp_combined_flow_workflow(
     )
 
     # Streamlines are plotted as Matplotlib lines.
-    assert len(
-        figure.axes.lines
-    ) > 0
+    assert len(figure.axes.lines) > 0
 
     # -----------------------------------------------------
     # Annotation
@@ -479,9 +424,7 @@ def test_vtp_combined_flow_workflow(
         ylabel=r"$y\;(m)$",
     )
 
-    figure.set_title(
-        r"$\gamma_{\mathrm{DV}}$ distribution"
-    )
+    figure.set_title(r"$\gamma_{\mathrm{DV}}$ distribution")
 
     # -----------------------------------------------------
     # Colorbar
@@ -498,10 +441,7 @@ def test_vtp_combined_flow_workflow(
     # Export
     # -----------------------------------------------------
 
-    output = (
-        tmp_path /
-        "example_04_vtp_combined_flow"
-    )
+    output = tmp_path / "example_04_vtp_combined_flow"
 
     figure.export(
         str(output),
@@ -515,13 +455,9 @@ def test_vtp_combined_flow_workflow(
     # Verify output
     # -----------------------------------------------------
 
-    pdf = Path(
-        str(output) + ".pdf"
-    )
+    pdf = Path(str(output) + ".pdf")
 
-    pdf_tex = Path(
-        str(output) + ".pdf_tex"
-    )
+    pdf_tex = Path(str(output) + ".pdf_tex")
 
     assert pdf.exists()
     assert pdf.stat().st_size > 0
@@ -533,25 +469,21 @@ def test_vtp_combined_flow_workflow(
     # Close
     # -----------------------------------------------------
 
-    plt.close(
-        figure.figure
-    )
+    plt.close(figure.figure)
+
+
 def test_vtp_contour_geometry_annotation_workflow(
     tmp_path,
 ):
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     figure_config = FigureConfig(
         width=3.4,
         height=3.0,
     )
 
-    figure = PublicationFigure(
-        figure_config
-    )
+    figure = PublicationFigure(figure_config)
 
     # -----------------------------------------------------
     # Contour
@@ -563,9 +495,7 @@ def test_vtp_contour_geometry_annotation_workflow(
         association="cell",
     )
 
-    contour = contour_plot.plot(
-        figure.axes
-    )
+    contour = contour_plot.plot(figure.axes)
 
     assert contour is not None
 
@@ -617,10 +547,7 @@ def test_vtp_contour_geometry_annotation_workflow(
     # Export
     # -----------------------------------------------------
 
-    output = (
-        tmp_path /
-        "example_05_contour_geometry"
-    )
+    output = tmp_path / "example_05_contour_geometry"
 
     figure.export(
         str(output),
@@ -630,13 +557,9 @@ def test_vtp_contour_geometry_annotation_workflow(
         ],
     )
 
-    pdf = Path(
-        str(output) + ".pdf"
-    )
+    pdf = Path(str(output) + ".pdf")
 
-    pdf_tex = Path(
-        str(output) + ".pdf_tex"
-    )
+    pdf_tex = Path(str(output) + ".pdf_tex")
 
     assert pdf.exists()
     assert pdf.stat().st_size > 0
@@ -644,9 +567,9 @@ def test_vtp_contour_geometry_annotation_workflow(
     assert pdf_tex.exists()
     assert pdf_tex.stat().st_size > 0
 
-    plt.close(
-        figure.figure
-    )
+    plt.close(figure.figure)
+
+
 def test_basic_line_workflow(
     tmp_path,
 ):
@@ -661,9 +584,7 @@ def test_basic_line_workflow(
         100,
     )
 
-    y = np.sin(
-        2.0 * np.pi * x
-    )
+    y = np.sin(2.0 * np.pi * x)
 
     data = Data1D(
         x=x,
@@ -684,9 +605,7 @@ def test_basic_line_workflow(
         dpi=600,
     )
 
-    figure = PublicationFigure(
-        figure_config
-    )
+    figure = PublicationFigure(figure_config)
 
     # -----------------------------------------------------
     # Line
@@ -703,9 +622,7 @@ def test_basic_line_workflow(
         linestyle="-",
     )
 
-    lines = line_plot.plot(
-        figure.axes
-    )
+    lines = line_plot.plot(figure.axes)
 
     assert len(lines) == 1
 
@@ -745,28 +662,17 @@ def test_basic_line_workflow(
         ylabel=r"$f(x)$",
     )
 
-    assert (
-        figure.axes.get_xlabel()
-        == r"$x\;(m)$"
-    )
+    assert figure.axes.get_xlabel() == r"$x\;(m)$"
 
-    assert (
-        figure.axes.get_ylabel()
-        == r"$f(x)$"
-    )
+    assert figure.axes.get_ylabel() == r"$f(x)$"
 
     # -----------------------------------------------------
     # Title
     # -----------------------------------------------------
 
-    figure.set_title(
-        r"Basic 1D line plot"
-    )
+    figure.set_title(r"Basic 1D line plot")
 
-    assert (
-        figure.axes.get_title()
-        == r"Basic 1D line plot"
-    )
+    assert figure.axes.get_title() == r"Basic 1D line plot"
 
     # -----------------------------------------------------
     # Legend
@@ -782,10 +688,7 @@ def test_basic_line_workflow(
     # Export
     # -----------------------------------------------------
 
-    output = (
-        tmp_path /
-        "example_06_basic_line"
-    )
+    output = tmp_path / "example_06_basic_line"
 
     figure.export(
         str(output),
@@ -799,13 +702,9 @@ def test_basic_line_workflow(
     # Verify files
     # -----------------------------------------------------
 
-    pdf = Path(
-        str(output) + ".pdf"
-    )
+    pdf = Path(str(output) + ".pdf")
 
-    pdf_tex = Path(
-        str(output) + ".pdf_tex"
-    )
+    pdf_tex = Path(str(output) + ".pdf_tex")
 
     assert pdf.exists()
     assert pdf.stat().st_size > 0
@@ -817,6 +716,4 @@ def test_basic_line_workflow(
     # Close
     # -----------------------------------------------------
 
-    plt.close(
-        figure.figure
-    )
+    plt.close(figure.figure)

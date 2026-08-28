@@ -2,15 +2,12 @@ import numpy as np
 
 from postprocess.io.vtp import read_vtp
 
-
 INPUT_FILE = "data/zNormal.vtp"
 
 
 def test_read_vtp():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     assert data is not None
 
@@ -23,9 +20,7 @@ def test_read_vtp():
 
 def test_vtp_expected_fields():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     expected_fields = {
         "alpha",
@@ -35,16 +30,12 @@ def test_vtp_expected_fields():
         "U",
     }
 
-    assert expected_fields.issubset(
-        set(data.dataset.cell_data.keys())
-    )
+    assert expected_fields.issubset(set(data.dataset.cell_data.keys()))
 
 
 def test_vtp_geometry():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     points = data.dataset.points
 
@@ -55,18 +46,12 @@ def test_vtp_geometry():
 
 def test_vtp_gammaDV():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
-    values = np.asarray(
-        data.dataset.cell_data["gammaDV"]
-    )
+    values = np.asarray(data.dataset.cell_data["gammaDV"])
 
     assert values.ndim == 1
 
     assert len(values) == 9603
 
-    assert np.all(
-        np.isfinite(values)
-    )
+    assert np.all(np.isfinite(values))

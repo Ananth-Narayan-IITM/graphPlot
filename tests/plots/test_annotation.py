@@ -1,14 +1,12 @@
 import matplotlib.pyplot as plt
-
-from matplotlib.patches import FancyArrow
-from matplotlib.patches import Rectangle
+from matplotlib.patches import FancyArrow, Rectangle
 
 from postprocess.plots.annotation import AnnotationPlot
-
 
 # =========================================================
 # Text
 # =========================================================
+
 
 def test_annotation_add_text():
 
@@ -35,6 +33,7 @@ def test_annotation_add_text():
 # Arrow
 # =========================================================
 
+
 def test_annotation_add_arrow():
 
     figure, axes = plt.subplots()
@@ -57,6 +56,7 @@ def test_annotation_add_arrow():
 # Marker
 # =========================================================
 
+
 def test_annotation_add_marker():
 
     figure, axes = plt.subplots()
@@ -68,9 +68,7 @@ def test_annotation_add_marker():
 
     assert marker is not None
 
-    assert len(
-        marker.get_offsets()
-    ) == 1
+    assert len(marker.get_offsets()) == 1
 
     plt.close(figure)
 
@@ -78,6 +76,7 @@ def test_annotation_add_marker():
 # =========================================================
 # Line
 # =========================================================
+
 
 def test_annotation_add_line():
 
@@ -91,13 +90,9 @@ def test_annotation_add_line():
 
     assert line is not None
 
-    assert list(
-        line.get_xdata()
-    ) == [0.1, 0.8]
+    assert list(line.get_xdata()) == [0.1, 0.8]
 
-    assert list(
-        line.get_ydata()
-    ) == [0.2, 0.9]
+    assert list(line.get_ydata()) == [0.2, 0.9]
 
     plt.close(figure)
 
@@ -105,6 +100,7 @@ def test_annotation_add_line():
 # =========================================================
 # Rectangle
 # =========================================================
+
 
 def test_annotation_add_rectangle():
 
@@ -126,6 +122,8 @@ def test_annotation_add_rectangle():
     assert rectangle.get_height() == 0.5
 
     plt.close(figure)
+
+
 def test_annotation_add_rectangle_dimensions():
 
     figure, axes = plt.subplots()
@@ -146,6 +144,7 @@ def test_annotation_add_rectangle_dimensions():
 
     plt.close(figure)
 
+
 def test_annotation_add_line_geometry():
 
     figure, axes = plt.subplots()
@@ -159,13 +158,9 @@ def test_annotation_add_line_geometry():
         linestyle="--",
     )
 
-    assert list(
-        line.get_xdata()
-    ) == [1.0, 4.0]
+    assert list(line.get_xdata()) == [1.0, 4.0]
 
-    assert list(
-        line.get_ydata()
-    ) == [2.0, 6.0]
+    assert list(line.get_ydata()) == [2.0, 6.0]
 
     assert line.get_color() == "black"
 
@@ -174,6 +169,7 @@ def test_annotation_add_line_geometry():
     assert line.get_linestyle() == "--"
 
     plt.close(figure)
+
 
 def test_annotation_add_arrow_geometry():
 

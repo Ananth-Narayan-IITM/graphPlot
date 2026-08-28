@@ -1,4 +1,6 @@
 from postprocess.style import PublicationStyle
+
+
 class LinePlot:
     """
     Publication-quality 1D multi-dataset plot.
@@ -188,10 +190,7 @@ class LinePlot:
         """
 
         if y_error is None and x_error is None:
-            raise ValueError(
-                "At least one of y_error or x_error "
-                "must be provided."
-            )
+            raise ValueError("At least one of y_error or x_error must be provided.")
         style = self.style.dataset_style(
             len(self.datasets) + len(self.errorbars),
             role=role,
@@ -252,7 +251,6 @@ class LinePlot:
         # -------------------------------------------------
 
         for item in self.datasets:
-
             data = item["data"]
 
             line = axes.plot(
@@ -264,15 +262,9 @@ class LinePlot:
                 linestyle=item["linestyle"],
                 marker=item["marker"],
                 markersize=item["markersize"],
-                markerfacecolor=item[
-                    "markerfacecolor"
-                ],
-                markeredgecolor=item[
-                    "markeredgecolor"
-                ],
-                markeredgewidth=item[
-                    "markeredgewidth"
-                ],
+                markerfacecolor=item["markerfacecolor"],
+                markeredgecolor=item["markeredgecolor"],
+                markeredgewidth=item["markeredgewidth"],
                 markevery=item["markevery"],
                 alpha=item["alpha"],
                 zorder=item["zorder"],
@@ -286,7 +278,6 @@ class LinePlot:
         # -------------------------------------------------
 
         for item in self.errorbars:
-
             data = item["data"]
 
             errorbar = axes.errorbar(
@@ -298,15 +289,9 @@ class LinePlot:
                 color=item["color"],
                 marker=item["marker"],
                 markersize=item["markersize"],
-                markerfacecolor=item[
-                    "markerfacecolor"
-                ],
-                markeredgecolor=item[
-                    "markeredgecolor"
-                ],
-                markeredgewidth=item[
-                    "markeredgewidth"
-                ],
+                markerfacecolor=item["markerfacecolor"],
+                markeredgecolor=item["markeredgecolor"],
+                markeredgewidth=item["markeredgewidth"],
                 linestyle=item["linestyle"],
                 linewidth=item["linewidth"],
                 capsize=item["capsize"],
@@ -329,10 +314,7 @@ class LinePlot:
     @property
     def number_of_datasets(self):
 
-        return (
-            len(self.datasets)
-            + len(self.errorbars)
-        )
+        return len(self.datasets) + len(self.errorbars)
 
     # =====================================================
     # Clear

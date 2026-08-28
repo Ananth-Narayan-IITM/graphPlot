@@ -2,7 +2,6 @@
 Marker schemes for publication figures.
 """
 
-
 PUBLICATION_MARKERS = [
     "o",
     "s",
@@ -43,8 +42,5 @@ def get_markers(scheme):
         return list(BLACKWHITE_MARKERS)
 
     raise ValueError(
-        "Unknown marker scheme '{}'. "
-        "Available schemes: publication, blackwhite.".format(
-            scheme
-        )
+        f"Unknown marker scheme '{scheme}'. Available schemes: publication, blackwhite."
     )

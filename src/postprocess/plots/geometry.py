@@ -1,6 +1,4 @@
-from typing import Sequence, Tuple
-
-import matplotlib.patches as patches
+from matplotlib import patches
 
 
 class GeometryPlot:
@@ -178,13 +176,10 @@ class GeometryPlot:
         dx = x1 - x0
         dy = y1 - y0
 
-        length = (dx ** 2 + dy ** 2) ** 0.5
+        length = (dx**2 + dy**2) ** 0.5
 
         if length == 0.0:
-            raise ValueError(
-                "Dimension start and end points "
-                "cannot be identical."
-            )
+            raise ValueError("Dimension start and end points cannot be identical.")
 
         # -------------------------------------------------
         # Unit normal
@@ -246,16 +241,9 @@ class GeometryPlot:
         # -------------------------------------------------
 
         if text is not None:
+            tx = 0.5 * (p0[0] + p1[0]) + text_offset * nx
 
-            tx = (
-                0.5 * (p0[0] + p1[0])
-                + text_offset * nx
-            )
-
-            ty = (
-                0.5 * (p0[1] + p1[1])
-                + text_offset * ny
-            )
+            ty = 0.5 * (p0[1] + p1[1]) + text_offset * ny
 
             angle = 0.0
 

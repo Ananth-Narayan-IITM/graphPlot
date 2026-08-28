@@ -1,4 +1,3 @@
-from pathlib import Path
 import numpy as np
 
 
@@ -56,19 +55,13 @@ class Data1D:
         )
 
         if self.x.ndim != 1:
-            raise ValueError(
-                "x must be a one-dimensional array."
-            )
+            raise ValueError("x must be a one-dimensional array.")
 
         if self.y.ndim != 1:
-            raise ValueError(
-                "y must be a one-dimensional array."
-            )
+            raise ValueError("y must be a one-dimensional array.")
 
         if len(self.x) != len(self.y):
-            raise ValueError(
-                "x and y must have the same length."
-            )
+            raise ValueError("x and y must have the same length.")
 
         self.label = label
 
@@ -78,10 +71,7 @@ class Data1D:
         self.x_unit = x_unit
         self.y_unit = y_unit
 
-        self.metadata = (
-            {} if metadata is None
-            else dict(metadata)
-        )
+        self.metadata = {} if metadata is None else dict(metadata)
 
     # =====================================================
     # Basic information
@@ -122,10 +112,7 @@ class Data1D:
             Cleaned dataset.
         """
 
-        valid = (
-            np.isfinite(self.x)
-            & np.isfinite(self.y)
-        )
+        valid = np.isfinite(self.x) & np.isfinite(self.y)
 
         return Data1D(
             self.x[valid],
@@ -152,9 +139,7 @@ class Data1D:
             Sorted dataset.
         """
 
-        order = np.argsort(
-            self.x
-        )
+        order = np.argsort(self.x)
 
         return Data1D(
             self.x[order],
@@ -176,19 +161,8 @@ class Data1D:
 
     def __repr__(self):
 
-        return (
-            "Data1D("
-            "size={}, "
-            "x=[{}, {}], "
-            "y=[{}, {}]"
-            ")".format(
-                self.size,
-                self.x_min,
-                self.x_max,
-                self.y_min,
-                self.y_max,
-            )
-        )
+        return f"Data1D(size={self.size}, x=[{self.x_min}, {self.x_max}], y=[{self.y_min}, {self.y_max}])"
+
     # =====================================================
     # Scaling
     # =====================================================
@@ -226,34 +200,19 @@ class Data1D:
         scale = float(scale)
 
         if scale == 0.0:
-            raise ValueError(
-                "x scale cannot be zero."
-            )
+            raise ValueError("x scale cannot be zero.")
 
         return Data1D(
             x=self.x / scale,
             y=self.y.copy(),
-
             label=self.label,
-
-            x_label=(
-                self.x_label
-                if label is None
-                else label
-            ),
-
+            x_label=(self.x_label if label is None else label),
             y_label=self.y_label,
-
-            x_unit=(
-                self.x_unit
-                if unit is None
-                else unit
-            ),
-
+            x_unit=(self.x_unit if unit is None else unit),
             y_unit=self.y_unit,
-
             metadata=self.metadata.copy(),
         )
+
     def scale_y(
         self,
         scale,
@@ -287,31 +246,15 @@ class Data1D:
         scale = float(scale)
 
         if scale == 0.0:
-            raise ValueError(
-                "y scale cannot be zero."
-            )
+            raise ValueError("y scale cannot be zero.")
 
         return Data1D(
             x=self.x.copy(),
             y=self.y / scale,
-
             label=self.label,
-
             x_label=self.x_label,
-
-            y_label=(
-                self.y_label
-                if label is None
-                else label
-            ),
-
+            y_label=(self.y_label if label is None else label),
             x_unit=self.x_unit,
-
-            y_unit=(
-                self.y_unit
-                if unit is None
-                else unit
-            ),
-
+            y_unit=(self.y_unit if unit is None else unit),
             metadata=self.metadata.copy(),
         )

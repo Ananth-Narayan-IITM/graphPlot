@@ -23,20 +23,16 @@ PDF + PDF_TeX
 """
 
 from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import (
-    ContourPlot,
-)
-
-from postprocess.plots.mesh import (
-    MeshPlot,
-)
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.contour import (
+    ContourPlot,
+)
+from postprocess.plots.mesh import (
+    MeshPlot,
+)
 
 # =========================================================
 # User configuration
@@ -46,30 +42,22 @@ INPUT_FILE = "data/zNormal.vtp"
 
 FIELD = "gammaDV"
 
-TITLE = (
-    r"$\gamma_{\mathrm{DV}}$ distribution"
-)
+TITLE = r"$\gamma_{\mathrm{DV}}$ distribution"
 
 X_LABEL = r"$x\;(m)$"
 
 Y_LABEL = r"$y\;(m)$"
 
-COLORBAR_LABEL = (
-    r"$\gamma_{\mathrm{DV}}\;(1/s)$"
-)
+COLORBAR_LABEL = r"$\gamma_{\mathrm{DV}}\;(1/s)$"
 
-OUTPUT_FILE = (
-    "output/example_02_vtp_contour_mesh"
-)
+OUTPUT_FILE = "output/example_02_vtp_contour_mesh"
 
 
 # =========================================================
 # Read VTP
 # =========================================================
 
-data = read_vtp(
-    INPUT_FILE
-)
+data = read_vtp(INPUT_FILE)
 
 
 # =========================================================
@@ -79,12 +67,10 @@ data = read_vtp(
 figure_config = FigureConfig(
     width=3.4,
     height=3.0,
-    dpi = 1200,
+    dpi=1200,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -106,9 +92,7 @@ contour = contour_plot.plot(
 # Computational mesh
 # =========================================================
 
-mesh_plot = MeshPlot(
-    data
-)
+mesh_plot = MeshPlot(data)
 
 mesh = mesh_plot.plot(
     figure.axes,
@@ -138,9 +122,7 @@ figure.set_labels(
 # Title
 # =========================================================
 
-figure.set_title(
-    TITLE
-)
+figure.set_title(TITLE)
 
 
 # =========================================================
@@ -166,6 +148,4 @@ figure.export(
 )
 
 
-print(
-    "Example 02 completed successfully."
-)
+print("Example 02 completed successfully.")

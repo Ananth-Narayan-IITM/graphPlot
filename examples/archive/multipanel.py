@@ -23,7 +23,6 @@ from postprocess.layout.figure import (
     PublicationFigure,
 )
 
-
 # =========================================================
 # Figure configuration
 # =========================================================
@@ -104,13 +103,9 @@ figure.label_panels()
 # Common axis labels
 # =========================================================
 
-figure.set_common_xlabel(
-    r"$x$"
-)
+figure.set_common_xlabel(r"$x$")
 
-figure.set_common_ylabel(
-    r"$f(x)$"
-)
+figure.set_common_ylabel(r"$f(x)$")
 
 
 # =========================================================
@@ -131,10 +126,6 @@ figure.adjust_layout(
 # Export
 # =========================================================
 
-figure.save(
-    "output/tutorial_multipanel_labels"
-)
+figure.save("output/tutorial_multipanel_labels")
 
-print(
-    "Multipanel figure generated successfully."
-)
+print("Multipanel figure generated successfully.")

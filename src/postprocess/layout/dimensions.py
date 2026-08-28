@@ -8,14 +8,11 @@ def get_width(name):
     """
 
     if name == "single_column":
-
         return SINGLE_COLUMN_WIDTH
 
     if name == "double_column":
-
         return DOUBLE_COLUMN_WIDTH
 
     raise ValueError(
-        f"Unknown figure width '{name}'. "
-        "Use 'single_column' or 'double_column'."
+        f"Unknown figure width '{name}'. Use 'single_column' or 'double_column'."
     )

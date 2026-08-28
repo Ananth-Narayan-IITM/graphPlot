@@ -1,8 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
 import pyvista as pv
-
 from matplotlib.quiver import Quiver
 
 from postprocess.plots.vector import VectorPlot
@@ -11,38 +9,46 @@ from postprocess.plots.vector import VectorPlot
 # Test data
 # =========================================================
 
+
 def make_vector_dataset():
 
-    points = np.array([
-        [0.0, 0.0, 0.0],
-        [1.0, 0.0, 0.0],
-        [1.0, 1.0, 0.0],
-        [0.0, 1.0, 0.0],
+    points = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [1.0, 1.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [2.0, 0.0, 0.0],
+            [2.0, 1.0, 0.0],
+        ]
+    )
 
-        [2.0, 0.0, 0.0],
-        [2.0, 1.0, 0.0],
-    ])
-
-    faces = np.hstack([
-        [4, 0, 1, 2, 3],
-        [4, 1, 4, 5, 2],
-    ])
+    faces = np.hstack(
+        [
+            [4, 0, 1, 2, 3],
+            [4, 1, 4, 5, 2],
+        ]
+    )
 
     mesh = pv.PolyData(
         points,
         faces,
     )
 
-    mesh.cell_data["U"] = np.array([
-        [2.0, 0.0, 0.0],
-        [1.0, 1.0, 0.0],
-    ])
+    mesh.cell_data["U"] = np.array(
+        [
+            [2.0, 0.0, 0.0],
+            [1.0, 1.0, 0.0],
+        ]
+    )
 
     return mesh
+
 
 # =========================================================
 # Creation
 # =========================================================
+
 
 def test_vector_plot_creation():
 
@@ -61,6 +67,7 @@ def test_vector_plot_creation():
 # =========================================================
 # Plot
 # =========================================================
+
 
 def test_vector_plot_returns_quiver():
 
@@ -95,6 +102,7 @@ def test_vector_plot_returns_quiver():
 # Vector magnitude
 # =========================================================
 
+
 def test_vector_plot_preserves_magnitude():
 
     data = make_vector_dataset()
@@ -106,7 +114,6 @@ def test_vector_plot_preserves_magnitude():
     )
 
     class DummyAxes:
-
         def quiver(
             self,
             x,
@@ -130,10 +137,7 @@ def test_vector_plot_preserves_magnitude():
         scale=1,
     )
 
-    magnitudes = np.sqrt(
-        result["u"] ** 2
-        + result["v"] ** 2
-    )
+    magnitudes = np.sqrt(result["u"] ** 2 + result["v"] ** 2)
 
     assert np.allclose(
         magnitudes,
@@ -143,9 +147,11 @@ def test_vector_plot_preserves_magnitude():
         ],
     )
 
+
 # =========================================================
 # Vector normalization
 # =========================================================
+
 
 def test_vector_normalization():
 
@@ -158,7 +164,6 @@ def test_vector_normalization():
     )
 
     class DummyAxes:
-
         def quiver(
             self,
             x,
@@ -182,10 +187,7 @@ def test_vector_normalization():
         scale=1,
     )
 
-    magnitudes = np.sqrt(
-        result["u"] ** 2
-        + result["v"] ** 2
-    )
+    magnitudes = np.sqrt(result["u"] ** 2 + result["v"] ** 2)
 
     assert np.allclose(
         magnitudes,

@@ -3,19 +3,13 @@ from pathlib import Path
 from postprocess.export.latex import (
     LaTeXTextRegistry,
 )
-
 from postprocess.export.pdftex import (
     PDFTeXExporter,
 )
 
+SVG_FILE = Path("/tmp/graphplot_placeholder.svg")
 
-SVG_FILE = Path(
-    "/tmp/graphplot_placeholder.svg"
-)
-
-OUTPUT_FILE = Path(
-    "output/placeholder.pdf"
-)
+OUTPUT_FILE = Path("output/placeholder.pdf")
 
 
 # =========================================================
@@ -24,9 +18,7 @@ OUTPUT_FILE = Path(
 
 registry = LaTeXTextRegistry()
 
-placeholder = registry.register(
-    r"$\gamma_{\mathrm{DV}}$ (1/s)"
-)
+placeholder = registry.register(r"$\gamma_{\mathrm{DV}}$ (1/s)")
 
 
 print(
@@ -39,7 +31,7 @@ print(
 # Create SVG
 # =========================================================
 
-svg = """\
+svg = f"""\
 <svg xmlns="http://www.w3.org/2000/svg"
      width="100mm"
      height="60mm"
@@ -64,9 +56,7 @@ svg = """\
     </text>
 
 </svg>
-""".format(
-    placeholder=placeholder
-)
+"""
 
 
 with open(
@@ -74,7 +64,6 @@ with open(
     "w",
     encoding="utf-8",
 ) as file:
-
     file.write(svg)
 
 
@@ -94,9 +83,7 @@ pdf_file, pdf_tex_file = exporter.export(
 # Replace placeholder
 # =========================================================
 
-registry.replace_in_file(
-    pdf_tex_file
-)
+registry.replace_in_file(pdf_tex_file)
 
 
 print(

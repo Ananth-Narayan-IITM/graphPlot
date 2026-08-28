@@ -17,15 +17,12 @@ existing CFD result.
 """
 
 from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import ContourPlot
-from postprocess.plots.annotation import AnnotationPlot
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.annotation import AnnotationPlot
+from postprocess.plots.contour import ContourPlot
 
 # =========================================================
 # Configuration
@@ -35,18 +32,14 @@ INPUT_FILE = "data/zNormal.vtp"
 
 FIELD = "gammaDV"
 
-OUTPUT_FILE = (
-    "output/example_05_vtp_contour_geometry"
-)
+OUTPUT_FILE = "output/example_05_vtp_contour_geometry"
 
 
 # =========================================================
 # Read VTP
 # =========================================================
 
-data = read_vtp(
-    INPUT_FILE
-)
+data = read_vtp(INPUT_FILE)
 
 
 # =========================================================
@@ -59,9 +52,7 @@ figure_config = FigureConfig(
     dpi=600,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -74,9 +65,7 @@ contour_plot = ContourPlot(
     association="cell",
 )
 
-contour = contour_plot.plot(
-    figure.axes
-)
+contour = contour_plot.plot(figure.axes)
 
 
 # =========================================================
@@ -129,9 +118,7 @@ assert geometry is not None
 # Horizontal dimension
 # =========================================================
 
-dimension_y = (
-    geometry_y - 0.20
-)
+dimension_y = geometry_y - 0.20
 
 # Dimension line
 
@@ -194,13 +181,8 @@ AnnotationPlot.add_arrow(
 
 AnnotationPlot.add_text(
     figure.axes,
-    x=(
-        geometry_x
-        + geometry_width / 2
-    ),
-    y=(
-        dimension_y - 0.10
-    ),
+    x=(geometry_x + geometry_width / 2),
+    y=(dimension_y - 0.10),
     text=r"$L = 1.0\;m$",
     fontsize=8,
     ha="center",
@@ -212,29 +194,22 @@ AnnotationPlot.add_text(
 # Vertical dimension
 # =========================================================
 
-dimension_x = (
-    geometry_x
-    + geometry_width
-    + 0.20
-)
+dimension_x = geometry_x + geometry_width + 0.20
 
 # Dimension line
 
-vertical_dimension_line = (
-    AnnotationPlot.add_line(
-        figure.axes,
-        start=(
-            dimension_x,
-            geometry_y,
-        ),
-        end=(
-            dimension_x,
-            geometry_y
-            + geometry_height,
-        ),
-        color="black",
-        linewidth=0.8,
-    )
+vertical_dimension_line = AnnotationPlot.add_line(
+    figure.axes,
+    start=(
+        dimension_x,
+        geometry_y,
+    ),
+    end=(
+        dimension_x,
+        geometry_y + geometry_height,
+    ),
+    color="black",
+    linewidth=0.8,
 )
 
 assert vertical_dimension_line is not None
@@ -265,14 +240,11 @@ AnnotationPlot.add_arrow(
     figure.axes,
     start=(
         dimension_x,
-        geometry_y
-        + geometry_height
-        - 0.08,
+        geometry_y + geometry_height - 0.08,
     ),
     end=(
         dimension_x,
-        geometry_y
-        + geometry_height,
+        geometry_y + geometry_height,
     ),
     color="black",
     linewidth=0.8,
@@ -285,13 +257,8 @@ AnnotationPlot.add_arrow(
 
 AnnotationPlot.add_text(
     figure.axes,
-    x=(
-        dimension_x + 0.08
-    ),
-    y=(
-        geometry_y
-        + geometry_height / 2
-    ),
+    x=(dimension_x + 0.08),
+    y=(geometry_y + geometry_height / 2),
     text=r"$H = 0.65\;m$",
     fontsize=8,
     ha="left",
@@ -314,9 +281,7 @@ figure.set_labels(
 # Title
 # =========================================================
 
-figure.set_title(
-    r"$\gamma_{\mathrm{DV}}$ distribution"
-)
+figure.set_title(r"$\gamma_{\mathrm{DV}}$ distribution")
 
 
 # =========================================================
@@ -342,6 +307,4 @@ figure.export(
 )
 
 
-print(
-    "Example 05 completed successfully."
-)
+print("Example 05 completed successfully.")

@@ -62,6 +62,7 @@ BLACKWHITE_COLORS = [
 # Color scheme resolver
 # =========================================================
 
+
 def get_colors(scheme):
     """
     Return the requested color scheme.
@@ -92,7 +93,7 @@ def get_colors(scheme):
         return list(BLACKWHITE_COLORS)
 
     raise ValueError(
-        "Unknown color scheme '{}'. "
+        f"Unknown color scheme '{scheme}'. "
         "Available schemes: default, colorblind, "
-        "grayscale, blackwhite.".format(scheme)
+        "grayscale, blackwhite."
     )

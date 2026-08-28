@@ -1,6 +1,4 @@
-from typing import Optional, Tuple
-
-import matplotlib.patches as patches
+from matplotlib import patches
 
 
 class AnnotationPlot:
@@ -234,8 +232,6 @@ class AnnotationPlot:
             **kwargs,
         )
 
-        axes.add_patch(
-            rectangle
-        )
+        axes.add_patch(rectangle)
 
         return rectangle

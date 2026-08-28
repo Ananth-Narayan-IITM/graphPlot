@@ -21,12 +21,11 @@ workflow is completely self-contained.
 import numpy as np
 
 from postprocess.data.data1d import Data1D
-from postprocess.plots.line import LinePlot
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.line import LinePlot
 
 # =========================================================
 # Data
@@ -38,11 +37,7 @@ x = np.linspace(
     100,
 )
 
-y = (
-    np.sin(
-        2.0 * np.pi * x
-    )
-)
+y = np.sin(2.0 * np.pi * x)
 
 
 data = Data1D(
@@ -65,9 +60,7 @@ figure_config = FigureConfig(
     dpi=600,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -85,9 +78,7 @@ line_plot.add(
     linestyle="-",
 )
 
-lines = line_plot.plot(
-    figure.axes
-)
+lines = line_plot.plot(figure.axes)
 
 assert len(lines) == 1
 
@@ -105,9 +96,7 @@ figure.set_labels(
 # Title
 # =========================================================
 
-figure.set_title(
-    r"Basic 1D line plot"
-)
+figure.set_title(r"Basic 1D line plot")
 
 
 # =========================================================
@@ -132,6 +121,4 @@ figure.export(
 )
 
 
-print(
-    "Example 06 completed successfully."
-)
+print("Example 06 completed successfully.")

@@ -67,31 +67,20 @@ class LegendManager:
         Render the legend.
         """
 
-        handles, labels = (
-            axes.get_legend_handles_labels()
-        )
+        handles, labels = axes.get_legend_handles_labels()
 
         # -------------------------------------------------
         # Add reference entries
         # -------------------------------------------------
 
         for entry in self.reference_entries:
-
             if entry["handle"] is not None:
-
-                handles.append(
-                    entry["handle"]
-                )
+                handles.append(entry["handle"])
 
             else:
+                handles.append(None)
 
-                handles.append(
-                    None
-                )
-
-            labels.append(
-                entry["label"]
-            )
+            labels.append(entry["label"])
 
         # -------------------------------------------------
         # Nothing to display

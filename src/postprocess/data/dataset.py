@@ -14,17 +14,9 @@ class DataSet:
 
         self.mesh = mesh
 
-        self.point_data = (
-            point_data
-            if point_data is not None
-            else {}
-        )
+        self.point_data = point_data if point_data is not None else {}
 
-        self.cell_data = (
-            cell_data
-            if cell_data is not None
-            else {}
-        )
+        self.cell_data = cell_data if cell_data is not None else {}
 
     def get_field(
         self,
@@ -33,7 +25,6 @@ class DataSet:
     ):
 
         if association == "cell":
-
             if name not in self.cell_data:
                 raise KeyError(
                     f"Cell field '{name}' not found.\n"
@@ -44,7 +35,6 @@ class DataSet:
             return self.cell_data[name]
 
         if association == "point":
-
             if name not in self.point_data:
                 raise KeyError(
                     f"Point field '{name}' not found.\n"
@@ -54,8 +44,4 @@ class DataSet:
 
             return self.point_data[name]
 
-        raise ValueError(
-            "association must be either "
-            "'cell' or 'point'."
-        )
-    
+        raise ValueError("association must be either 'cell' or 'point'.")

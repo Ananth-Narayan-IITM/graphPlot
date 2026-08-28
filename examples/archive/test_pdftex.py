@@ -4,14 +4,9 @@ from postprocess.export.pdftex import (
     PDFTeXExporter,
 )
 
+SVG_FILE = Path("/tmp/graphplot_pdftex_test.svg")
 
-SVG_FILE = Path(
-    "/tmp/graphplot_pdftex_test.svg"
-)
-
-OUTPUT_FILE = Path(
-    "output/test_pdftex.pdf"
-)
+OUTPUT_FILE = Path("output/test_pdftex.pdf")
 
 
 exporter = PDFTeXExporter()

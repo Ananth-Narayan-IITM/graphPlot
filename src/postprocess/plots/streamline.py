@@ -30,10 +30,7 @@ class StreamlinePlot:
             "point",
             "cell",
         ):
-            raise ValueError(
-                "association must be 'auto', "
-                "'point', or 'cell'."
-            )
+            raise ValueError("association must be 'auto', 'point', or 'cell'.")
 
         self.association = association
 
@@ -71,13 +68,9 @@ class StreamlinePlot:
         # -------------------------------------------------
 
         if self.association == "point":
-
             if self.field not in dataset.point_data:
                 raise KeyError(
-                    "Vector field '{}' is not available "
-                    "as point data.".format(
-                        self.field
-                    )
+                    f"Vector field '{self.field}' is not available as point data."
                 )
 
             mesh = dataset.copy()
@@ -94,22 +87,16 @@ class StreamlinePlot:
         # -------------------------------------------------
 
         if self.association == "cell":
-
             if self.field not in dataset.cell_data:
                 raise KeyError(
-                    "Vector field '{}' is not available "
-                    "as cell data.".format(
-                        self.field
-                    )
+                    f"Vector field '{self.field}' is not available as cell data."
                 )
 
             # Convert cell-centered vectors to point data.
             #
             # VTK then interpolates the velocity field
             # continuously during streamline integration.
-            mesh = dataset.cell_data_to_point_data(
-                pass_cell_data=True
-            )
+            mesh = dataset.cell_data_to_point_data(pass_cell_data=True)
 
             mesh.set_active_vectors(
                 self.field,
@@ -123,7 +110,6 @@ class StreamlinePlot:
         # -------------------------------------------------
 
         if self.field in dataset.point_data:
-
             mesh = dataset.copy()
 
             mesh.set_active_vectors(
@@ -134,10 +120,7 @@ class StreamlinePlot:
             return mesh
 
         if self.field in dataset.cell_data:
-
-            mesh = dataset.cell_data_to_point_data(
-                pass_cell_data=True
-            )
+            mesh = dataset.cell_data_to_point_data(pass_cell_data=True)
 
             mesh.set_active_vectors(
                 self.field,
@@ -147,10 +130,7 @@ class StreamlinePlot:
             return mesh
 
         raise KeyError(
-            "Vector field '{}' was not found "
-            "in point or cell data.".format(
-                self.field
-            )
+            f"Vector field '{self.field}' was not found in point or cell data."
         )
 
     # =====================================================
@@ -195,29 +175,22 @@ class StreamlinePlot:
             Fractional margin removed from the ends.
         """
 
-        xmin, xmax, ymin, ymax, zmin, zmax = (
-            bounds
-        )
+        xmin, xmax, ymin, ymax, zmin, zmax = bounds
 
         if n_seeds < 1:
-            raise ValueError(
-                "n_seeds must be greater than zero."
-            )
+            raise ValueError("n_seeds must be greater than zero.")
 
         if seed_axis not in (
             "x",
             "y",
         ):
-            raise ValueError(
-                "seed_axis must be 'x' or 'y'."
-            )
+            raise ValueError("seed_axis must be 'x' or 'y'.")
 
         # -------------------------------------------------
         # Default seed position
         # -------------------------------------------------
 
         if seed_position is None:
-
             if seed_axis == "y":
                 seed_position = xmin
 
@@ -229,23 +202,14 @@ class StreamlinePlot:
         # -------------------------------------------------
 
         if not 0.0 <= seed_margin < 0.5:
-            raise ValueError(
-                "seed_margin must be in [0, 0.5)."
-            )
+            raise ValueError("seed_margin must be in [0, 0.5).")
 
         if seed_axis == "y":
-
             span = ymax - ymin
 
-            y0 = (
-                ymin
-                + seed_margin * span
-            )
+            y0 = ymin + seed_margin * span
 
-            y1 = (
-                ymax
-                - seed_margin * span
-            )
+            y1 = ymax - seed_margin * span
 
             values = np.linspace(
                 y0,
@@ -268,18 +232,11 @@ class StreamlinePlot:
             )
 
         else:
-
             span = xmax - xmin
 
-            x0 = (
-                xmin
-                + seed_margin * span
-            )
+            x0 = xmin + seed_margin * span
 
-            x1 = (
-                xmax
-                - seed_margin * span
-            )
+            x1 = xmax - seed_margin * span
 
             values = np.linspace(
                 x0,
@@ -316,9 +273,7 @@ class StreamlinePlot:
 
         import pyvista as pv
 
-        return pv.PolyData(
-            np.asarray(points)
-        )
+        return pv.PolyData(np.asarray(points))
 
     # =====================================================
     # Plot
@@ -427,8 +382,7 @@ class StreamlinePlot:
             "both",
         ):
             raise ValueError(
-                "integration_direction must be "
-                "'forward', 'backward', or 'both'."
+                "integration_direction must be 'forward', 'backward', or 'both'."
             )
 
         # -------------------------------------------------
@@ -440,10 +394,7 @@ class StreamlinePlot:
             4,
             45,
         ):
-            raise ValueError(
-                "integrator_type must be "
-                "2, 4, or 45."
-            )
+            raise ValueError("integrator_type must be 2, 4, or 45.")
 
         # -------------------------------------------------
         # Prepare mesh
@@ -456,7 +407,6 @@ class StreamlinePlot:
         # -------------------------------------------------
 
         if seed_points is None:
-
             points = self._create_seed_points(
                 mesh.bounds,
                 n_seeds=n_seeds,
@@ -466,60 +416,37 @@ class StreamlinePlot:
             )
 
         else:
-
             points = np.asarray(
                 seed_points,
                 dtype=float,
             )
 
             if points.ndim != 2:
-                raise ValueError(
-                    "seed_points must be a 2D "
-                    "array with shape (N, 3)."
-                )
+                raise ValueError("seed_points must be a 2D array with shape (N, 3).")
 
             if points.shape[1] != 3:
-                raise ValueError(
-                    "seed_points must have shape "
-                    "(N, 3)."
-                )
+                raise ValueError("seed_points must have shape (N, 3).")
 
-        source = self._make_source(
-            points
-        )
+        source = self._make_source(points)
 
         # -------------------------------------------------
         # VTK streamline integration
         # -------------------------------------------------
 
-        streamlines = (
-            mesh.streamlines_from_source(
-                source,
-                vectors=self.field,
-                integrator_type=integrator_type,
-                integration_direction=(
-                    integration_direction
-                ),
-                surface_streamlines=(
-                    surface_streamlines
-                ),
-                initial_step_length=(
-                    initial_step_length
-                ),
-                min_step_length=(
-                    min_step_length
-                ),
-                max_step_length=(
-                    max_step_length
-                ),
-                max_steps=max_steps,
-                terminal_speed=terminal_speed,
-                max_error=max_error,
-                interpolator_type=(
-                    interpolator_type
-                ),
-                compute_vorticity=False,
-            )
+        streamlines = mesh.streamlines_from_source(
+            source,
+            vectors=self.field,
+            integrator_type=integrator_type,
+            integration_direction=(integration_direction),
+            surface_streamlines=(surface_streamlines),
+            initial_step_length=(initial_step_length),
+            min_step_length=(min_step_length),
+            max_step_length=(max_step_length),
+            max_steps=max_steps,
+            terminal_speed=terminal_speed,
+            max_error=max_error,
+            interpolator_type=(interpolator_type),
+            compute_vorticity=False,
         )
 
         # -------------------------------------------------
@@ -541,24 +468,12 @@ class StreamlinePlot:
 
         offset = 0
 
-        for _ in range(
-            streamlines.n_cells
-        ):
+        for _ in range(streamlines.n_cells):
+            n_points = int(lines[offset])
 
-            n_points = int(
-                lines[offset]
-            )
+            ids = lines[offset + 1 : offset + 1 + n_points]
 
-            ids = lines[
-                offset + 1:
-                offset + 1 + n_points
-            ]
-
-            points_line = (
-                streamlines.points[
-                    ids
-                ]
-            )
+            points_line = streamlines.points[ids]
 
             # Only x-y coordinates are plotted.
             axes.plot(
@@ -580,42 +495,24 @@ class StreamlinePlot:
         # -------------------------------------------------
 
         if arrowsize > 0:
+            for cell_id in range(streamlines.n_cells):
+                ids = streamlines.get_cell(cell_id).point_ids
 
-            for cell_id in range(
-                streamlines.n_cells
-            ):
-
-                ids = streamlines.get_cell(
-                    cell_id
-                ).point_ids
-
-                points_line = (
-                    streamlines.points[
-                        ids
-                    ]
-                )
+                points_line = streamlines.points[ids]
 
                 if len(points_line) < 4:
                     continue
 
-                middle = len(
-                    points_line
-                ) // 2
+                middle = len(points_line) // 2
 
-                p0 = points_line[
-                    middle - 1
-                ]
+                p0 = points_line[middle - 1]
 
-                p1 = points_line[
-                    middle
-                ]
+                p1 = points_line[middle]
 
                 dx = p1[0] - p0[0]
                 dy = p1[1] - p0[1]
 
-                length = np.sqrt(
-                    dx * dx + dy * dy
-                )
+                length = np.sqrt(dx * dx + dy * dy)
 
                 if length <= 0:
                     continue
@@ -634,9 +531,7 @@ class StreamlinePlot:
                         "arrowstyle": "-|>",
                         "color": color,
                         "lw": linewidth,
-                        "mutation_scale": (
-                            8.0 * arrowsize
-                        ),
+                        "mutation_scale": (8.0 * arrowsize),
                     },
                     zorder=zorder,
                 )

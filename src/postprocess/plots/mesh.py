@@ -57,9 +57,7 @@ class MeshPlot:
 
         axes.add_collection(collection)
 
-        x_min, x_max, y_min, y_max = (
-            self.mesh.bounds
-        )
+        x_min, x_max, y_min, y_max = self.mesh.bounds
 
         axes.set_xlim(
             x_min,

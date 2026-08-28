@@ -38,9 +38,6 @@ class Mesh:
         polygons = []
 
         for cell in self.cells:
-
-            polygons.append(
-                self.points[cell][:, :2]
-            )
+            polygons.append(self.points[cell][:, :2])
 
         return polygons

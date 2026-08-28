@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import Optional, Tuple
-import numpy as np
-import matplotlib.pyplot as plt
 
-from postprocess.layout.colorbar import add_colorbar
+import matplotlib.pyplot as plt
+import numpy as np
+
 from postprocess.export.latex import LaTeXTextRegistry
+from postprocess.layout.colorbar import add_colorbar
 
 
 @dataclass
@@ -56,14 +57,9 @@ class PublicationFigure:
         width = float(config.width)
 
         if config.height is None:
-
-            height = (
-                width *
-                float(config.height_ratio)
-            )
+            height = width * float(config.height_ratio)
 
         else:
-
             height = float(config.height)
 
         self.figure, axes = plt.subplots(
@@ -80,22 +76,13 @@ class PublicationFigure:
         )
 
         if nrows == 1 and ncols == 1:
-
-            self._axes_array = (
-                self._axes_array.reshape(1, 1)
-            )
+            self._axes_array = self._axes_array.reshape(1, 1)
 
         elif nrows == 1:
-
-            self._axes_array = (
-                self._axes_array.reshape(1, ncols)
-            )
+            self._axes_array = self._axes_array.reshape(1, ncols)
 
         elif ncols == 1:
-
-            self._axes_array = (
-                self._axes_array.reshape(nrows, 1)
-            )
+            self._axes_array = self._axes_array.reshape(nrows, 1)
 
         self.axes = axes
 
@@ -122,16 +109,13 @@ class PublicationFigure:
         """
 
         if row < 0 or row >= self.nrows:
-            raise IndexError(
-                f"Panel row {row} is out of range."
-            )
+            raise IndexError(f"Panel row {row} is out of range.")
 
         if column < 0 or column >= self.ncols:
-            raise IndexError(
-                f"Panel column {column} is out of range."
-            )
+            raise IndexError(f"Panel column {column} is out of range.")
 
         return self._axes_array[row, column]
+
     def set_common_xlabel(
         self,
         label,
@@ -160,6 +144,7 @@ class PublicationFigure:
             ha="center",
             va="center",
         )
+
     def set_common_ylabel(
         self,
         label,
@@ -189,6 +174,7 @@ class PublicationFigure:
             va="center",
             rotation="vertical",
         )
+
     def label_panels(
         self,
         labels=None,
@@ -215,37 +201,20 @@ class PublicationFigure:
         """
 
         if labels is None:
-
             labels = []
 
-            for i in range(
-                self.nrows * self.ncols
-            ):
+            for i in range(self.nrows * self.ncols):
+                labels.append("({})".format(chr(ord("a") + i)))
 
-                labels.append(
-                    "({})".format(
-                        chr(ord("a") + i)
-                    )
-                )
-
-        expected = (
-            self.nrows *
-            self.ncols
-        )
+        expected = self.nrows * self.ncols
 
         if len(labels) != expected:
-
-            raise ValueError(
-                "Number of panel labels must "
-                f"be {expected}."
-            )
+            raise ValueError(f"Number of panel labels must be {expected}.")
 
         index = 0
 
         for row in range(self.nrows):
-
             for column in range(self.ncols):
-
                 ax = self.panel(
                     row,
                     column,
@@ -262,6 +231,7 @@ class PublicationFigure:
                 )
 
                 index += 1
+
     def adjust_layout(
         self,
         left=None,
@@ -283,6 +253,7 @@ class PublicationFigure:
             wspace=wspace,
             hspace=hspace,
         )
+
     def add_shared_colorbar(
         self,
         mappable,
@@ -332,19 +303,13 @@ class PublicationFigure:
             axes = [axes]
 
         if len(axes) == 0:
-            raise ValueError(
-                "At least one axes is required "
-                "for a shared colorbar."
-            )
+            raise ValueError("At least one axes is required for a shared colorbar.")
 
         if orientation not in (
             "vertical",
             "horizontal",
         ):
-            raise ValueError(
-                "orientation must be either "
-                "'vertical' or 'horizontal'."
-            )
+            raise ValueError("orientation must be either 'vertical' or 'horizontal'.")
 
         colorbar = self.figure.colorbar(
             mappable,
@@ -356,12 +321,10 @@ class PublicationFigure:
         )
 
         if label is not None:
-
-            colorbar.set_label(
-                label
-            )
+            colorbar.set_label(label)
 
         return colorbar
+
     # =====================================================
     # Labels
     # =====================================================
@@ -380,10 +343,7 @@ class PublicationFigure:
         """
 
         if xlabel is not None:
-
-            self.axes.set_xlabel(
-                xlabel
-            )
+            self.axes.set_xlabel(xlabel)
 
             self._latex_artists.append(
                 (
@@ -393,10 +353,7 @@ class PublicationFigure:
             )
 
         if ylabel is not None:
-
-            self.axes.set_ylabel(
-                ylabel
-            )
+            self.axes.set_ylabel(ylabel)
 
             self._latex_artists.append(
                 (
@@ -404,6 +361,7 @@ class PublicationFigure:
                     ylabel,
                 )
             )
+
     # =====================================================
     # Title
     # =====================================================
@@ -432,6 +390,7 @@ class PublicationFigure:
                 title,
             )
         )
+
     # =====================================================
     # Limits
     # =====================================================
@@ -446,16 +405,10 @@ class PublicationFigure:
         """
 
         if xlim is not None:
-
-            self.axes.set_xlim(
-                xlim
-            )
+            self.axes.set_xlim(xlim)
 
         if ylim is not None:
-
-            self.axes.set_ylim(
-                ylim
-            )
+            self.axes.set_ylim(ylim)
 
     # =====================================================
     # Ticks
@@ -471,16 +424,10 @@ class PublicationFigure:
         """
 
         if xticks is not None:
-
-            self.axes.set_xticks(
-                xticks
-            )
+            self.axes.set_xticks(xticks)
 
         if yticks is not None:
-
-            self.axes.set_yticks(
-                yticks
-            )
+            self.axes.set_yticks(yticks)
 
     # =====================================================
     # Colorbar
@@ -514,7 +461,6 @@ class PublicationFigure:
         )
 
         if label is not None:
-
             self._latex_artists.append(
                 (
                     colorbar.ax.yaxis.label
@@ -564,18 +510,13 @@ class PublicationFigure:
 
         import matplotlib as mpl
 
-        old_fonttype = (
-            mpl.rcParams["svg.fonttype"]
-        )
+        old_fonttype = mpl.rcParams["svg.fonttype"]
 
-        old_unicode_minus = (
-            mpl.rcParams["axes.unicode_minus"]
-        )
+        old_unicode_minus = mpl.rcParams["axes.unicode_minus"]
 
         replacements = []
 
         try:
-
             mpl.rcParams["svg.fonttype"] = "none"
             if pdftex:
                 mpl.rcParams["axes.unicode_minus"] = False
@@ -585,16 +526,8 @@ class PublicationFigure:
             # -------------------------------------------------
 
             if pdftex:
-
-                for artist, latex_text in (
-                    self._latex_artists
-                ):
-
-                    placeholder = (
-                        self.latex_registry.register(
-                            latex_text
-                        )
-                    )
+                for artist, latex_text in self._latex_artists:
+                    placeholder = self.latex_registry.register(latex_text)
 
                     replacements.append(
                         (
@@ -603,9 +536,7 @@ class PublicationFigure:
                         )
                     )
 
-                    artist.set_text(
-                        placeholder
-                    )
+                    artist.set_text(placeholder)
 
             # -------------------------------------------------
             # Save SVG
@@ -619,22 +550,14 @@ class PublicationFigure:
             )
 
         finally:
-
             # -------------------------------------------------
             # Restore original labels
             # -------------------------------------------------
 
-            for artist, original_text in (
-                replacements
-            ):
+            for artist, original_text in replacements:
+                artist.set_text(original_text)
 
-                artist.set_text(
-                    original_text
-                )
-
-            mpl.rcParams["svg.fonttype"] = (
-                old_fonttype
-            )
+            mpl.rcParams["svg.fonttype"] = old_fonttype
 
     # =====================================================
     # Export
@@ -662,9 +585,7 @@ class PublicationFigure:
             PDFTeXExporter,
         )
 
-        filename = Path(
-            filename
-        )
+        filename = Path(filename)
 
         filename.parent.mkdir(
             parents=True,
@@ -672,41 +593,27 @@ class PublicationFigure:
         )
 
         for fmt in formats:
-
             # -------------------------------------------------
             # PNG
             # -------------------------------------------------
 
             if fmt == "png":
-
-                self.save(
-                    filename.with_suffix(
-                        ".png"
-                    )
-                )
+                self.save(filename.with_suffix(".png"))
 
             # -------------------------------------------------
             # PDF
             # -------------------------------------------------
 
             elif fmt == "pdf":
-
-                self.save(
-                    filename.with_suffix(
-                        ".pdf"
-                    )
-                )
+                self.save(filename.with_suffix(".pdf"))
 
             # -------------------------------------------------
             # SVG
             # -------------------------------------------------
 
             elif fmt == "svg":
-
                 self.save_svg(
-                    filename.with_suffix(
-                        ".svg"
-                    ),
+                    filename.with_suffix(".svg"),
                     pdftex=False,
                 )
 
@@ -715,14 +622,9 @@ class PublicationFigure:
             # -------------------------------------------------
 
             elif fmt == "pdf_tex":
+                svg_file = filename.with_suffix(".svg")
 
-                svg_file = filename.with_suffix(
-                    ".svg"
-                )
-
-                pdf_file = filename.with_suffix(
-                    ".pdf"
-                )
+                pdf_file = filename.with_suffix(".pdf")
 
                 # Save SVG with placeholders.
                 self.save_svg(
@@ -739,18 +641,10 @@ class PublicationFigure:
 
                 # Replace placeholders with
                 # original LaTeX strings.
-                self.latex_registry.replace_in_file(
-                    Path(
-                        str(pdf_file) + "_tex"
-                    )
-                )
+                self.latex_registry.replace_in_file(Path(str(pdf_file) + "_tex"))
 
             else:
-
-                raise ValueError(
-                    "Unsupported export format: "
-                    f"'{fmt}'"
-                )
+                raise ValueError(f"Unsupported export format: '{fmt}'")
 
     # =====================================================
     # Close
@@ -761,6 +655,4 @@ class PublicationFigure:
         Close the Matplotlib figure.
         """
 
-        plt.close(
-            self.figure
-        )
+        plt.close(self.figure)

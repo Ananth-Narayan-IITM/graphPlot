@@ -1,7 +1,6 @@
+import subprocess
 from pathlib import Path
 from typing import Union
-
-import subprocess
 
 
 class PDFTeXExporter:
@@ -45,10 +44,7 @@ class PDFTeXExporter:
         # -------------------------------------------------
 
         if not svg_file.exists():
-
-            raise FileNotFoundError(
-                f"SVG file not found: {svg_file}"
-            )
+            raise FileNotFoundError(f"SVG file not found: {svg_file}")
 
         # -------------------------------------------------
         # Create output directory
@@ -84,7 +80,7 @@ class PDFTeXExporter:
             command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            universal_newlines=True,
+            text=True,
         )
 
         # -------------------------------------------------
@@ -92,7 +88,6 @@ class PDFTeXExporter:
         # -------------------------------------------------
 
         if result.returncode != 0:
-
             raise RuntimeError(
                 "Inkscape PDF+LaTeX export failed.\n\n"
                 f"Command:\n"
@@ -107,28 +102,20 @@ class PDFTeXExporter:
         # Expected PDF_TeX file
         # -------------------------------------------------
 
-        pdf_tex_file = Path(
-            str(output_file) + "_tex"
-        )
+        pdf_tex_file = Path(str(output_file) + "_tex")
 
         # -------------------------------------------------
         # Validate output
         # -------------------------------------------------
 
         if not output_file.exists():
-
             raise RuntimeError(
-                "Inkscape completed but PDF "
-                "file was not created:\n"
-                f"{output_file}"
+                f"Inkscape completed but PDF file was not created:\n{output_file}"
             )
 
         if not pdf_tex_file.exists():
-
             raise RuntimeError(
-                "Inkscape completed but PDF_TeX "
-                "file was not created:\n"
-                f"{pdf_tex_file}"
+                f"Inkscape completed but PDF_TeX file was not created:\n{pdf_tex_file}"
             )
 
         return (

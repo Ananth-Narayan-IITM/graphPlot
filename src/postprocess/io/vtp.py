@@ -34,13 +34,9 @@ class VTPData:
         index = 0
 
         while index < len(faces):
-
             n_points = faces[index]
 
-            cell = faces[
-                index + 1:
-                index + 1 + n_points
-            ]
+            cell = faces[index + 1 : index + 1 + n_points]
 
             cells.append(cell)
 
@@ -53,12 +49,8 @@ class VTPData:
 
         return DataSet(
             mesh=mesh,
-            point_data=dict(
-                self.dataset.point_data
-            ),
-            cell_data=dict(
-                self.dataset.cell_data
-            ),
+            point_data=dict(self.dataset.point_data),
+            cell_data=dict(self.dataset.cell_data),
         )
 
     @property
@@ -110,10 +102,7 @@ def read_vtp(
     filename = Path(filename)
 
     if not filename.exists():
-
-        raise FileNotFoundError(
-            f"VTP file not found: {filename}"
-        )
+        raise FileNotFoundError(f"VTP file not found: {filename}")
 
     dataset = pv.read(filename)
 

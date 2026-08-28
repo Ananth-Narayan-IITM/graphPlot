@@ -2,7 +2,6 @@
 Line style schemes for publication figures.
 """
 
-
 PUBLICATION_LINESTYLES = [
     "-",
     "--",
@@ -33,8 +32,5 @@ def get_linestyles(scheme):
         return list(BLACKWHITE_LINESTYLES)
 
     raise ValueError(
-        "Unknown line scheme '{}'. "
-        "Available schemes: publication, blackwhite.".format(
-            scheme
-        )
+        f"Unknown line scheme '{scheme}'. Available schemes: publication, blackwhite."
     )

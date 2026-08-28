@@ -50,15 +50,9 @@ def add_colorbar(
     )
 
     if label is not None:
-
-        colorbar.set_label(
-            label
-        )
+        colorbar.set_label(label)
 
     if ticks is not None:
-
-        colorbar.set_ticks(
-            ticks
-        )
+        colorbar.set_ticks(ticks)
 
     return colorbar

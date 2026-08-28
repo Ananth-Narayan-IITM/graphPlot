@@ -1,15 +1,12 @@
 from postprocess.io.tabular import read_1d
-
-from postprocess.plots.line import LinePlot
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.line import LinePlot
 from postprocess.style import (
-    PublicationStyle,
     LegendManager,
+    PublicationStyle,
 )
 
 # =========================================================
@@ -60,26 +57,20 @@ figure_config = FigureConfig(
 # Figure
 # =========================================================
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
 # Style
 # =========================================================
 
-style = PublicationStyle(
-    color_scheme="colorblind"
-)
+style = PublicationStyle(color_scheme="colorblind")
 
 # =========================================================
 # Line plot
 # =========================================================
 
-plot = LinePlot(
-    style=style
-)
+plot = LinePlot(style=style)
 
 plot.add(
     numerical,
@@ -100,21 +91,15 @@ plot.add_errorbar(
     role="experimental",
 )
 
-plot.plot(
-    figure.axes
-)
+plot.plot(figure.axes)
 
 # =========================================================
 # Axis labels
 # =========================================================
 
-figure.axes.set_xlabel(
-    r"$x$ (m)"
-)
+figure.axes.set_xlabel(r"$x$ (m)")
 
-figure.axes.set_ylabel(
-    r"$f(x)$"
-)
+figure.axes.set_ylabel(r"$f(x)$")
 
 
 # =========================================================

@@ -23,12 +23,11 @@ Workflow:
 import numpy as np
 
 from postprocess.data.data1d import Data1D
-from postprocess.plots.line import LinePlot
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.line import LinePlot
 
 # =========================================================
 # Create datasets
@@ -41,19 +40,11 @@ x = np.linspace(
 )
 
 
-y1 = np.sin(
-    2.0 * np.pi * x
-)
+y1 = np.sin(2.0 * np.pi * x)
 
-y2 = np.sin(
-    2.0 * np.pi * x
-) * np.exp(
-    -0.8 * x
-)
+y2 = np.sin(2.0 * np.pi * x) * np.exp(-0.8 * x)
 
-y3 = np.sin(
-    4.0 * np.pi * x
-) * 0.5
+y3 = np.sin(4.0 * np.pi * x) * 0.5
 
 
 data_1 = Data1D(
@@ -94,9 +85,7 @@ figure_config = FigureConfig(
     dpi=600,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -131,9 +120,7 @@ line_plot.add(
 # Plot all datasets
 # =========================================================
 
-lines = line_plot.plot(
-    figure.axes
-)
+lines = line_plot.plot(figure.axes)
 
 assert len(lines) == 3
 
@@ -152,9 +139,7 @@ figure.set_labels(
 # Title
 # =========================================================
 
-figure.set_title(
-    r"Comparison of numerical cases"
-)
+figure.set_title(r"Comparison of numerical cases")
 
 
 # =========================================================
@@ -173,12 +158,10 @@ figure.axes.legend(
 figure.export(
     "output/example_07_multiple_lines",
     formats=[
-        "pdf",
+        "png",
         "pdf_tex",
     ],
 )
 
 
-print(
-    "Example 07 completed successfully."
-)
+print("Example 07 completed successfully.")

@@ -1,9 +1,8 @@
 import numpy as np
-
-from matplotlib import cm
 from matplotlib.collections import PolyCollection
-from matplotlib.colors import BoundaryNorm
+
 from postprocess.layout.colors import ColorScale
+
 
 class ContourPlot:
     """
@@ -80,13 +79,10 @@ class ContourPlot:
         if scale is None:
             scale = ColorScale()
 
-        scale.resolve(
-            self.values
-        )
+        scale.resolve(self.values)
         if self.association != "cell":
             raise NotImplementedError(
-                "ContourPlot currently supports "
-                "cell-associated data only."
+                "ContourPlot currently supports cell-associated data only."
             )
 
         if len(self.values) != self.mesh.n_cells:
@@ -130,9 +126,7 @@ class ContourPlot:
         # Set geometry limits
         # -------------------------------------------------
 
-        x_min, x_max, y_min, y_max = (
-            self.mesh.bounds
-        )
+        x_min, x_max, y_min, y_max = self.mesh.bounds
 
         axes.set_xlim(
             x_min,

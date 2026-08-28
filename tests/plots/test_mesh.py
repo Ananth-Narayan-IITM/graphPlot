@@ -1,28 +1,28 @@
-import numpy as np
-
 import matplotlib.pyplot as plt
-
+import numpy as np
 from matplotlib.collections import PolyCollection
 
-from postprocess.data.mesh import Mesh
 from postprocess.data.dataset import DataSet
+from postprocess.data.mesh import Mesh
 from postprocess.plots.mesh import MeshPlot
-
 
 # =========================================================
 # Fixtures / test data
 # =========================================================
 
+
 def make_test_dataset():
 
-    points = np.array([
-        [0.0, 0.0],
-        [1.0, 0.0],
-        [1.0, 1.0],
-        [0.0, 1.0],
-        [2.0, 0.0],
-        [2.0, 1.0],
-    ])
+    points = np.array(
+        [
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+            [0.0, 1.0],
+            [2.0, 0.0],
+            [2.0, 1.0],
+        ]
+    )
 
     cells = [
         [0, 1, 2, 3],
@@ -43,13 +43,12 @@ def make_test_dataset():
 # Creation
 # =========================================================
 
+
 def test_mesh_plot_creation():
 
     data = make_test_dataset()
 
-    plot = MeshPlot(
-        data
-    )
+    plot = MeshPlot(data)
 
     assert plot.data is data
     assert plot.mesh is data.mesh
@@ -59,19 +58,16 @@ def test_mesh_plot_creation():
 # Plot
 # =========================================================
 
+
 def test_mesh_plot_returns_collection():
 
     data = make_test_dataset()
 
-    plot = MeshPlot(
-        data
-    )
+    plot = MeshPlot(data)
 
     figure, axes = plt.subplots()
 
-    collection = plot.plot(
-        axes
-    )
+    collection = plot.plot(axes)
 
     assert isinstance(
         collection,
@@ -85,23 +81,18 @@ def test_mesh_plot_returns_collection():
 # Geometry
 # =========================================================
 
+
 def test_mesh_plot_contains_all_cells():
 
     data = make_test_dataset()
 
-    plot = MeshPlot(
-        data
-    )
+    plot = MeshPlot(data)
 
     figure, axes = plt.subplots()
 
-    collection = plot.plot(
-        axes
-    )
+    collection = plot.plot(axes)
 
-    assert len(
-        collection.get_paths()
-    ) == data.mesh.n_cells
+    assert len(collection.get_paths()) == data.mesh.n_cells
 
     plt.close(figure)
 
@@ -110,19 +101,16 @@ def test_mesh_plot_contains_all_cells():
 # Axis limits
 # =========================================================
 
+
 def test_mesh_plot_sets_axis_limits():
 
     data = make_test_dataset()
 
-    plot = MeshPlot(
-        data
-    )
+    plot = MeshPlot(data)
 
     figure, axes = plt.subplots()
 
-    plot.plot(
-        axes
-    )
+    plot.plot(axes)
 
     assert axes.get_xlim() == (
         0.0,
@@ -141,13 +129,12 @@ def test_mesh_plot_sets_axis_limits():
 # Styling
 # =========================================================
 
+
 def test_mesh_plot_edge_and_face_style():
 
     data = make_test_dataset()
 
-    plot = MeshPlot(
-        data
-    )
+    plot = MeshPlot(data)
 
     figure, axes = plt.subplots()
 
@@ -188,13 +175,12 @@ def test_mesh_plot_edge_and_face_style():
 # Rasterization
 # =========================================================
 
+
 def test_mesh_can_be_rasterized():
 
     data = make_test_dataset()
 
-    plot = MeshPlot(
-        data
-    )
+    plot = MeshPlot(data)
 
     figure, axes = plt.subplots()
 
@@ -204,9 +190,7 @@ def test_mesh_can_be_rasterized():
         facecolor="none",
     )
 
-    collection.set_rasterized(
-        True
-    )
+    collection.set_rasterized(True)
 
     assert collection.get_rasterized() is True
 

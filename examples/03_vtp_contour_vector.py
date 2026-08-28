@@ -23,20 +23,16 @@ PDF + PDF_TeX
 """
 
 from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import (
-    ContourPlot,
-)
-
-from postprocess.plots.vector import (
-    VectorPlot,
-)
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.contour import (
+    ContourPlot,
+)
+from postprocess.plots.vector import (
+    VectorPlot,
+)
 
 # =========================================================
 # User configuration
@@ -57,22 +53,16 @@ X_LABEL = r"$x\;(m)$"
 
 Y_LABEL = r"$y\;(m)$"
 
-COLORBAR_LABEL = (
-    r"$\gamma_{\mathrm{DV}}\;(1/s)$"
-)
+COLORBAR_LABEL = r"$\gamma_{\mathrm{DV}}\;(1/s)$"
 
-OUTPUT_FILE = (
-    "output/example_03_vtp_contour_vector"
-)
+OUTPUT_FILE = "output/example_03_vtp_contour_vector"
 
 
 # =========================================================
 # Read VTP
 # =========================================================
 
-data = read_vtp(
-    INPUT_FILE
-)
+data = read_vtp(INPUT_FILE)
 
 
 # =========================================================
@@ -85,9 +75,7 @@ figure_config = FigureConfig(
     dpi=600,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -117,19 +105,14 @@ vector_plot = VectorPlot(
 
 vectors = vector_plot.plot(
     figure.axes,
-
     # Preserve vector magnitude.
     normalize=False,
-
     # Control the number of arrows.
     density=20,
-
     # Arrow scaling.
     scale=20,
-
     # Arrow appearance.
     width=0.002,
-
     color="black",
 )
 
@@ -148,9 +131,7 @@ figure.set_labels(
 # Title
 # =========================================================
 
-figure.set_title(
-    TITLE
-)
+figure.set_title(TITLE)
 
 
 # =========================================================
@@ -177,6 +158,4 @@ figure.export(
 )
 
 
-print(
-    "Example 03 completed successfully."
-)
+print("Example 03 completed successfully.")

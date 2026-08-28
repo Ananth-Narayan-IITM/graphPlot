@@ -7,13 +7,11 @@ one colorbar using PublicationFigure.
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
 
 # =========================================================
 # Figure configuration
@@ -106,13 +104,9 @@ figure.label_panels()
 # Common labels
 # =========================================================
 
-figure.set_common_xlabel(
-    r"$x$"
-)
+figure.set_common_xlabel(r"$x$")
 
-figure.set_common_ylabel(
-    r"$y$"
-)
+figure.set_common_ylabel(r"$y$")
 
 
 # =========================================================
@@ -145,10 +139,6 @@ figure.adjust_layout(
 # Export
 # =========================================================
 
-figure.save(
-    "output/tutorial_shared_colorbar"
-)
+figure.save("output/tutorial_shared_colorbar")
 
-print(
-    "Shared-colorbar figure generated successfully."
-)
+print("Shared-colorbar figure generated successfully.")

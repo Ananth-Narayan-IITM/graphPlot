@@ -1,45 +1,29 @@
 from pathlib import Path
 
 from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import ContourPlot
-from postprocess.plots.mesh import MeshPlot
-
+from postprocess.layout.colors import (
+    ColorScale,
+)
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
-from postprocess.layout.colors import (
-    ColorScale,
-)
-
+from postprocess.plots.contour import ContourPlot
+from postprocess.plots.mesh import MeshPlot
+from postprocess.plots.streamline import StreamlinePlot
 from postprocess.style.publication import (
     PublicationStyle,
 )
 
-from postprocess.plots.annotation import (
-    AnnotationPlot,
-)
-
-from postprocess.plots.geometry import GeometryPlot
-
-from postprocess.plots.vector import VectorPlot
-
-from postprocess.plots.streamline import StreamlinePlot
 # =========================================================
 # Configuration
 # =========================================================
 
-INPUT_FILE = Path(
-    "data/zNormal.vtp"
-)
+INPUT_FILE = Path("data/zNormal.vtp")
 
 FIELD = "gammaDV"
 
-OUTPUT_FILE = Path(
-    f"output/{FIELD}"
-)
+OUTPUT_FILE = Path(f"output/{FIELD}")
 
 
 # =========================================================
@@ -89,9 +73,7 @@ SHOW_GRID = False
 X_LABEL = r"$x$ (m)"
 Y_LABEL = r"$y$ (m)"
 
-COLORBAR_LABEL = (
-    r"$\gamma$ (1/s)"
-)
+COLORBAR_LABEL = r"$\gamma$ (1/s)"
 
 
 # =========================================================
@@ -118,25 +100,15 @@ style.apply()
 # Read VTP
 # =========================================================
 
-data = read_vtp(
-    INPUT_FILE
-)
+data = read_vtp(INPUT_FILE)
 
-print(
-    f"Reading: {data.filename}"
-)
+print(f"Reading: {data.filename}")
 
-print(
-    f"Points:  {data.n_points}"
-)
+print(f"Points:  {data.n_points}")
 
-print(
-    f"Cells:   {data.n_cells}"
-)
+print(f"Cells:   {data.n_cells}")
 
-print(
-    f"Bounds:  {data.bounds}"
-)
+print(f"Bounds:  {data.bounds}")
 
 
 # =========================================================
@@ -163,9 +135,7 @@ figure_config = FigureConfig(
     dpi=600,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -175,7 +145,6 @@ figure = PublicationFigure(
 contour = None
 
 if SHOW_CONTOURS:
-
     contour_plot = ContourPlot(
         data,
         field=FIELD,
@@ -194,10 +163,7 @@ if SHOW_CONTOURS:
 # =========================================================
 
 if SHOW_MESH:
-
-    mesh_plot = MeshPlot(
-        data
-    )
+    mesh_plot = MeshPlot(data)
 
     mesh_plot.plot(
         figure.axes,
@@ -222,7 +188,6 @@ figure.set_labels(
 # =========================================================
 
 if contour is not None:
-
     figure.add_colorbar(
         contour,
         label=COLORBAR_LABEL,
@@ -375,6 +340,4 @@ figure.export(
 
 figure.close()
 
-print(
-    "Figure generated successfully."
-)
+print("Figure generated successfully.")

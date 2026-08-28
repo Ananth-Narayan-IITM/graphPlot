@@ -48,16 +48,10 @@ def read_1d(
         Comment character.
     """
 
-    filename = Path(
-        filename
-    )
+    filename = Path(filename)
 
     if not filename.exists():
-        raise FileNotFoundError(
-            "File not found: {}".format(
-                filename
-            )
-        )
+        raise FileNotFoundError(f"File not found: {filename}")
 
     data = np.loadtxt(
         filename,
@@ -67,29 +61,15 @@ def read_1d(
     )
 
     if data.ndim != 2:
-        raise ValueError(
-            "Expected a tabular dataset."
-        )
+        raise ValueError("Expected a tabular dataset.")
 
     n_columns = data.shape[1]
 
     if x_column >= n_columns:
-        raise IndexError(
-            "x_column={} but file contains "
-            "{} columns.".format(
-                x_column,
-                n_columns,
-            )
-        )
+        raise IndexError(f"x_column={x_column} but file contains {n_columns} columns.")
 
     if y_column >= n_columns:
-        raise IndexError(
-            "y_column={} but file contains "
-            "{} columns.".format(
-                y_column,
-                n_columns,
-            )
-        )
+        raise IndexError(f"y_column={y_column} but file contains {n_columns} columns.")
 
     return Data1D(
         x=data[:, x_column],

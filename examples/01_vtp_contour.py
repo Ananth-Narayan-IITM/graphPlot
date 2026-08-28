@@ -20,16 +20,13 @@ PDF + PDF_TeX
 """
 
 from postprocess.io.vtp import read_vtp
-
-from postprocess.plots.contour import (
-    ContourPlot,
-)
-
 from postprocess.layout.figure import (
     FigureConfig,
     PublicationFigure,
 )
-
+from postprocess.plots.contour import (
+    ContourPlot,
+)
 
 # =========================================================
 # User configuration
@@ -39,30 +36,22 @@ INPUT_FILE = "data/zNormal.vtp"
 
 FIELD = "gammaDV"
 
-TITLE = (
-    r"$\gamma_{\mathrm{DV}}$ distribution"
-)
+TITLE = r"$\gamma_{\mathrm{DV}}$ distribution"
 
 X_LABEL = r"$x\;(m)$"
 
 Y_LABEL = r"$y\;(m)$"
 
-COLORBAR_LABEL = (
-    r"$\gamma_{\mathrm{DV}}\;(1/s)$"
-)
+COLORBAR_LABEL = r"$\gamma_{\mathrm{DV}}\;(1/s)$"
 
-OUTPUT_FILE = (
-    "output/example_01_vtp_contour"
-)
+OUTPUT_FILE = "output/example_01_vtp_contour"
 
 
 # =========================================================
 # Read VTP
 # =========================================================
 
-data = read_vtp(
-    INPUT_FILE
-)
+data = read_vtp(INPUT_FILE)
 
 
 # =========================================================
@@ -74,9 +63,7 @@ figure_config = FigureConfig(
     height=3.0,
 )
 
-figure = PublicationFigure(
-    figure_config
-)
+figure = PublicationFigure(figure_config)
 
 
 # =========================================================
@@ -108,9 +95,7 @@ figure.set_labels(
 # Title
 # =========================================================
 
-figure.set_title(
-    TITLE
-)
+figure.set_title(TITLE)
 
 
 # =========================================================
@@ -136,6 +121,4 @@ figure.export(
 )
 
 
-print(
-    "Example 01 completed successfully."
-)
+print("Example 01 completed successfully.")

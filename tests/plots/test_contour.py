@@ -1,26 +1,20 @@
 import matplotlib
 
-matplotlib.use(
-    "Agg"
-)
+matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 
 from postprocess.io.vtp import read_vtp
-
 from postprocess.plots.contour import (
     ContourPlot,
 )
-
 
 INPUT_FILE = "data/zNormal.vtp"
 
 
 def test_contour_creation():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     plot = ContourPlot(
         data,
@@ -34,9 +28,7 @@ def test_contour_creation():
 
 def test_contour_plot():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     plot = ContourPlot(
         data,
@@ -45,16 +37,10 @@ def test_contour_plot():
 
     figure, axes = plt.subplots()
 
-    collection = plot.plot(
-        axes
-    )
+    collection = plot.plot(axes)
 
     assert collection is not None
 
-    assert collection in (
-        axes.collections
-    )
+    assert collection in (axes.collections)
 
-    plt.close(
-        figure
-    )
+    plt.close(figure)

@@ -1,9 +1,8 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from postprocess.io.vtp import read_vtp
 from postprocess.plots.streamline import StreamlinePlot
-
 
 # =========================================================
 # Test data
@@ -14,9 +13,7 @@ INPUT_FILE = "data/zNormal.vtp"
 
 def make_streamline_plot():
 
-    data = read_vtp(
-        INPUT_FILE
-    )
+    data = read_vtp(INPUT_FILE)
 
     return StreamlinePlot(
         data,
@@ -27,6 +24,7 @@ def make_streamline_plot():
 # =========================================================
 # Creation
 # =========================================================
+
 
 def test_streamline_plot_creation():
 
@@ -39,6 +37,7 @@ def test_streamline_plot_creation():
 # =========================================================
 # Streamline generation
 # =========================================================
+
 
 def test_streamline_generation():
 
@@ -65,14 +64,9 @@ def test_streamline_generation():
     # Every plotted streamline must contain
     # more than one point.
     for line in axes.lines:
+        assert len(line.get_xdata()) > 1
 
-        assert len(
-            line.get_xdata()
-        ) > 1
-
-        assert len(
-            line.get_ydata()
-        ) > 1
+        assert len(line.get_ydata()) > 1
 
     plt.close(figure)
 
@@ -80,6 +74,7 @@ def test_streamline_generation():
 # =========================================================
 # Streamline styling
 # =========================================================
+
 
 def test_streamline_styling():
 
@@ -98,7 +93,6 @@ def test_streamline_styling():
     assert len(axes.lines) > 0
 
     for line in axes.lines:
-
         assert line.get_color() == "red"
 
         assert np.isclose(
@@ -113,6 +107,7 @@ def test_streamline_styling():
 # Integration direction validation
 # =========================================================
 
+
 def test_invalid_integration_direction():
 
     plot = make_streamline_plot()
@@ -120,25 +115,16 @@ def test_invalid_integration_direction():
     figure, axes = plt.subplots()
 
     try:
-
         plot.plot(
             axes,
             integration_direction="invalid",
         )
 
     except ValueError as error:
-
-        assert (
-            "integration_direction"
-            in str(error)
-        )
+        assert "integration_direction" in str(error)
 
     else:
-
-        raise AssertionError(
-            "Invalid integration direction "
-            "did not raise ValueError."
-        )
+        raise AssertionError("Invalid integration direction did not raise ValueError.")
 
     plt.close(figure)
 
@@ -147,6 +133,7 @@ def test_invalid_integration_direction():
 # Integrator validation
 # =========================================================
 
+
 def test_invalid_integrator():
 
     plot = make_streamline_plot()
@@ -154,24 +141,15 @@ def test_invalid_integrator():
     figure, axes = plt.subplots()
 
     try:
-
         plot.plot(
             axes,
             integrator_type=99,
         )
 
     except ValueError as error:
-
-        assert (
-            "integrator_type"
-            in str(error)
-        )
+        assert "integrator_type" in str(error)
 
     else:
-
-        raise AssertionError(
-            "Invalid integrator type "
-            "did not raise ValueError."
-        )
+        raise AssertionError("Invalid integrator type did not raise ValueError.")
 
     plt.close(figure)
