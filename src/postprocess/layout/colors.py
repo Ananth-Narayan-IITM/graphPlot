@@ -1,6 +1,6 @@
 import numpy as np
 
-from matplotlib import cm
+import matplotlib
 from matplotlib.colors import BoundaryNorm
 
 
@@ -73,9 +73,10 @@ class ColorScale:
             self.levels + 1,
         )
 
-        self.colormap = cm.get_cmap(
-            self.cmap,
-            self.levels,
+        self.colormap = matplotlib.colormaps.get_cmap(
+            self.cmap
+        ).resampled(
+            self.levels
         )
 
         self.norm = BoundaryNorm(

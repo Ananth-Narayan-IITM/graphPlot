@@ -4,9 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from postprocess.layout.colorbar import add_colorbar
-from postprocess.export.latex import (
-    LaTeXTextRegistry,
-)
+from postprocess.export.latex import LaTeXTextRegistry
 
 
 @dataclass
@@ -48,6 +46,9 @@ class PublicationFigure:
     ):
 
         self.config = config
+
+        self._latex_artists = []
+        self.latex_registry = LaTeXTextRegistry()
 
         self.nrows = nrows
         self.ncols = ncols
@@ -403,7 +404,34 @@ class PublicationFigure:
                     ylabel,
                 )
             )
+    # =====================================================
+    # Title
+    # =====================================================
 
+    def set_title(
+        self,
+        title,
+        **kwargs,
+    ):
+        """
+        Set the axes title.
+
+        The title is registered for PDF+TeX export
+        so that LaTeX expressions such as
+        ``$\\gamma$`` are preserved correctly.
+        """
+
+        self.axes.set_title(
+            title,
+            **kwargs,
+        )
+
+        self._latex_artists.append(
+            (
+                self.axes.title,
+                title,
+            )
+        )
     # =====================================================
     # Limits
     # =====================================================
