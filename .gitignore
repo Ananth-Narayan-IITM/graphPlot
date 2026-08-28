@@ -65,6 +65,7 @@ docs/html/
 docs/latex/
 docs/man/
 docs/xml/
+docs/
 
 # Doxygen generated files
 doxygen.log
