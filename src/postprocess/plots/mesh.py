@@ -14,9 +14,10 @@ class MeshPlot:
     def plot(
         self,
         axes,
-        color="black",
-        linewidth=0.25,
-        alpha=0.5,
+        edgecolor="black",
+        facecolor="none",
+        linewidth=0.15,
+        alpha=0.30,
     ):
         """
         Plot the original mesh.
@@ -26,14 +27,19 @@ class MeshPlot:
         axes
             Matplotlib axes.
 
-        color
-            Mesh line color.
+        edgecolor
+            Color of the cell boundaries.
+
+        facecolor
+            Face color of the cells.
+            Use "none" to keep the underlying
+            contour visible.
 
         linewidth
-            Mesh line width.
+            Width of the cell boundaries.
 
         alpha
-            Mesh transparency.
+            Transparency of the mesh.
 
         Returns
         -------
@@ -43,8 +49,8 @@ class MeshPlot:
 
         collection = PolyCollection(
             self.mesh.polygons,
-            facecolors="none",
-            edgecolors=color,
+            facecolors=facecolor,
+            edgecolors=edgecolor,
             linewidths=linewidth,
             alpha=alpha,
         )
@@ -65,7 +71,6 @@ class MeshPlot:
             y_max,
         )
 
-        # No Matplotlib background grid.
         axes.grid(False)
 
         return collection

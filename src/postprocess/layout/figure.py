@@ -541,6 +541,7 @@ class PublicationFigure:
         self.figure.savefig(
             filename,
             bbox_inches="tight",
+            dpi=self.config.dpi,
         )
 
     # =====================================================
@@ -608,6 +609,7 @@ class PublicationFigure:
                 filename,
                 format="svg",
                 bbox_inches="tight",
+                dpi=self.config.dpi,
             )
 
         finally:

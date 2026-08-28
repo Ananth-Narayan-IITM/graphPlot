@@ -79,6 +79,7 @@ data = read_vtp(
 figure_config = FigureConfig(
     width=3.4,
     height=3.0,
+    dpi = 1200,
 )
 
 figure = PublicationFigure(
@@ -111,9 +112,10 @@ mesh_plot = MeshPlot(
 
 mesh = mesh_plot.plot(
     figure.axes,
-    color="black",
-    linewidth=0.20,
-    alpha=0.65,
+    edgecolor="black",
+    facecolor="none",
+    linewidth=0.4,
+    alpha=1.0,
 )
 
 # Rasterize mesh as well.
