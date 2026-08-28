@@ -568,11 +568,17 @@ class PublicationFigure:
             mpl.rcParams["svg.fonttype"]
         )
 
+        old_unicode_minus = (
+            mpl.rcParams["axes.unicode_minus"]
+        )
+
         replacements = []
 
         try:
 
             mpl.rcParams["svg.fonttype"] = "none"
+            if pdftex:
+                mpl.rcParams["axes.unicode_minus"] = False
 
             # -------------------------------------------------
             # Replace LaTeX labels with placeholders
