@@ -1,0 +1,104 @@
+%% Creator: Inkscape 1.3.2 (1:1.3.2+202311252150+091e20ef0f), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'example_03_vtp_contour_vector.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{286.41824341bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.78973455)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.11954763,0.0801549){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}0\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.24328171,0.0801549){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.36701579,0.0801549){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.49074984,0.0801549){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}3\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.61448392,0.0801549){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}4\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.738218,0.0801549){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}5\end{tabular}}}}%
+    \put(0.42888283,0.0323991){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$x\;(m)$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.09510786,0.11785923){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.09510786,0.23399711){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.09510786,0.35013494){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.09510786,0.46627279){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}3\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.09510786,0.58241066){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}4\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.09510786,0.69854851){\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}5\end{tabular}}}}%
+    \put(0.05166724,0.42146846){\rotatebox{90}{\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$y\;(m)$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=13]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.42888283,0.73276148){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$\gamma_{\mathrm{DV}}$ distribution with velocity field\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=14]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.11785923){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.0002\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=15]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.1952845){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.1292\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=16]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.27270972){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.2582\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=17]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.35013494){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.3872\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=18]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.42756018){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.5162\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=19]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.50498543){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.6453\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=20]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.58241066){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.7743\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=21]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.80494,0.65983589){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.9033\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=22]{example_03_vtp_contour_vector.pdf}}%
+    \put(0.96760096,0.42146851){\rotatebox{90}{\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}$\gamma_{\mathrm{DV}}\;(1/s)$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=23]{example_03_vtp_contour_vector.pdf}}%
+  \end{picture}%
+\endgroup%

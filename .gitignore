@@ -1,1 +1,4 @@
 docs/
+.pytest_cache/
+graphPlot.egg-info/
+__pycache__/
