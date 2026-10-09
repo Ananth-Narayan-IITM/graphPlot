@@ -263,6 +263,7 @@ class PublicationFigure:
         fraction=0.046,
         pad=0.04,
         shrink=1.0,
+        labelpad=10,
     ):
         """
         Add one colorbar shared by multiple panels.
@@ -321,7 +322,7 @@ class PublicationFigure:
         )
 
         if label is not None:
-            colorbar.set_label(label)
+            colorbar.set_label(label, labelpad=labelpad)
 
         return colorbar
 
@@ -441,6 +442,7 @@ class PublicationFigure:
         orientation="vertical",
         pad=0.02,
         fraction=0.046,
+        labelpad=10,
     ):
         """
         Add a colorbar.
@@ -458,6 +460,7 @@ class PublicationFigure:
             orientation=orientation,
             pad=pad,
             fraction=fraction,
+            labelpad=labelpad,
         )
 
         if label is not None:
@@ -515,6 +518,19 @@ class PublicationFigure:
         old_unicode_minus = mpl.rcParams["axes.unicode_minus"]
 
         replacements = []
+        # PDF+TeX placeholders must not change the export canvas. Capture the
+        # tight bounding box while the original MathText/LaTeX labels are still
+        # present; otherwise long placeholder strings expand the canvas and
+        # shift the axes relative to the LaTeX overlay after replacement.
+        pdftex_bbox = None
+        if pdftex:
+            self.figure.canvas.draw()
+            renderer = self.figure.canvas.get_renderer()
+            tight_bbox = self.figure.get_tightbbox(renderer)
+            if tight_bbox is not None:
+                # Match savefig(bbox_inches="tight")'s normal padding, but keep
+                # the bounds independent of temporary placeholder text widths.
+                pdftex_bbox = tight_bbox.padded(0.1)
 
         try:
             mpl.rcParams["svg.fonttype"] = "none"
@@ -525,18 +541,49 @@ class PublicationFigure:
             # Replace LaTeX labels with placeholders
             # -------------------------------------------------
 
+            formatter_restores = []
             if pdftex:
+                # Register normal figure labels as placeholders. Inkscape's
+                # PDF+LaTeX export can then leave their typesetting to LaTeX.
                 for artist, latex_text in self._latex_artists:
                     placeholder = self.latex_registry.register(latex_text)
-
-                    replacements.append(
-                        (
-                            artist,
-                            latex_text,
-                        )
-                    )
-
+                    replacements.append((artist, latex_text))
                     artist.set_text(placeholder)
+
+                # MathText tick labels need a different treatment. Calling
+                # Text.set_text() is not reliable for ticks because Matplotlib
+                # regenerates tick text from its formatter during savefig.
+                # Temporarily wrap each axis formatter instead, returning a
+                # stable plain-text token for MathText labels. The registry
+                # later replaces that token in the generated PDF_TeX file with
+                # the original expression, e.g. ``$10^{2}$``.
+                from matplotlib.ticker import FuncFormatter
+
+                for ax in self.figure.axes:
+                    for axis in (ax.xaxis, ax.yaxis):
+                        original_formatter = axis.get_major_formatter()
+                        formatter_restores.append((axis, original_formatter))
+                        token_cache = {}
+
+                        def format_tick(
+                            value,
+                            position,
+                            *,
+                            formatter=original_formatter,
+                            cache=token_cache,
+                        ):
+                            original_text = formatter(value, position)
+                            if (
+                                not isinstance(original_text, str)
+                                or "$" not in original_text
+                            ):
+                                return original_text
+                            key = (float(value), position, original_text)
+                            if key not in cache:
+                                cache[key] = self.latex_registry.register(original_text)
+                            return cache[key]
+
+                        axis.set_major_formatter(FuncFormatter(format_tick))
 
             # -------------------------------------------------
             # Save SVG
@@ -545,14 +592,19 @@ class PublicationFigure:
             self.figure.savefig(
                 filename,
                 format="svg",
-                bbox_inches="tight",
+                bbox_inches=pdftex_bbox
+                if pdftex and pdftex_bbox is not None
+                else "tight",
                 dpi=self.config.dpi,
             )
 
         finally:
             # -------------------------------------------------
-            # Restore original labels
+            # Restore temporary tick formatters and original labels
             # -------------------------------------------------
+
+            for axis, original_formatter in locals().get("formatter_restores", []):
+                axis.set_major_formatter(original_formatter)
 
             for artist, original_text in replacements:
                 artist.set_text(original_text)

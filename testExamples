@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# Run all Python examples, combine their PDF_TeX overlays into one LaTeX file,
+# and compile that file once into a single PDF for visual verification.
+# Run from any directory; paths are resolved relative to this script.
+
+set -Eeuo pipefail
+
+ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+EXAMPLES_DIR="${ROOT_DIR}/examples"
+OUTPUT_DIR="${ROOT_DIR}/output"
+COMBINED_TEX="${OUTPUT_DIR}/combinedExamples.tex"
+COMBINED_PDF="${OUTPUT_DIR}/combinedExamples.pdf"
+
+if [[ ! -d "${EXAMPLES_DIR}" ]]; then
+    echo "ERROR: examples directory not found: ${EXAMPLES_DIR}" >&2
+    exit 1
+fi
+
+if ! command -v pdflatex >/dev/null 2>&1; then
+    echo "ERROR: pdflatex was not found. Install a LaTeX distribution or add pdflatex to PATH." >&2
+    exit 1
+fi
+
+mkdir -p "${OUTPUT_DIR}"
+
+# Make the local src package importable without requiring an editable install.
+export PYTHONPATH="${ROOT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}"
+
+shopt -s nullglob
+examples=("${EXAMPLES_DIR}"/*.py)
+if (( ${#examples[@]} == 0 )); then
+    echo "ERROR: no Python examples found in ${EXAMPLES_DIR}" >&2
+    exit 1
+fi
+
+for example in "${examples[@]}"; do
+    echo
+    echo "============================================================"
+    echo "Running example: ${example#"${ROOT_DIR}/"}"
+    echo "============================================================"
+    python3 "${example}"
+done
+
+# Discover the PDF_TeX files after examples finish, so newly generated files
+# are included in the combined document. Filenames are sorted by the shell.
+pdf_tex_files=("${OUTPUT_DIR}"/*.pdf_tex)
+if (( ${#pdf_tex_files[@]} == 0 )); then
+    echo "ERROR: no output/*.pdf_tex files were generated." >&2
+    exit 1
+fi
+
+# Write one LaTeX document containing every overlay, one figure per page.
+cat > "${COMBINED_TEX}" <<'TEX'
+\documentclass{article}
+\usepackage[margin=8mm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{transparent}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\begin{document}
+TEX
+
+figure_count=0
+for pdf_tex in "${pdf_tex_files[@]}"; do
+    base="$(basename -- "${pdf_tex}" .pdf_tex)"
+    companion_pdf="${OUTPUT_DIR}/${base}.pdf"
+
+    if [[ ! -f "${companion_pdf}" ]]; then
+        echo "ERROR: missing companion PDF for ${pdf_tex}: ${companion_pdf}" >&2
+        exit 1
+    fi
+
+    if (( figure_count > 0 )); then
+        printf '\\clearpage\n' >> "${COMBINED_TEX}"
+    fi
+
+    # The PDF_TeX overlay refers to its companion PDF by basename. Compile
+    # with OUTPUT_DIR as the working directory so these paths resolve.
+    cat >> "${COMBINED_TEX}" <<TEX
+\\def\\svgwidth{0.98\\linewidth}
+\\input{${base}.pdf_tex}
+TEX
+
+    ((figure_count += 1))
+    echo "Added figure: ${base}.pdf_tex"
+done
+
+cat >> "${COMBINED_TEX}" <<'TEX'
+\end{document}
+TEX
+
+echo
+echo "Compiling combined LaTeX document (${figure_count} figures)..."
+(
+    cd "${OUTPUT_DIR}"
+    pdflatex \
+        -interaction=nonstopmode \
+        -halt-on-error \
+        -file-line-error \
+        -jobname=combinedExamples \
+        combinedExamples.tex
+)
+
+echo
+echo "SUCCESS: combined LaTeX source: ${COMBINED_TEX}"
+echo "SUCCESS: combined PDF:         ${COMBINED_PDF}"
+echo "Figures included: ${figure_count}"

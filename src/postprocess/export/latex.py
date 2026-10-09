@@ -20,7 +20,7 @@ class LaTeXTextRegistry:
 
         self._counter += 1
 
-        placeholder = f"GRAPHPlotLabel{self._counter:04d}"
+        placeholder = f"QZ{self._counter}X"
 
         self._labels[placeholder] = text
 

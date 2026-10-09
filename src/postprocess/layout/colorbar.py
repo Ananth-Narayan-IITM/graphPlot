@@ -10,6 +10,7 @@ def add_colorbar(
     orientation="vertical",
     pad=0.02,
     fraction=0.046,
+    labelpad=10,
 ):
     """
     Add a colorbar to a figure.
@@ -50,7 +51,7 @@ def add_colorbar(
     )
 
     if label is not None:
-        colorbar.set_label(label)
+        colorbar.set_label(label, labelpad=labelpad)
 
     if ticks is not None:
         colorbar.set_ticks(ticks)
