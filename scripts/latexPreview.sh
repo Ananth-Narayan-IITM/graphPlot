@@ -48,7 +48,7 @@ description_for() {
 
 {
     cat <<'EOF'
-\documentclass[11pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage[a4paper,margin=25mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -77,7 +77,8 @@ figure text matches the surrounding paper text.
 \section*{Font-size reference}
 Compare the reference paragraphs below with the text inside the figures. The
 figures are scaled to the column width, but their text remains at the point
-sizes chosen in the Python script.
+sizes chosen in the Python script. The default \texttt{paper} style uses 10 pt
+for axis labels and titles, and 9 pt for ticks and legends.
 
 \noindent{\fontsize{8}{9.6}\selectfont 8 pt: The quick brown fox jumps over the lazy dog.}\par
 \vspace{0.5em}

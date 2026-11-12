@@ -40,16 +40,21 @@ LINESTYLES = ("-", "--", "-.", ":")
 class Style:
     """Visual defaults shared by every figure and panel.
 
+    ``font_size`` controls axis labels and titles. Ticks and legends default to
+    one point smaller. Passing ``font_size`` to :meth:`with_` or
+    :meth:`from_preset` updates those related sizes automatically unless they
+    are explicitly overridden.
+
     A style is immutable. Use :meth:`with_` to create a modified copy.
     """
 
     preset: str = "paper"
     font_family: str = "serif"
-    font_size: float = 9.0
-    label_size: float = 9.0
-    title_size: float = 9.0
-    tick_size: float = 8.0
-    legend_size: float = 8.0
+    font_size: float = 10.0
+    label_size: float | None = None
+    title_size: float | None = None
+    tick_size: float | None = None
+    legend_size: float | None = None
 
     line_width: float = 1.2
     axes_line_width: float = 0.8
@@ -65,6 +70,29 @@ class Style:
     grid: bool = False
     mathtext: str = "stix"
 
+    def __post_init__(self) -> None:
+        size = float(self.font_size)
+        object.__setattr__(
+            self,
+            "label_size",
+            size if self.label_size is None else float(self.label_size),
+        )
+        object.__setattr__(
+            self,
+            "title_size",
+            size if self.title_size is None else float(self.title_size),
+        )
+        object.__setattr__(
+            self,
+            "tick_size",
+            size - 1.0 if self.tick_size is None else float(self.tick_size),
+        )
+        object.__setattr__(
+            self,
+            "legend_size",
+            size - 1.0 if self.legend_size is None else float(self.legend_size),
+        )
+
     @classmethod
     def from_preset(cls, preset: str = "paper", **overrides) -> Style:
         """Return a style preset with optional field overrides."""
@@ -75,10 +103,6 @@ class Style:
             base = cls(
                 preset="ieee",
                 font_size=8.0,
-                label_size=8.0,
-                title_size=8.0,
-                tick_size=7.0,
-                legend_size=7.0,
                 line_width=1.0,
                 dpi=600,
             )
@@ -87,10 +111,6 @@ class Style:
                 preset="elsevier",
                 font_family="serif",
                 font_size=9.0,
-                label_size=9.0,
-                title_size=9.0,
-                tick_size=8.0,
-                legend_size=8.0,
                 line_width=1.1,
                 dpi=600,
             )
@@ -98,10 +118,6 @@ class Style:
             base = cls(
                 preset="thesis",
                 font_size=10.0,
-                label_size=10.0,
-                title_size=10.0,
-                tick_size=9.0,
-                legend_size=9.0,
                 line_width=1.3,
                 dpi=300,
             )
@@ -110,10 +126,6 @@ class Style:
                 preset="screen",
                 font_family="sans-serif",
                 font_size=10.0,
-                label_size=10.0,
-                title_size=11.0,
-                tick_size=9.0,
-                legend_size=9.0,
                 line_width=1.5,
                 dpi=150,
             )
@@ -122,10 +134,21 @@ class Style:
             raise ValueError(
                 f"Unknown style preset {preset!r}. Available: {available}."
             )
-        return replace(base, **overrides) if overrides else base
+        return base.with_(**overrides) if overrides else base
 
     def with_(self, **overrides) -> Style:
-        """Return a modified copy of this style."""
+        """Return a modified copy of this style.
+
+        Changing ``font_size`` also changes label, title, tick and legend sizes
+        unless those fields are supplied explicitly.
+        """
+        overrides = dict(overrides)
+        if "font_size" in overrides:
+            size = float(overrides["font_size"])
+            overrides.setdefault("label_size", size)
+            overrides.setdefault("title_size", size)
+            overrides.setdefault("tick_size", size - 1.0)
+            overrides.setdefault("legend_size", size - 1.0)
         return replace(self, **overrides)
 
     def rc(self) -> dict[str, object]:

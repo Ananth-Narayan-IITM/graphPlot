@@ -365,11 +365,24 @@ fig.suptitle("Overall title")
 ```python
 style = gp.Style.from_preset(
     "paper",             # paper, ieee, elsevier, thesis, screen
-    font_size=9,
+    font_size=10,
     line_width=1.2,
     dpi=600,
 )
 
+fig = gp.Figure(width=3.4, height=2.6, style=style)
+```
+
+The `paper` preset uses 10 pt for axis labels and titles, and 9 pt for ticks
+and legends. Changing `font_size` updates those related sizes automatically
+unless `label_size`, `title_size`, `tick_size` or `legend_size` is set
+explicitly.
+
+Use the same size as your manuscript if you want the figure text to match the
+body text exactly:
+
+```python
+style = gp.Style.from_preset("paper", font_size=11)
 fig = gp.Figure(width=3.4, height=2.6, style=style)
 ```
 
