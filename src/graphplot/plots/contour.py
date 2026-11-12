@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 import matplotlib as mpl
+import matplotlib.tri as mtri
 import numpy as np
 from matplotlib.collections import PolyCollection
 from matplotlib.colors import BoundaryNorm, Colormap, Normalize
@@ -111,14 +112,11 @@ def plot_field_contour(
     rasterize: bool | str = "auto",
     **kwargs,
 ) -> PolyCollection:
-    """Draw a cell-centred scalar field as filled polygons."""
-    values = data.field(field, association=association, component=component)
-    if values.size != data.n_cells:
-        raise ValueError(
-            f"Field {field!r} has {values.size} values but the mesh has "
-            f"{data.n_cells} cells."
-        )
-
+    """Draw a scalar field as filled polygons or a triangulated surface."""
+    resolved_association = (
+        data.association(field) if association == "auto" else association
+    )
+    values = data.field(field, association=resolved_association, component=component)
     scale = ColorScale(
         levels=levels,
         cmap=cmap,
@@ -128,24 +126,84 @@ def plot_field_contour(
         extend=extend,
     ).resolve(values)
 
-    collection = PolyCollection(
-        data.cell_polygons(),
-        array=values,
-        cmap=scale.colormap,
-        norm=scale.norm,
-        edgecolors="none",
-        linewidths=0.0,
-        antialiased=False,
-        **kwargs,
-    )
+    if resolved_association == "point":
+        collection = _plot_point_contour(
+            axes,
+            data,
+            values,
+            scale,
+            extend=extend,
+            rasterize=rasterize,
+            **kwargs,
+        )
+    else:
+        if values.size != data.n_cells:
+            raise ValueError(
+                f"Field {field!r} has {values.size} values but the mesh has "
+                f"{data.n_cells} cells."
+            )
+        collection = PolyCollection(
+            data.cell_polygons(),
+            array=values,
+            cmap=scale.colormap,
+            norm=scale.norm,
+            edgecolors="none",
+            linewidths=0.0,
+            antialiased=False,
+            **kwargs,
+        )
+        if rasterize is True or (rasterize == "auto" and data.n_cells > 50_000):
+            collection.set_rasterized(True)
+        axes.add_collection(collection)
 
-    if rasterize is True or (rasterize == "auto" and data.n_cells > 50_000):
-        collection.set_rasterized(True)
-
-    axes.add_collection(collection)
     xmin, xmax, ymin, ymax = data.bounds2d
     axes.set_xlim(xmin, xmax)
     axes.set_ylim(ymin, ymax)
     axes.set_aspect("equal", adjustable="box")
     axes.grid(False)
+    return collection
+
+
+def _plot_point_contour(
+    axes,
+    data: FieldData,
+    values: np.ndarray,
+    scale: ColorScale,
+    *,
+    extend: str,
+    rasterize: bool | str,
+    **kwargs,
+):
+    if values.size != data.n_points:
+        raise ValueError(
+            f"Point field has {values.size} values but the mesh has "
+            f"{data.n_points} points."
+        )
+
+    points = data.points[:, :2]
+    triangles = data.triangles()
+    triangulation = mtri.Triangulation(points[:, 0], points[:, 1], triangles)
+
+    if scale.levels_array is not None:
+        collection = axes.tricontourf(
+            triangulation,
+            values,
+            levels=scale.levels_array,
+            cmap=scale.colormap,
+            norm=scale.norm,
+            extend=extend,
+            **kwargs,
+        )
+    else:
+        collection = axes.tripcolor(
+            triangulation,
+            values,
+            cmap=scale.colormap,
+            norm=scale.norm,
+            shading="gouraud",
+            **kwargs,
+        )
+
+    if rasterize is True or (rasterize == "auto" and data.n_cells > 50_000):
+        collection.set_rasterized(True)
     return collection

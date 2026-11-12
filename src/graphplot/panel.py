@@ -4,11 +4,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 from matplotlib.axes import Axes
 
 from graphplot.data.field import FieldData
+from graphplot.data.series import Data1D
+from graphplot.data.table import Table
 from graphplot.io.load import load
 from graphplot.plots.contour import plot_field_contour
+from graphplot.plots.legend import grouped_legend, table_legend
 from graphplot.plots.mesh import plot_mesh
 
 
@@ -28,6 +32,110 @@ class Panel:
         self.artists: list[object] = []
         self.last_artist: object | None = None
         self.last_mappable: object | None = None
+        self.last_legend: object | None = None
+        self._line_count = 0
+
+    # ------------------------------------------------------------------
+    # 1D plots
+    # ------------------------------------------------------------------
+
+    def line(
+        self,
+        data,
+        y=None,
+        *,
+        x=None,
+        label: str | None = None,
+        role: str | None = None,
+        color=None,
+        linestyle=None,
+        marker=None,
+        **kwargs,
+    ) -> Panel:
+        """Plot one or more 1D series.
+
+        ``data`` may be a path, a :class:`Table`, a :class:`Data1D`, or an
+        array. For tabular input, ``x`` and ``y`` are column names or indices.
+        """
+        series = self._as_series(data, x=x, y=y)
+        if isinstance(series, list):
+            for item in series:
+                self._plot_series(
+                    item,
+                    label=None,
+                    role=role,
+                    color=color,
+                    linestyle=linestyle,
+                    marker=marker,
+                    **kwargs,
+                )
+            return self
+        return self._plot_series(
+            series,
+            label=label,
+            role=role,
+            color=color,
+            linestyle=linestyle,
+            marker=marker,
+            **kwargs,
+        )
+
+    def errorbar(
+        self,
+        data,
+        y=None,
+        *,
+        x=None,
+        yerr=None,
+        xerr=None,
+        label: str | None = None,
+        color=None,
+        marker="o",
+        linestyle="none",
+        capsize: float = 3.0,
+        **kwargs,
+    ) -> Panel:
+        """Plot a series with error bars."""
+        series = self._as_series(data, x=x, y=y)
+        if isinstance(series, list):
+            for item in series:
+                self._errorbar_series(
+                    item,
+                    yerr=yerr,
+                    xerr=xerr,
+                    label=None,
+                    color=color,
+                    marker=marker,
+                    linestyle=linestyle,
+                    capsize=capsize,
+                    **kwargs,
+                )
+            return self
+        return self._errorbar_series(
+            series,
+            yerr=yerr,
+            xerr=xerr,
+            label=label,
+            color=color,
+            marker=marker,
+            linestyle=linestyle,
+            capsize=capsize,
+            **kwargs,
+        )
+
+    def fill_between(
+        self,
+        x,
+        y1,
+        y2=0.0,
+        *,
+        label: str | None = None,
+        **kwargs,
+    ) -> Panel:
+        """Fill the area between two curves."""
+        artist = self.ax.fill_between(x, y1, y2, label=label, **kwargs)
+        self._register(artist)
+        return self
 
     # ------------------------------------------------------------------
     # Data plots
@@ -152,10 +260,84 @@ class Panel:
         self.ax.set_axis_off()
         return self
 
-    def legend(self, **kwargs) -> Panel:
-        """Create a legend from labelled artists."""
-        self.ax.legend(**kwargs)
+    def legend(
+        self,
+        *,
+        loc: str = "best",
+        ncol: int = 1,
+        ncols: int | None = None,
+        frameon: bool = False,
+        fontsize: float | None = None,
+        title: str | None = None,
+        groups=None,
+        **kwargs,
+    ):
+        """Create a standard or grouped legend.
+
+        ``groups`` may be a list of ``{"title": ..., "labels": [...]}``
+        dictionaries or a mapping from group title to labels.
+        """
+        if ncols is not None:
+            ncol = ncols
+        if groups is not None:
+            legend = grouped_legend(
+                self.ax,
+                groups,
+                loc=loc,
+                ncol=ncol,
+                frameon=frameon,
+                fontsize=fontsize,
+                title=title,
+                **kwargs,
+            )
+        else:
+            legend = self.ax.legend(
+                loc=loc,
+                ncol=ncol,
+                frameon=frameon,
+                fontsize=fontsize,
+                title=title,
+                **kwargs,
+            )
+        self.last_legend = legend
         return self
+
+    def legend_table(
+        self,
+        groups,
+        *,
+        location: str = "lower center",
+        bbox_to_anchor=(0.5, -0.12),
+        fontsize: float | None = None,
+        handle_length: float = 32,
+        column_spacing: float = 30,
+        row_spacing: float = 5,
+    ):
+        """Create a table-style legend with group headings and case rows."""
+        legend = table_legend(
+            self.figure.figure,
+            groups,
+            location=location,
+            bbox_to_anchor=bbox_to_anchor,
+            fontsize=fontsize or self.figure.style.legend_size,
+            handle_length=handle_length,
+            column_spacing=column_spacing,
+            row_spacing=row_spacing,
+        )
+        self.last_legend = legend
+        return self
+
+    def twinx(self) -> Panel:
+        """Create a panel sharing the x-axis with this panel."""
+        panel = Panel(self.figure, self.ax.twinx(), self.row, self.column)
+        panel._is_twin = True
+        return panel
+
+    def twiny(self) -> Panel:
+        """Create a panel sharing the y-axis with this panel."""
+        panel = Panel(self.figure, self.ax.twiny(), self.row, self.column)
+        panel._is_twin = True
+        return panel
 
     def label(
         self,
@@ -212,6 +394,98 @@ class Panel:
     # Internal helpers
     # ------------------------------------------------------------------
 
+    def _as_series(self, data, *, x=None, y=None) -> Data1D | list[Data1D]:
+        if isinstance(data, Data1D):
+            return data
+
+        if isinstance(data, (str, Path)):
+            data = load(data)
+
+        if isinstance(data, Table):
+            x_key = _default_column(data, x, "x", 0)
+            if isinstance(y, (list, tuple)):
+                return [data.series(x_key, item) for item in y]
+            y_key = _default_column(data, y, "y", 1)
+            return data.series(x_key, y_key)
+
+        array = np.asarray(data, dtype=float)
+        if y is None:
+            if array.ndim == 2 and array.shape[1] >= 2:
+                return Data1D(array[:, 0], array[:, 1])
+            raise ValueError(
+                "y is required when plotting a one-dimensional array. "
+                "Pass line(x, y) or line(table, y='column')."
+            )
+        y_array = np.asarray(y, dtype=float)
+        if array.ndim != 1 or y_array.ndim != 1:
+            raise ValueError("x and y arrays must be one-dimensional.")
+        return Data1D(array, y_array)
+
+    def _plot_series(
+        self,
+        series: Data1D,
+        *,
+        label=None,
+        role=None,
+        color=None,
+        linestyle=None,
+        marker=None,
+        **kwargs,
+    ) -> Panel:
+        style = self.figure.style
+        index = self._line_count
+        color = kwargs.pop("c", color) or style.color(index)
+        linestyle = kwargs.pop("ls", linestyle)
+        if linestyle is None:
+            linestyle = _role_linestyle(role, style.linestyle(index))
+        if marker is None:
+            marker = style.marker(index) if role == "experimental" else None
+
+        artist = self.ax.plot(
+            series.x,
+            series.y,
+            label=label or series.label,
+            color=color,
+            linestyle=linestyle,
+            marker=marker,
+            **kwargs,
+        )[0]
+        self._line_count += 1
+        self._register(artist)
+        return self
+
+    def _errorbar_series(
+        self,
+        series: Data1D,
+        *,
+        yerr=None,
+        xerr=None,
+        label=None,
+        color=None,
+        marker="o",
+        linestyle="none",
+        capsize=3.0,
+        **kwargs,
+    ) -> Panel:
+        style = self.figure.style
+        index = self._line_count
+        color = kwargs.pop("c", color) or style.color(index)
+        container = self.ax.errorbar(
+            series.x,
+            series.y,
+            yerr=series.yerr if yerr is None else yerr,
+            xerr=series.xerr if xerr is None else xerr,
+            label=label or series.label,
+            color=color,
+            marker=marker,
+            linestyle=linestyle,
+            capsize=capsize,
+            **kwargs,
+        )
+        self._line_count += 1
+        self._register(container)
+        return self
+
     def _register(self, artist, *, mappable: bool = False) -> None:
         self.artists.append(artist)
         self.last_artist = artist
@@ -239,3 +513,20 @@ def _with_unit(label: str, unit: str | None) -> str:
     if label.endswith("]"):
         return label
     return f"{label} [{unit}]"
+
+
+def _default_column(table: Table, key, preferred: str, index: int):
+    if key is not None:
+        return key
+    return preferred if preferred in table.columns else index
+
+
+def _role_linestyle(role: str | None, fallback: str) -> str:
+    if role is None:
+        return fallback
+    return {
+        "numerical": "-",
+        "analytical": "--",
+        "experimental": "none",
+        "reference": "-.",
+    }.get(role, fallback)

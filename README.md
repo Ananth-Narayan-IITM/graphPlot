@@ -58,6 +58,48 @@ Include it in a paper with:
 \end{figure}
 ```
 
+## Quick start: line plots and grouped legends
+
+```python
+import graphplot as gp
+
+fig = (
+    gp.Figure(width=3.4, height=2.6)
+    .line("data/numerical.dat", label="Numerical", role="numerical")
+    .line("data/experiment.dat", label="Experiment", role="experimental")
+    .xlabel("$x$", unit="m")
+    .ylabel("$u$", unit="m/s")
+    .legend(loc="best")
+)
+fig.save("output/line", formats=["png", "pdf_tex"])
+```
+
+Grouped legend:
+
+```python
+fig.legend(
+    groups=[
+        {"title": "Numerical", "labels": ["Case 1", "Case 2"]},
+        {"title": "Experiment", "labels": ["Exp. 1", "Exp. 2"]},
+    ],
+    ncol=2,
+)
+```
+
+Dual y-axis with a table legend:
+
+```python
+left = fig.line(x, temperature, label="Case 1", color="black")
+right = fig.twinx().line(x, pressure, label="Case 1", color="#D55E00")
+
+left.legend_table(
+    {
+        "Temperature": {"Case 1": left.last_artist},
+        "Pressure": {"Case 1": right.last_artist},
+    }
+)
+```
+
 ## Design
 
 ```python

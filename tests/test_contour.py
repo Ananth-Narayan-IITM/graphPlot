@@ -34,6 +34,22 @@ def test_contour_field_required_with_multiple_fields():
         fig.close()
 
 
+def test_point_centred_contour(tmp_path):
+    import numpy as np
+    import pyvista as pv
+
+    dataset = pv.read("data/zNormal.vtp")
+    dataset.point_data["point_field"] = np.linspace(0.0, 1.0, dataset.n_points)
+    data = gp.FieldData(dataset)
+    fig = gp.Figure(width=3.4, height=3.0)
+    fig.contour(data, "point_field", association="point", levels=12)
+    assert fig.last_mappable is not None
+    path = tmp_path / "point_contour.png"
+    fig.figure.savefig(path, bbox_inches="tight", dpi=100)
+    assert path.exists()
+    fig.close()
+
+
 def test_mesh_overlay(tmp_path):
     fig = gp.Figure(width=3.4, height=3.0)
     fig.contour("data/zNormal.vtp", "gammaDV")

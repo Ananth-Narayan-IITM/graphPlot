@@ -5,8 +5,11 @@
 - The complete v1 implementation is preserved on the local `v1` branch
   (tag `v1-final`, commit `2e60876`).
 - `master` has been rebooted with the v2 package.
-- First milestone complete: VTP contour, mesh overlay, colorbar,
-  native PDF+TeX export, tabular reader, CLI diagnostics, tests and examples.
+- First milestone complete: VTP contour, point and cell data, mesh overlay,
+  colorbar, native PDF+TeX export, tabular reader, CLI diagnostics, tests and
+  examples.
+- Second milestone complete: 1D line and error-bar plots, grouped legends,
+  table legends, dual y-axes, and matching examples/tests.
 
 ## Decisions
 

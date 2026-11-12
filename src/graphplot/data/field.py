@@ -136,31 +136,45 @@ class FieldData:
             )
         raise ValueError(f"Field {name!r} has unsupported shape {values.shape}.")
 
-    def cell_polygons(self) -> list[np.ndarray]:
-        """Return each cell as an ``(n, 2)`` polygon of XY coordinates."""
-        points = self.points
-        polygons: list[np.ndarray] = []
-
-        if hasattr(self.dataset, "faces") and not hasattr(
-            self.dataset, "cell_connectivity"
-        ):
-            faces = np.asarray(self.dataset.faces)
+    def cell_indices(self) -> list[np.ndarray]:
+        """Return the point indices of every cell."""
+        faces = getattr(self.dataset, "faces", None)
+        if faces is not None:
+            faces = np.asarray(faces)
+            cells: list[np.ndarray] = []
             index = 0
             while index < len(faces):
                 n_points = int(faces[index])
-                cell = faces[index + 1 : index + 1 + n_points]
-                polygons.append(points[cell][:, :2])
+                if n_points <= 0:
+                    break
+                cells.append(faces[index + 1 : index + 1 + n_points])
                 index += n_points + 1
-            return polygons
+            if len(cells) == self.n_cells:
+                return cells
 
         connectivity = np.asarray(self.dataset.cell_connectivity)
         offsets = np.asarray(self.dataset.offset)
+        cells = []
         for cell_id in range(self.dataset.n_cells):
             start = int(offsets[cell_id])
             stop = int(offsets[cell_id + 1])
-            cell = connectivity[start:stop]
-            polygons.append(points[cell][:, :2])
-        return polygons
+            cells.append(connectivity[start:stop])
+        return cells
+
+    def cell_polygons(self) -> list[np.ndarray]:
+        """Return each cell as an ``(n, 2)`` polygon of XY coordinates."""
+        points = self.points
+        return [points[cell][:, :2] for cell in self.cell_indices()]
+
+    def triangles(self) -> np.ndarray:
+        """Return a fan triangulation of all cells as an ``(n, 3)`` array."""
+        triangles: list[tuple[int, int, int]] = []
+        for cell in self.cell_indices():
+            if len(cell) < 3:
+                continue
+            for index in range(1, len(cell) - 1):
+                triangles.append((int(cell[0]), int(cell[index]), int(cell[index + 1])))
+        return np.asarray(triangles, dtype=int).reshape(-1, 3)
 
     def iter_cell_polygons(self) -> Iterator[np.ndarray]:
         """Yield cell polygons one at a time."""
