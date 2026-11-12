@@ -11,7 +11,7 @@ from graphplot.io.load import load, load_field, load_table
 from graphplot.panel import Panel
 from graphplot.style import Style
 
-__version__ = "2.0.0.dev0"
+__version__ = "2.0.0"
 
 __all__ = [
     "Data1D",

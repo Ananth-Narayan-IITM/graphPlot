@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "graphPlot"
-version = "2.0.0.dev0"
+version = "2.0.0"
 description = "Compact publication-quality figures from OpenFOAM VTP and tabular data"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,6 +26,7 @@ dev = [
 
 [project.scripts]
 graphplot = "graphplot.cli:main"
+graphPlot = "graphplot.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

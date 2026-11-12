@@ -1,14 +1,17 @@
 """Grouped legend with numerical and experimental headings.
 
-Run from the repository root:
+Run from anywhere:
 
-    python examples/04_grouped_legend.py
+    graphPlot examples/groupedLegend.py
 """
+
+from pathlib import Path
 
 import numpy as np
 
 import graphplot as gp
 
+ROOT = Path(__file__).resolve().parents[1]
 x = np.linspace(0.0, 1.0, 120)
 
 fig = (
@@ -16,10 +19,16 @@ fig = (
     .line(x, np.sin(2 * np.pi * x), label="Case 1", role="numerical")
     .line(x, np.cos(2 * np.pi * x), label="Case 2", role="numerical")
     .line(
-        x[::10], np.sin(2 * np.pi * x[::10]) + 0.02, label="Exp. 1", role="experimental"
+        x[::10],
+        np.sin(2 * np.pi * x[::10]) + 0.02,
+        label="Exp. 1",
+        role="experimental",
     )
     .line(
-        x[::10], np.cos(2 * np.pi * x[::10]) - 0.02, label="Exp. 2", role="experimental"
+        x[::10],
+        np.cos(2 * np.pi * x[::10]) - 0.02,
+        label="Exp. 2",
+        role="experimental",
     )
     .xlabel("$x$", unit="m")
     .ylabel("$u$", unit="m/s")
@@ -32,5 +41,5 @@ fig.legend(
     ncol=2,
     loc="upper right",
 )
-fig.save("output/04_grouped_legend", formats=["png", "pdf_tex"])
+fig.save(ROOT / "output" / "groupedLegend", formats=["png", "pdf_tex"])
 fig.close()

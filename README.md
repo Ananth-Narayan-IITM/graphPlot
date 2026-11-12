@@ -8,16 +8,34 @@ text is typeset by LaTeX, so labels, ticks, legends and math match the document.
 
 ## Install
 
-```bash
-cd graphPlot
-python3 -m venv .venv
-.venv/bin/pip install -e ".[dev]"
-```
-
-Normal installation:
+On a normal Python installation:
 
 ```bash
 pip install .
+```
+
+On this machine the system Python is externally managed (PEP 668), so
+`pip install .` is refused. Use the one-time local installer instead. It creates
+a persistent environment at `~/.venvs/graphPlot`, installs the package there,
+and links the `graphPlot` command into `~/.local/bin`:
+
+```bash
+bash scripts/install-local.sh
+```
+
+After that, no environment activation is needed:
+
+```bash
+graphPlot check
+graphPlot examples/vtpContours.py
+```
+
+For development, an editable install inside the repository is still available:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
+.venv/bin/python -m pytest
 ```
 
 ## Quick start: VTP contour
@@ -33,15 +51,15 @@ fig = (
 )
 
 fig.colorbar(label=r"$\gamma_{\mathrm{DV}}$ [1/s]")
-fig.save("output/01_vtp_contour", formats=["png", "pdf_tex"])
+fig.save("output/vtpContours", formats=["png", "pdf_tex"])
 fig.close()
 ```
 
 The export writes:
 
-- `01_vtp_contour.png` — quick preview
-- `01_vtp_contour.pdf` — text-free graphics layer
-- `01_vtp_contour.pdf_tex` — LaTeX text overlay
+- `vtpContours.png` — quick preview
+- `vtpContours.pdf` — text-free graphics layer
+- `vtpContours.pdf_tex` — LaTeX text overlay
 
 Include it in a paper with:
 
@@ -53,7 +71,7 @@ Include it in a paper with:
 \begin{figure}[htbp]
   \centering
   \def\svgwidth{\columnwidth}
-  \input{output/01_vtp_contour.pdf_tex}
+  \input{output/vtpContours.pdf_tex}
   \caption{...}
 \end{figure}
 ```
@@ -132,14 +150,28 @@ The current development focus is:
 
 ## CLI
 
+The `graphPlot` command runs a figure script directly. No environment
+activation or YAML file is needed:
+
 ```bash
-graphplot check
-graphplot info data/zNormal.vtp
-graphplot --version
+graphPlot examples/vtpContours.py
+graphPlot examples/vtpContourMesh.py
+graphPlot examples/linePlot.py
+graphPlot examples/groupedLegend.py
+graphPlot examples/dualAxis.py
 ```
 
-`graphplot check` reports Python, NumPy, Matplotlib, PyVista, LaTeX and Doxygen
-availability.
+Diagnostics:
+
+```bash
+graphPlot check
+graphPlot info data/zNormal.vtp
+graphPlot --version
+```
+
+`graphPlot check` reports Python, NumPy, Matplotlib, PyVista, LaTeX and Doxygen
+availability. Scripts use the non-interactive Agg backend by default, so they
+can run from a terminal without a display.
 
 ## Documentation
 

@@ -291,12 +291,13 @@ graphics-only PDF so the two outputs do not overwrite each other.
 
 Figures are written as compact Python scripts. YAML is deliberately not used:
 it would add a second configuration language, hide Matplotlib control, and
-make debugging harder. The CLI is limited to diagnostics.
+make debugging harder. The CLI runs scripts directly and provides diagnostics.
 
 ```bash
-graphplot check          # Python, PyVista, LaTeX and Doxygen availability
-graphplot info case.vtp  # fields, associations, bounds
-graphplot --version
+graphPlot examples/vtpContours.py   # run a figure script
+graphPlot check                     # Python, PyVista, LaTeX and Doxygen
+graphPlot info case.vtp             # fields, associations, bounds
+graphPlot --version
 ```
 
 A typical figure is a short, readable Python file:
