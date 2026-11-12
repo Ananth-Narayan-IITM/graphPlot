@@ -427,6 +427,32 @@ paths = fig.save(
 When both `pdf` and `pdf_tex` are requested, the PDF_TeX graphics layer is
 written as `figureName_tex.pdf` so the standalone PDF is not overwritten.
 
+### Font size in PDF_TeX
+
+By default, `pdf_tex` **does not contain a font size command**. Every label,
+tick, legend and math expression inherits the font size in effect where the
+file is included. This is the intended PDF_TeX behaviour:
+
+```latex
+\input{output/figureName.pdf_tex}                    % 10 pt document → 10 pt text
+{\small \input{output/figureName.pdf_tex}}           % locally smaller
+{\fontsize{24}{28}\selectfont
+ \input{output/figureName.pdf_tex}}                  % locally 24 pt
+```
+
+If you instead want the PDF_TeX file to preserve the Matplotlib point sizes,
+use:
+
+```python
+fig.save(
+    "output/figureName",
+    formats=["pdf_tex"],
+    pdf_tex_text_size="figure",
+)
+```
+
+`pdf_tex_text_size="inherit"` is the default.
+
 LaTeX inclusion:
 
 ```latex

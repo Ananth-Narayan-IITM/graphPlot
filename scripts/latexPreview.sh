@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
 # Build a LaTeX document containing every output/*.pdf_tex file.
 # Each figure is placed on its own page, preceded by a short description.
+#
+# Usage:
+#   bash scripts/latexPreview.sh
+#   bash scripts/latexPreview.sh --font-size 24
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="${REPO}/output"
 TEX="${OUT}/latexPreview.tex"
 PDF="${OUT}/latexPreview.pdf"
+
+figure_size=""
+if [[ "${1:-}" == "--font-size" ]]; then
+    figure_size="${2:?missing value for --font-size}"
+    shift 2
+fi
+figure_leading=""
+if [[ -n "${figure_size}" ]]; then
+    figure_leading="$(awk "BEGIN { printf \"%.2f\", ${figure_size} * 1.2 }")"
+fi
 
 if ! command -v pdflatex >/dev/null 2>&1; then
     echo "pdflatex was not found. Install a LaTeX distribution first." >&2
@@ -70,15 +84,15 @@ description_for() {
 \clearpage
 \section*{How to read this preview}
 This document includes every \texttt{.pdf\_tex} file found in \texttt{output/}.
-Each figure is placed on its own page. The figures use the document font for
-all labels, ticks, legends and math, so this is the place to check that the
-figure text matches the surrounding paper text.
+Each figure is placed on its own page. The PDF\_TeX files do not contain a fixed
+font size: all labels, ticks, legends and math inherit the font size in effect
+where the file is included.
 
 \section*{Font-size reference}
-Compare the reference paragraphs below with the text inside the figures. The
-figures are scaled to the column width, but their text remains at the point
-sizes chosen in the Python script. The default \texttt{paper} style uses 10 pt
-for axis labels and titles, and 9 pt for ticks and legends.
+This preview uses 10 pt body text by default. Compare the reference paragraphs
+below with the text inside each figure. If you want to check another manuscript
+size, run \texttt{bash scripts/latexPreview.sh --font-size 24}; the figures will
+be wrapped in a 24 pt group without changing the PDF\_TeX files.
 
 \noindent{\fontsize{8}{9.6}\selectfont 8 pt: The quick brown fox jumps over the lazy dog.}\par
 \vspace{0.5em}
@@ -92,23 +106,33 @@ for axis labels and titles, and 9 pt for ticks and legends.
 $\nabla\cdot\mathbf{u}=0$.
 
 \vfill
-\noindent\textit{If a figure label looks larger or smaller than the paragraph
-size you intend to use in the paper, change the figure's \texttt{Style}
-font sizes or scale the figure with \texttt{\textbackslash svgwidth}.}
+\noindent\textit{In the paper, control the size around the include:
+\texttt{\{\textbackslash small \textbackslash input\{fig.pdf\_tex\}\}} or
+\texttt{\{\textbackslash fontsize\{9\}\{11\}\textbackslash selectfont
+\textbackslash input\{fig.pdf\_tex\}\}}.}
 \clearpage
 EOF
 
     for file in "${figures[@]}"; do
         name="$(basename "${file}" .pdf_tex)"
         description="$(description_for "${name}")"
+        if [[ -n "${figure_size}" ]]; then
+            open_group="{\\fontsize{${figure_size}}{${figure_leading}}\\selectfont"
+            close_group="}"
+        else
+            open_group=""
+            close_group=""
+        fi
         cat <<EOF
 \section*{\texttt{\detokenize{${name}}}}
 ${description}
 
 \vspace{1em}
 \begin{center}
+${open_group}
 \def\svgwidth{\columnwidth}
 \input{output/${name}.pdf_tex}
+${close_group}
 \end{center}
 \clearpage
 EOF

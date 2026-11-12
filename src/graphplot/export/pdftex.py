@@ -39,6 +39,7 @@ def save_pdf_tex(
     pdf_filename: str | Path | None = None,
     pad_inches: float = 0.02,
     transparent: bool = False,
+    text_size: str = "inherit",
 ) -> tuple[Path, Path]:
     """Save a text-free PDF and a ``.pdf_tex`` file.
 
@@ -51,12 +52,18 @@ def save_pdf_tex(
         Optional base path for the graphics PDF. Use this when a separate
         native PDF is also requested, so the two PDFs do not overwrite each
         other.
+    text_size
+        ``"inherit"`` (default) writes no ``\\fontsize`` command, so all text
+        follows the font size in effect where the file is included. Use
+        ``"figure"`` to preserve the Matplotlib point sizes.
 
     Returns
     -------
     tuple of pathlib.Path
         PDF and PDF_TeX paths.
     """
+    if text_size not in ("inherit", "figure"):
+        raise ValueError("text_size must be 'inherit' or 'figure'.")
     base = Path(filename)
     if base.suffix == ".pdf":
         base = base.with_suffix("")
@@ -94,7 +101,7 @@ def save_pdf_tex(
         for artist, alpha in old_alphas:
             artist.set_alpha(alpha)
 
-    _write_pdf_tex(tex_path, pdf_path, bbox, records)
+    _write_pdf_tex(tex_path, pdf_path, bbox, records, text_size=text_size)
     return pdf_path, tex_path
 
 
@@ -189,6 +196,8 @@ def _write_pdf_tex(
     pdf_path: Path,
     bbox: Bbox,
     records: list[_TextRecord],
+    *,
+    text_size: str,
 ) -> None:
     width_points = bbox.width * 72.0
     height_points = bbox.height * 72.0
@@ -215,10 +224,16 @@ def _write_pdf_tex(
     for record in records:
         body = _format_record(record)
         align = _alignment(record.ha, record.va)
+        if text_size == "figure":
+            prefix = (
+                f"\\fontsize{{{record.size:.4f}}}"
+                f"{{{record.size * 1.2:.4f}}}\\selectfont "
+            )
+        else:
+            prefix = ""
         lines.append(
             f"  \\put({record.x:.8f},{record.y:.8f})"
-            f"{{\\makebox(0,0)[{align}]{{\\fontsize{{{record.size:.4f}}}"
-            f"{{{record.size * 1.2:.4f}}}\\selectfont {body}}}}}%"
+            f"{{\\makebox(0,0)[{align}]{{{prefix}{body}}}}}%"
         )
 
     lines.extend(["\\end{picture}%", "\\endgroup%", ""])

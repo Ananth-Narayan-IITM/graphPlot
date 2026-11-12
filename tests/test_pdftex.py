@@ -31,6 +31,14 @@ def test_pdf_tex_compiles(tmp_path, monkeypatch):
     assert r"\begin{picture}" in content
     assert r"\put(" in content
     assert "gammaDV" not in content or "$" in content
+    assert r"\fontsize" not in content
+
+    sized = fig.save(
+        "figure_sized",
+        formats=["pdf_tex"],
+        pdf_tex_text_size="figure",
+    )
+    assert r"\fontsize" in sized["pdf_tex"].read_text(encoding="utf-8")
 
     document = tmp_path / "document.tex"
     document.write_text(

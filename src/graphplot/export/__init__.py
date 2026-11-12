@@ -15,6 +15,7 @@ def save_figure(
     dpi: int | None = None,
     transparent: bool = False,
     pad_inches: float = 0.02,
+    pdf_tex_text_size: str = "inherit",
     **savefig_kwargs,
 ) -> dict[str, Path]:
     """Save a figure in one or more formats.
@@ -41,6 +42,7 @@ def save_figure(
             pdf_filename=graphics_pdf,
             pad_inches=pad_inches,
             transparent=transparent,
+            text_size=pdf_tex_text_size,
         )
         paths["pdf_tex"] = tex_path
         paths["pdf_tex_graphics"] = pdf_path

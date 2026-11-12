@@ -270,6 +270,23 @@ output/latexPreview.pdf
 Use it to check that figure labels, ticks, legends and math match the paper
 font. The preview includes reference paragraphs at 8, 9, 10 and 11 pt.
 
+PDF_TeX files do not hard-code font sizes; their text inherits the surrounding
+document size. To test another size without changing the figures:
+
+```bash
+bash scripts/latexPreview.sh --font-size 24
+```
+
+This wraps each figure in a 24 pt group. In a paper, control the local size in
+the same way:
+
+```latex
+{\small \input{output/vtpContours.pdf_tex}}
+```
+
+If you want the PDF_TeX file to keep the Matplotlib point sizes instead, use
+`fig.save(..., pdf_tex_text_size="figure")`.
+
 ## Tests
 
 Use the persistent installation created by `scripts/installLocal.sh`:

@@ -212,9 +212,15 @@ class Figure:
         dpi: int | None = None,
         transparent: bool = False,
         pad_inches: float = 0.02,
+        pdf_tex_text_size: str = "inherit",
         **savefig_kwargs,
     ) -> dict[str, Path]:
-        """Save the figure and return the generated paths."""
+        """Save the figure and return the generated paths.
+
+        ``pdf_tex_text_size="inherit"`` (default) lets the surrounding LaTeX
+        document control the text size. Use ``"figure"`` to preserve the
+        Matplotlib point sizes inside the PDF_TeX file.
+        """
         return save_figure(
             self,
             filename,
@@ -222,6 +228,7 @@ class Figure:
             dpi=dpi,
             transparent=transparent,
             pad_inches=pad_inches,
+            pdf_tex_text_size=pdf_tex_text_size,
             **savefig_kwargs,
         )
 
