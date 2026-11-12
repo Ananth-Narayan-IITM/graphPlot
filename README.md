@@ -199,6 +199,8 @@ fig.save("figures/gamma")
 - Multi-panel figures use `fig[0, 0]`.
 - Plot methods return the panel, so calls chain.
 - Extra keyword arguments pass through to Matplotlib.
+- Color schemes are selectable: `colorblind`, `grayscale`, `blackwhite`,
+  `default`, or a custom `colors=(...)` palette.
 - Figures are written as Python scripts; there is no YAML configuration layer.
 
 ## Contours first
@@ -315,6 +317,7 @@ graphPlot examples/dualAxis.py
 graphPlot examples/comparisonTable.py
 graphPlot examples/velocityVectors.py
 graphPlot examples/streamlines.py
+graphPlot examples/colorSchemes.py
 ```
 
 Diagnostics:
@@ -334,7 +337,8 @@ can run from a terminal without a display.
 The practical guide is [`docs/API_GUIDE.md`](docs/API_GUIDE.md). It explains
 which object and method to use for each task, with a decision table, signatures,
 recipes and common pitfalls. The one-page quick reference is
-[`docs/CHEATSHEET.md`](docs/CHEATSHEET.md).
+[`docs/CHEATSHEET.md`](docs/CHEATSHEET.md). The pre-submission checklist for
+journals is [`docs/JOURNAL_CHECKLIST.md`](docs/JOURNAL_CHECKLIST.md).
 
 Generated Doxygen documentation:
 

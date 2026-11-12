@@ -151,7 +151,7 @@ class Panel:
         association: str = "auto",
         component: str | int | None = None,
         levels: int | list[float] | None = 32,
-        cmap="viridis",
+        cmap: str | None = None,
         vmin: float | None = None,
         vmax: float | None = None,
         norm=None,
@@ -169,6 +169,9 @@ class Panel:
                     f"Available fields: {available}"
                 )
             field = next(iter(field_data.fields))
+
+        if cmap is None:
+            cmap = self.figure.style.contour_cmap
 
         collection = plot_field_contour(
             self.ax,

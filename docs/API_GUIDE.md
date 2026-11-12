@@ -152,7 +152,7 @@ fig.contour(
     association="auto",     # "auto", "cell" or "point"
     component=None,         # "x", "y", "z" for vector fields
     levels=32,              # int or explicit list of levels
-    cmap="viridis",
+    cmap=None,              # None → Style.contour_cmap
     vmin=None,
     vmax=None,
     norm=None,
@@ -457,6 +457,47 @@ body text exactly:
 ```python
 style = gp.Style.from_preset("paper", font_size=11)
 fig = gp.Figure(width=3.4, height=2.6, style=style)
+```
+
+### Color schemes
+
+Categorical color schemes are selected with `color_scheme`:
+
+```python
+colorblind = gp.Style.from_preset("paper", color_scheme="colorblind")
+grayscale = gp.Style.from_preset("paper", color_scheme="grayscale")
+blackwhite = gp.Style.from_preset("paper", color_scheme="blackwhite")
+default = gp.Style.from_preset("paper", color_scheme="default")
+```
+
+| Scheme | Categorical colors | Default contour map |
+|---|---|---|
+| `colorblind` | Okabe–Ito colorblind-safe palette | `viridis` |
+| `grayscale` | gray shades | `Greys` |
+| `blackwhite` | black only, distinguished by line style and marker | `Greys` |
+| `default` | Matplotlib tab10-like palette | `viridis` |
+| custom | `colors=("...", "...")` | set `contour_cmap` |
+
+`blackwhite` is the safest choice for print journals: all curves are black, and
+line styles plus markers carry the distinction. `grayscale` keeps several gray
+levels but still uses line styles.
+
+Contour colormap follows the scheme automatically:
+
+```python
+style = gp.Style.from_preset("paper", color_scheme="blackwhite")
+fig = gp.Figure(style=style)
+fig.contour(data, "gammaDV")          # uses Greys automatically
+```
+
+Override it when needed:
+
+```python
+style = gp.Style.from_preset(
+    "paper",
+    color_scheme="colorblind",
+    contour_cmap="cividis",
+)
 ```
 
 Per-call Matplotlib keywords always override the style:

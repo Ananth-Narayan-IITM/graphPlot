@@ -32,8 +32,29 @@ DEFAULT_COLORS = (
 
 GRAYSCALE = ("#000000", "#404040", "#707070", "#999999", "#BFBFBF", "#D9D9D9")
 
+BLACKWHITE = ("#000000",)
+
 MARKERS = ("o", "s", "^", "D", "v", "<", ">", "P", "X")
 LINESTYLES = ("-", "--", "-.", ":")
+
+COLOR_SCHEMES = {
+    "default": DEFAULT_COLORS,
+    "colorblind": COLORBLIND,
+    "grayscale": GRAYSCALE,
+    "blackwhite": BLACKWHITE,
+}
+
+
+def get_colors(scheme: str) -> tuple[str, ...]:
+    """Return a named categorical color scheme."""
+    try:
+        return COLOR_SCHEMES[scheme.lower()]
+    except KeyError as exc:
+        available = ", ".join(COLOR_SCHEMES)
+        raise ValueError(
+            f"Unknown color scheme {scheme!r}. Available: {available}, "
+            "or pass colors=(...) explicitly."
+        ) from exc
 
 
 @dataclass(frozen=True)
@@ -62,15 +83,27 @@ class Style:
     tick_length: float = 3.0
     marker_size: float = 4.0
 
-    colors: tuple[str, ...] = COLORBLIND
+    color_scheme: str = "colorblind"
+    colors: tuple[str, ...] | None = None
     markers: tuple[str, ...] = MARKERS
     linestyles: tuple[str, ...] = LINESTYLES
+    contour_cmap: str | None = None
 
     dpi: int = 600
     grid: bool = False
     mathtext: str = "stix"
 
     def __post_init__(self) -> None:
+        if self.colors is None:
+            object.__setattr__(self, "colors", get_colors(self.color_scheme))
+        if self.contour_cmap is None:
+            cmap = (
+                "Greys"
+                if self.color_scheme in ("grayscale", "blackwhite")
+                else "viridis"
+            )
+            object.__setattr__(self, "contour_cmap", cmap)
+
         size = float(self.font_size)
         object.__setattr__(
             self,
@@ -94,14 +127,26 @@ class Style:
         )
 
     @classmethod
-    def from_preset(cls, preset: str = "paper", **overrides) -> Style:
-        """Return a style preset with optional field overrides."""
+    def from_preset(
+        cls,
+        preset: str = "paper",
+        *,
+        color_scheme: str = "colorblind",
+        **overrides,
+    ) -> Style:
+        """Return a style preset with optional field overrides.
+
+        ``color_scheme`` may be ``"colorblind"``, ``"grayscale"``,
+        ``"blackwhite"`` or ``"default"``. Pass ``colors=(...)`` to use a
+        custom categorical palette.
+        """
         preset = preset.lower()
         if preset == "paper":
-            base = cls()
+            base = cls(color_scheme=color_scheme)
         elif preset == "ieee":
             base = cls(
                 preset="ieee",
+                color_scheme=color_scheme,
                 font_size=8.0,
                 line_width=1.0,
                 dpi=600,
@@ -109,6 +154,7 @@ class Style:
         elif preset == "elsevier":
             base = cls(
                 preset="elsevier",
+                color_scheme=color_scheme,
                 font_family="serif",
                 font_size=9.0,
                 line_width=1.1,
@@ -117,6 +163,7 @@ class Style:
         elif preset == "thesis":
             base = cls(
                 preset="thesis",
+                color_scheme=color_scheme,
                 font_size=10.0,
                 line_width=1.3,
                 dpi=300,
@@ -124,6 +171,7 @@ class Style:
         elif preset == "screen":
             base = cls(
                 preset="screen",
+                color_scheme=color_scheme,
                 font_family="sans-serif",
                 font_size=10.0,
                 line_width=1.5,
@@ -149,6 +197,11 @@ class Style:
             overrides.setdefault("title_size", size)
             overrides.setdefault("tick_size", size - 1.0)
             overrides.setdefault("legend_size", size - 1.0)
+        if "color_scheme" in overrides:
+            if "colors" not in overrides:
+                overrides["colors"] = None
+            if "contour_cmap" not in overrides:
+                overrides["contour_cmap"] = None
         return replace(self, **overrides)
 
     def rc(self) -> dict[str, object]:

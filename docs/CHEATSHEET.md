@@ -204,6 +204,25 @@ next feature.
 
 ---
 
+## Color schemes
+
+```python
+style = gp.Style.from_preset("paper", color_scheme="blackwhite")
+fig = project.figure(style=style)
+```
+
+| Scheme | Use for |
+|---|---|
+| `colorblind` | screen and color-safe publication |
+| `grayscale` | grayscale printing with several levels |
+| `blackwhite` | strict black-and-white print |
+| `default` | ordinary Matplotlib colors |
+| custom | `colors=("...", "...")` |
+
+`blackwhite` uses black lines plus different line styles and markers.
+Contours automatically use `Greys` for `grayscale` and `blackwhite`, and
+`viridis` otherwise.
+
 ## Common mistakes
 
 | Symptom | Cause / fix |

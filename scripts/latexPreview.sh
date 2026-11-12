@@ -49,6 +49,9 @@ description_for() {
         *streamlines*)
             echo "Streamlines with direction arrows. Check that the seed line and arrowheads are readable at the final figure size."
             ;;
+        *colorSchemes*)
+            echo "Categorical color-scheme comparison: colorblind, grayscale and black-and-white. Check that curves remain distinguishable without color."
+            ;;
         *)
             echo "Generated figure. Compare all text with the reference paragraphs on the previous page."
             ;;
