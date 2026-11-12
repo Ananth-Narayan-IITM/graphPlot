@@ -195,6 +195,55 @@ If no project root is found, the command keeps the invocation directory. When
 running a script with plain `python script.py`, normal Python path rules apply.
 Use `Path(__file__)` only when a path must be relative to the script file itself.
 
+## One master file for canvas size and formats
+
+Create a single `figureSettings.py` in your figure project:
+
+```python
+import graphplot as gp
+
+project = gp.Project(
+    width=3.4,
+    height=2.8,
+    dpi=600,
+    style="paper",
+    formats=("pdf_tex", "png"),
+    output_dir="output",
+)
+```
+
+Each figure script imports it:
+
+```python
+from figureSettings import project
+
+fig = project.figure()
+fig.line("data/numerical.dat", label="Numerical")
+fig.xlabel("$x$", unit="m")
+fig.ylabel("$u$", unit="m/s")
+fig.legend()
+
+project.save(fig, "linePlot")
+fig.close()
+```
+
+Change the width, height, formats or DPI in `figureSettings.py` once and every
+script follows. Individual figures can still override a field:
+
+```python
+fig = project.figure(height=3.0)          # taller figure
+project.save(fig, "wide", formats=("png",))  # one-off format
+```
+
+Named variants are also possible:
+
+```python
+DOUBLE = project.with_(width=6.8)
+SINGLE = project
+```
+
+The examples use this pattern in `examples/figureSettings.py`.
+
 ## Run all examples
 
 One command runs every file in `examples/` and writes the figures under
@@ -271,17 +320,18 @@ Use it to check that figure labels, ticks, legends and math match the paper
 font. The preview includes reference paragraphs at 8, 9, 10 and 11 pt.
 
 PDF_TeX files do not hard-code font sizes; their text inherits the surrounding
-document size. To test another size without changing the figures:
-
-```bash
-bash scripts/latexPreview.sh --font-size 24
-```
-
-This wraps each figure in a 24 pt group. In a paper, control the local size in
-the same way:
+document size. Control the size where the figure is included:
 
 ```latex
 {\small \input{output/vtpContours.pdf_tex}}
+```
+
+or, for a 24 pt test:
+
+```latex
+{\fontsize{24}{28.8}\selectfont
+ \def\svgwidth{\columnwidth}
+ \input{output/vtpContours.pdf_tex}}
 ```
 
 If you want the PDF_TeX file to keep the Matplotlib point sizes instead, use

@@ -9,6 +9,7 @@ from graphplot.data.table import Table
 from graphplot.figure import Figure
 from graphplot.io.load import load, load_field, load_table
 from graphplot.panel import Panel
+from graphplot.project import Project
 from graphplot.style import Style
 
 __version__ = "2.0.0"
@@ -18,6 +19,7 @@ __all__ = [
     "FieldData",
     "Figure",
     "Panel",
+    "Project",
     "Style",
     "Table",
     "check",

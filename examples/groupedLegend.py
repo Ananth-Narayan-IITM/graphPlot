@@ -6,13 +6,12 @@ Run from anywhere:
 """
 
 import numpy as np
-
-import graphplot as gp
+from figureSettings import project
 
 x = np.linspace(0.0, 1.0, 120)
 
 fig = (
-    gp.Figure(width=3.8, height=2.8)
+    project.figure(width=3.8)
     .line(x, np.sin(2 * np.pi * x), label="Case 1", role="numerical")
     .line(x, np.cos(2 * np.pi * x), label="Case 2", role="numerical")
     .line(
@@ -38,5 +37,5 @@ fig.legend(
     ncol=2,
     loc="upper right",
 )
-fig.save("output/groupedLegend", formats=["png", "pdf_tex"])
+project.save(fig, "groupedLegend")
 fig.close()

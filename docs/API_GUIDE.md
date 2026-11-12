@@ -32,6 +32,7 @@ For generated class/method pages, run `bash scripts/buildDocs.sh` and open
 | Add a panel label | `fig.label("(a)")` or `fig.label_panels()` |
 | Save a publication figure | `fig.save("output/name", formats=["pdf_tex", "png"])` |
 | Change fonts, colors or line widths | `gp.Style` / `gp.Figure(style="paper")` |
+| Share canvas size, formats and output directory | `gp.Project` |
 | Run a figure script | `graphPlot script.py` |
 
 ---
@@ -405,7 +406,62 @@ A style is immutable; use `style.with_(font_size=10)` to create a modified copy.
 
 ---
 
-## 9. Export
+## 9. Shared project settings
+
+When you have many figure scripts, keep canvas size, DPI, formats and output
+directory in one master file:
+
+```python
+# figureSettings.py
+import graphplot as gp
+
+project = gp.Project(
+    width=3.4,
+    height=2.8,
+    dpi=600,
+    style="paper",
+    formats=("pdf_tex", "png"),
+    output_dir="output",
+)
+```
+
+Each script imports the project:
+
+```python
+from figureSettings import project
+
+fig = project.figure()
+fig.line("data/numerical.dat", label="Numerical")
+fig.xlabel("$x$", unit="m")
+fig.legend()
+
+project.save(fig, "linePlot")
+fig.close()
+```
+
+Change `width`, `height`, `formats` or `dpi` in `figureSettings.py` once and
+every script follows. Per-figure overrides remain possible:
+
+```python
+fig = project.figure(height=3.0)
+project.save(fig, "wide", formats=("png",))
+```
+
+Create named variants with `Project.with_`:
+
+```python
+SINGLE = project
+DOUBLE = project.with_(width=6.8)
+SQUARE = project.with_(height=3.4)
+```
+
+`Project.figure()` forwards all other `Figure` options such as `nrows`,
+`ncols`, `layout` and `style`. `Project.save()` forwards all `Figure.save`
+options such as `dpi`, `transparent` and `pdf_tex_text_size`.
+
+---
+
+## 10. Export
 
 ```python
 paths = fig.save(
@@ -473,7 +529,7 @@ Matplotlib figure; a `with gp.Figure(...) as fig:` block closes it automatically
 
 ---
 
-## 10. Common recipes
+## 11. Common recipes
 
 ### VTP contour with colorbar
 
@@ -561,7 +617,7 @@ fig.save("output/combined")
 
 ---
 
-## 11. Running scripts
+## 12. Running scripts
 
 ```bash
 graphPlot examples/vtpContours.py
@@ -582,7 +638,7 @@ graphPlot info data/zNormal.vtp
 
 ---
 
-## 12. Conventions and gotchas
+## 13. Conventions and gotchas
 
 - **Plot methods return the panel.** Use `panel.last_artist` for the Matplotlib
   artist, `panel.last_mappable` for the most recent contour, and
@@ -605,7 +661,7 @@ graphPlot info data/zNormal.vtp
 
 ---
 
-## 13. Roadmap
+## 14. Roadmap
 
 Already implemented:
 

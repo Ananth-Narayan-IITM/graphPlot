@@ -37,6 +37,9 @@ fi
 
 cd "${REPO}"
 for script in "${REPO}"/examples/*.py; do
+    case "$(basename "${script}")" in
+        figureSettings.py) continue ;;
+    esac
     echo "==> $(basename "${script}")"
     "${runner[@]}" "${script}"
 done
