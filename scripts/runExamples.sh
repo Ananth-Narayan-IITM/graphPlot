@@ -23,14 +23,15 @@ elif command -v graphPlot >/dev/null 2>&1; then
     runner=("$(command -v graphPlot)")
 else
     echo "graphPlot was not found." >&2
-    echo "Run: bash ${REPO}/scripts/install-local.sh" >&2
+    echo "Run: bash ${REPO}/scripts/installLocal.sh" >&2
     exit 1
 fi
 
 mkdir -p "${OUT}"
 if [[ "${clean}" -eq 1 ]]; then
     find "${OUT}" -maxdepth 1 -type f \
-        \( -name '*.png' -o -name '*.pdf' -o -name '*.pdf_tex' -o -name '*.svg' \) \
+        \( -name '*.png' -o -name '*.pdf' -o -name '*.pdf_tex' -o -name '*.svg' \
+        -o -name 'latexPreview.*' \) \
         -delete
 fi
 

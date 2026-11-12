@@ -4,6 +4,6 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-bash "${REPO}/scripts/run-tests.sh"
+bash "${REPO}/scripts/runTests.sh"
 echo
-bash "${REPO}/scripts/run-examples.sh" "${@}"
+bash "${REPO}/scripts/runExamples.sh" "${@}"

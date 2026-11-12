@@ -20,7 +20,7 @@ a persistent environment at `~/.venvs/graphPlot`, installs the package and its
 development tools there, and links the `graphPlot` command into `~/.local/bin`:
 
 ```bash
-bash scripts/install-local.sh
+bash scripts/installLocal.sh
 ```
 
 After that, **do not activate or create an environment**. The command works
@@ -40,14 +40,14 @@ environment.
 Run the test suite and every example:
 
 ```bash
-bash scripts/run-tests.sh
-bash scripts/run-examples.sh
+bash scripts/runTests.sh
+bash scripts/runExamples.sh
 ```
 
 Or run both in one step:
 
 ```bash
-bash scripts/verify.sh
+bash scripts/verifyAll.sh
 ```
 
 ### Optional development setup
@@ -201,13 +201,13 @@ One command runs every file in `examples/` and writes the figures under
 `output/`:
 
 ```bash
-bash scripts/run-examples.sh
+bash scripts/runExamples.sh
 ```
 
 To remove previously generated figures first:
 
 ```bash
-bash scripts/run-examples.sh --clean
+bash scripts/runExamples.sh --clean
 ```
 
 The script uses the persistent `~/.venvs/graphPlot` installation and prints the
@@ -238,22 +238,44 @@ graphPlot --version
 availability. Scripts use the non-interactive Agg backend by default, so they
 can run from a terminal without a display.
 
-## Documentation
+## API documentation
 
-API documentation is generated with Doxygen:
+The practical guide is [`docs/API_GUIDE.md`](docs/API_GUIDE.md). It explains
+which object and method to use for each task, with a decision table, signatures,
+recipes and common pitfalls.
+
+Generated Doxygen documentation:
 
 ```bash
-doxygen Doxyfile
+bash scripts/buildDocs.sh
 ```
 
 The generated site is written to `docs/html/index.html`.
 
-## Tests
+## LaTeX preview
 
-Use the persistent installation created by `scripts/install-local.sh`:
+Build a document containing every `output/*.pdf_tex` file, one figure per page,
+with a title page and a font-size reference page:
 
 ```bash
-bash scripts/run-tests.sh
+bash scripts/latexPreview.sh
+```
+
+The result is:
+
+```text
+output/latexPreview.pdf
+```
+
+Use it to check that figure labels, ticks, legends and math match the paper
+font. The preview includes reference paragraphs at 8, 9, 10 and 11 pt.
+
+## Tests
+
+Use the persistent installation created by `scripts/installLocal.sh`:
+
+```bash
+bash scripts/runTests.sh
 ```
 
 This runs the tests with `~/.venvs/graphPlot/bin/python -m pytest`; it does not
@@ -266,7 +288,7 @@ depend on an activated `.venv`. You can also run pytest directly:
 The PDF+TeX test compiles a small LaTeX document when `pdflatex` is available
 and checks that the rendered figure contains actual graphics.
 
-`bash scripts/verify.sh` runs both the tests and all examples.
+`bash scripts/verifyAll.sh` runs both the tests and all examples.
 
 ## Legacy v1
 
