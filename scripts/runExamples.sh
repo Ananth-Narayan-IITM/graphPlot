@@ -45,7 +45,16 @@ for script in "${REPO}"/examples/*.py; do
 done
 
 echo
-echo "All examples completed. Outputs are in:"
+echo "Main examples completed. Outputs are in:"
 echo "  ${OUT}"
 echo
 find "${OUT}" -maxdepth 1 -type f | sort
+
+echo
+echo "Standalone examples"
+echo "-------------------"
+standalone_args=()
+if [[ "${clean}" -eq 1 ]]; then
+    standalone_args+=(--clean)
+fi
+bash "${REPO}/scripts/runStandaloneExamples.sh" "${standalone_args[@]}"

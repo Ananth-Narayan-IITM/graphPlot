@@ -316,11 +316,17 @@ The examples use this pattern in `examples/figureSettings.py`.
 
 ## Run all examples
 
-One command runs every file in `examples/` and writes the figures under
-`output/`:
+One command runs the main examples and the standalone examples:
 
 ```bash
 bash scripts/runExamples.sh
+```
+
+Outputs are written to:
+
+```text
+output/              # main examples using figureSettings.py
+output/standalone/   # standalone examples without figureSettings.py
 ```
 
 To remove previously generated figures first:
@@ -330,7 +336,11 @@ bash scripts/runExamples.sh --clean
 ```
 
 The script uses the persistent `~/.venvs/graphPlot` installation and prints the
-list of generated files when it finishes.
+generated files when it finishes. To run only the standalone set:
+
+```bash
+bash scripts/runStandaloneExamples.sh
+```
 
 ## Standalone examples
 

@@ -7,5 +7,3 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 bash "${REPO}/scripts/runTests.sh"
 echo
 bash "${REPO}/scripts/runExamples.sh" "${@}"
-echo
-bash "${REPO}/scripts/runStandaloneExamples.sh" "${@}"
