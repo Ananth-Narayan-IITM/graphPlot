@@ -273,6 +273,7 @@ graphPlot examples/vtpContourMesh.py
 graphPlot examples/linePlot.py
 graphPlot examples/groupedLegend.py
 graphPlot examples/dualAxis.py
+graphPlot examples/comparisonTable.py
 ```
 
 Diagnostics:

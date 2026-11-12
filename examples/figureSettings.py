@@ -15,3 +15,6 @@ project = gp.Project(
     formats=("pdf_tex", "png"),
     output_dir="output",
 )
+
+# Larger canvas for tabular/parameter-comparison grids.
+comparison = project.with_(width=6.8, height=10.5)

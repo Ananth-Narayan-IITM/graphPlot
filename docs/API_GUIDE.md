@@ -603,6 +603,42 @@ left.legend_table(
 )
 ```
 
+### Parameter comparison grid
+
+Rows are parameters and columns are reference/present work. This is the pattern
+used by `examples/comparisonTable.py`:
+
+```python
+from figureSettings import comparison
+import graphplot as gp
+
+data = gp.load("data/zNormal.vtp")
+values = data.field("gammaDV")
+vmin, vmax = float(values.min()), float(values.max())
+
+fig = comparison.figure(nrows=4, ncols=2, sharex=True, sharey=True)
+
+for row, temperature in enumerate((0, 10, 20, 30)):
+    for column, heading in enumerate(("Reference", "Present work")):
+        panel = fig[row, column]
+        panel.contour(
+            data, "gammaDV", levels=24, vmin=vmin, vmax=vmax
+        )
+        if row == 0:
+            panel.title(heading)
+        if column == 0:
+            panel.ax.set_ylabel(rf"$T={temperature}$")
+
+fig.common_labels(x="$x$ [m]", y="$y$ [m]")
+fig.colorbar(
+    axes=fig.panels_flat,
+    label=r"$\gamma_{\mathrm{DV}}$ [1/s]",
+    location="right",
+    shrink=0.65,
+)
+comparison.save(fig, "comparisonTable")
+```
+
 ### Multi-panel
 
 ```python

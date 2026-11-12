@@ -40,6 +40,9 @@ description_for() {
         *dualAxis*)
             echo "Dual y-axis figure with a table-style legend. Check both y-axis labels and the legend rows."
             ;;
+        *comparisonTable*)
+            echo "Parameter comparison grid: rows are T = 0, 10, 20, 30 and columns are Reference and Present work. Check the row labels and shared colorbar."
+            ;;
         *)
             echo "Generated figure. Compare all text with the reference paragraphs on the previous page."
             ;;
@@ -106,7 +109,7 @@ ${description}
 
 \vspace{1em}
 \begin{center}
-\def\svgwidth{\columnwidth}
+\def\svgwidth{0.8\columnwidth}
 \input{output/${name}.pdf_tex}
 \end{center}
 \clearpage
