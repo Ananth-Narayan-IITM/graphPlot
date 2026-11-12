@@ -14,6 +14,8 @@ from graphplot.io.load import load
 from graphplot.plots.contour import plot_field_contour
 from graphplot.plots.legend import grouped_legend, table_legend
 from graphplot.plots.mesh import plot_mesh
+from graphplot.plots.streamline import plot_streamlines
+from graphplot.plots.vector import plot_vectors
 
 
 class Panel:
@@ -190,6 +192,20 @@ class Panel:
         """Overlay the computational mesh."""
         field_data = self._as_field(data)
         collection = plot_mesh(self.ax, field_data, **kwargs)
+        self._register(collection)
+        return self
+
+    def vectors(self, data, field: str, **kwargs) -> Panel:
+        """Draw a 2D velocity field as scaled arrows."""
+        field_data = self._as_field(data)
+        quiver = plot_vectors(self.ax, field_data, field, **kwargs)
+        self._register(quiver, mappable=kwargs.get("magnitude_color", False))
+        return self
+
+    def streamlines(self, data, field: str, **kwargs) -> Panel:
+        """Draw streamlines computed from a 2D velocity field."""
+        field_data = self._as_field(data)
+        collection = plot_streamlines(self.ax, field_data, field, **kwargs)
         self._register(collection)
         return self
 

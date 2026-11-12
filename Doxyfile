@@ -946,7 +946,8 @@ WARN_LOGFILE           =
 INPUT                  = src/graphplot \
                          README.md \
                          PLAN_v2.md \
-                         docs/API_GUIDE.md
+                         docs/API_GUIDE.md \
+                         docs/CHEATSHEET.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

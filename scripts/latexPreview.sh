@@ -43,6 +43,12 @@ description_for() {
         *comparisonTable*)
             echo "Parameter comparison grid: rows are T = 0, 10, 20, 30 and columns are Reference and Present work. Check the row labels and shared colorbar."
             ;;
+        *velocityVectors*)
+            echo "Velocity arrows scaled by the local velocity magnitude. Check arrow density, arrow length and label sizes."
+            ;;
+        *streamlines*)
+            echo "Streamlines with direction arrows. Check that the seed line and arrowheads are readable at the final figure size."
+            ;;
         *)
             echo "Generated figure. Compare all text with the reference paragraphs on the previous page."
             ;;

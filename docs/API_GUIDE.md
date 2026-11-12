@@ -5,7 +5,9 @@ This is the practical guide to the public API. It answers two questions:
 1. **Which object or method should I use for a given task?**
 2. **What are the exact signatures and conventions?**
 
-For generated class/method pages, run `bash scripts/buildDocs.sh` and open
+For a one-page reminder of the common patterns, see
+[the cheat sheet](@ref cheatsheet) (`docs/CHEATSHEET.md`). For generated
+class/method pages, run `bash scripts/buildDocs.sh` and open
 `docs/html/index.html`.
 
 ---
@@ -17,6 +19,8 @@ For generated class/method pages, run `bash scripts/buildDocs.sh` and open
 | Load a VTP/VTU/VTK file | `gp.load("case.vtp")` or pass the path directly to `contour`/`mesh` |
 | Load a CSV, DAT, XY, TXT or OpenFOAM probe file | `gp.load("data.dat")` → `Table` |
 | Plot a scalar field from VTP/VTU | `fig.contour(data, "field")` |
+| Draw velocity arrows | `fig.vectors(data, "U")` |
+| Draw streamlines | `fig.streamlines(data, "U")` |
 | Overlay the computational mesh | `fig.mesh(data)` |
 | Plot one or more 1D curves | `fig.line(...)` |
 | Add error bars | `fig.errorbar(...)` |
@@ -175,6 +179,68 @@ fig.mesh(
 ```
 
 Use as an overlay after `contour`, or alone to inspect the mesh.
+
+### `vectors` — velocity arrows
+
+```python
+fig.vectors(
+    data_or_path,
+    "U",
+    *,
+    association="auto",
+    density=20,             # arrows along the smaller dimension
+    scale="auto",           # or a numeric Matplotlib quiver scale
+    length=0.1,             # reference arrow length
+    reference_percentile=90,
+    min_magnitude=0.0,      # hide near-zero arrows
+    normalize=False,        # True for equal-length arrows
+    color="black",
+    magnitude_color=False,
+    cmap="viridis",
+    width=0.0025,
+    alpha=1.0,
+    pivot="mid",
+    zorder=5,
+)
+```
+
+Use for a velocity field. `scale="auto"` makes arrows visible without manual
+tuning. `min_magnitude` removes arrows in stagnant or solid regions. If the
+arrows are noisy, lower `density`; if they are invisible, increase `length` or
+lower `min_magnitude`.
+
+### `streamlines` — integrated flow lines
+
+```python
+fig.streamlines(
+    data_or_path,
+    "U",
+    *,
+    association="auto",
+    seed_points=None,       # explicit (N, 2) or (N, 3) seeds
+    n_seeds=20,
+    seed_axis="y",          # "y": fixed x, distribute along y
+    seed_position=None,     # fixed x for seed_axis="y"
+    seed_margin=0.02,
+    integration_direction="forward",  # "forward", "backward" or "both"
+    integrator_type=45,
+    surface_streamlines=True,
+    initial_step_length=0.1,
+    min_step_length=0.01,
+    max_step_length=0.5,
+    max_steps=2000,
+    terminal_speed=1e-12,
+    max_error=1e-6,
+    interpolator_type="cell",
+    color="black",
+    linewidth=0.8,
+    arrowsize=1.0,
+)
+```
+
+Use when direction and topology matter more than magnitude. Place seeds inside
+the flow region. For a recirculating flow, `integration_direction="both"` often
+gives the most complete picture. Set `arrowsize=0` to remove direction arrows.
 
 ### `line` — 1D curves
 
@@ -687,11 +753,13 @@ graphPlot info data/zNormal.vtp
 - **Association matters.** `association="auto"` prefers cell data when a field
   exists in both cell and point data. Use `association="point"` explicitly for
   point-centred fields.
-- **Vector fields need a component.** `U` is a vector; use
-  `component="x"` to plot a scalar component.
+- **Vector fields need a component for contours.** `U` is a vector; use
+  `component="x"` to plot a scalar component. Use `vectors` or `streamlines`
+  when you want the full vector field.
 - **No YAML.** Figures are Python scripts.
-- **2D is the current focus.** VTP/VTU contours and mesh overlays are supported;
-  tabular contours, vectors, streamlines and annotations are on the roadmap.
+- **2D is the current focus.** VTP/VTU contours, mesh overlays, vectors and
+  streamlines are supported; tabular contours and annotations are on the
+  roadmap.
 - **PDF_TeX text is LaTeX text.** Use `$...$` for math. Plain text is escaped
   automatically.
 
@@ -703,6 +771,8 @@ Already implemented:
 
 - VTP/VTU cell and point contours
 - mesh overlays
+- velocity vectors with automatic scaling
+- streamlines with seed control and direction arrows
 - 1D line and error-bar plots
 - grouped and table legends
 - dual y-axes
@@ -713,7 +783,6 @@ Already implemented:
 Planned:
 
 - tabular/scattered contour plots
-- vector fields and streamlines
 - annotations and dimensions
 - shared colorbar helpers for complex layouts
 

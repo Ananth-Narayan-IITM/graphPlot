@@ -71,6 +71,34 @@ class FieldData:
         """Cell-centre coordinates as an ``(n, 3)`` array."""
         return np.asarray(self.dataset.cell_centers().points)
 
+    def vectors(
+        self,
+        name: str,
+        association: str = "auto",
+    ) -> tuple[np.ndarray, np.ndarray]:
+        """Return coordinates and vector components for a vector field.
+
+        Returns ``(coordinates, vectors)`` where ``coordinates`` has shape
+        ``(n, 3)`` and ``vectors`` has shape ``(n, 2)`` or ``(n, 3)``.
+        """
+        if association not in ("auto", "cell", "point"):
+            raise ValueError("association must be 'auto', 'cell' or 'point'.")
+        if association == "auto":
+            association = self.association(name)
+
+        if association == "cell":
+            values = np.asarray(self.dataset.cell_data[name])
+            coordinates = self.cell_centers
+        else:
+            values = np.asarray(self.dataset.point_data[name])
+            coordinates = self.points
+
+        if values.ndim != 2 or values.shape[1] < 2:
+            raise ValueError(
+                f"Field {name!r} is not a vector field with at least two components."
+            )
+        return coordinates, values
+
     def association(self, name: str) -> str:
         """Return ``'cell'`` or ``'point'`` for a field name."""
         if name in self.dataset.cell_data:

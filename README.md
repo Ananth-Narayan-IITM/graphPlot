@@ -140,6 +140,45 @@ left.legend_table(
 )
 ```
 
+## Velocity arrows and streamlines
+
+```python
+data = gp.load("data/zNormal.vtp")
+
+fig = (
+    project.figure(height=3.0)
+    .mesh(data, edgecolor="0.8", linewidth=0.06, alpha=0.35)
+    .vectors(data, "U", density=18, length=0.12, min_magnitude=0.03)
+    .xlabel("$x$", unit="m")
+    .ylabel("$y$", unit="m")
+)
+project.save(fig, "velocityVectors")
+```
+
+```python
+fig = (
+    project.figure(height=3.0)
+    .mesh(data, edgecolor="0.8", linewidth=0.06, alpha=0.35)
+    .streamlines(
+        data,
+        "U",
+        seed_axis="y",
+        seed_position=2.5,
+        n_seeds=16,
+        integration_direction="both",
+    )
+    .xlabel("$x$", unit="m")
+    .ylabel("$y$", unit="m")
+)
+project.save(fig, "streamlines")
+```
+
+- `vectors` uses automatic arrow scaling; tune `length`, `density` and
+  `min_magnitude`.
+- `streamlines` uses PyVista/VTK integration; place seeds inside the flow
+  region with `seed_position`.
+- Use `integration_direction="both"` for recirculating flows.
+
 ## Design
 
 ```python
@@ -274,6 +313,8 @@ graphPlot examples/linePlot.py
 graphPlot examples/groupedLegend.py
 graphPlot examples/dualAxis.py
 graphPlot examples/comparisonTable.py
+graphPlot examples/velocityVectors.py
+graphPlot examples/streamlines.py
 ```
 
 Diagnostics:
@@ -292,7 +333,8 @@ can run from a terminal without a display.
 
 The practical guide is [`docs/API_GUIDE.md`](docs/API_GUIDE.md). It explains
 which object and method to use for each task, with a decision table, signatures,
-recipes and common pitfalls.
+recipes and common pitfalls. The one-page quick reference is
+[`docs/CHEATSHEET.md`](docs/CHEATSHEET.md).
 
 Generated Doxygen documentation:
 
