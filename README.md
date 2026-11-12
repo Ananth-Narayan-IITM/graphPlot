@@ -16,21 +16,43 @@ pip install .
 
 On this machine the system Python is externally managed (PEP 668), so
 `pip install .` is refused. Use the one-time local installer instead. It creates
-a persistent environment at `~/.venvs/graphPlot`, installs the package there,
-and links the `graphPlot` command into `~/.local/bin`:
+a persistent environment at `~/.venvs/graphPlot`, installs the package and its
+development tools there, and links the `graphPlot` command into `~/.local/bin`:
 
 ```bash
 bash scripts/install-local.sh
 ```
 
-After that, no environment activation is needed:
+After that, **do not activate or create an environment**. The command works
+directly:
 
 ```bash
+graphPlot --version
 graphPlot check
 graphPlot examples/vtpContours.py
 ```
 
-For development, an editable install inside the repository is still available:
+The installer is idempotent: running it again upgrades/repairs the persistent
+environment.
+
+### Verify the installation
+
+Run the test suite and every example:
+
+```bash
+bash scripts/run-tests.sh
+bash scripts/run-examples.sh
+```
+
+Or run both in one step:
+
+```bash
+bash scripts/verify.sh
+```
+
+### Optional development setup
+
+Only needed if you want to modify the source in an editable checkout:
 
 ```bash
 python3 -m venv .venv
@@ -148,6 +170,24 @@ The current development focus is:
 2. 2D line plots, multi-axis layouts, grouped legends and table legends.
 3. Vectors, streamlines, annotations and extra plot types.
 
+## Run all examples
+
+One command runs every file in `examples/` and writes the figures under
+`output/`:
+
+```bash
+bash scripts/run-examples.sh
+```
+
+To remove previously generated figures first:
+
+```bash
+bash scripts/run-examples.sh --clean
+```
+
+The script uses the persistent `~/.venvs/graphPlot` installation and prints the
+list of generated files when it finishes.
+
 ## CLI
 
 The `graphPlot` command runs a figure script directly. No environment
@@ -185,12 +225,23 @@ The generated site is written to `docs/html/index.html`.
 
 ## Tests
 
+Use the persistent installation created by `scripts/install-local.sh`:
+
 ```bash
-.venv/bin/python -m pytest
+bash scripts/run-tests.sh
+```
+
+This runs the tests with `~/.venvs/graphPlot/bin/python -m pytest`; it does not
+depend on an activated `.venv`. You can also run pytest directly:
+
+```bash
+~/.venvs/graphPlot/bin/python -m pytest
 ```
 
 The PDF+TeX test compiles a small LaTeX document when `pdflatex` is available
 and checks that the rendered figure contains actual graphics.
+
+`bash scripts/verify.sh` runs both the tests and all examples.
 
 ## Legacy v1
 

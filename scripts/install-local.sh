@@ -9,7 +9,7 @@ BIN="${HOME}/.local/bin"
 
 python3 -m venv "${VENV}"
 "${VENV}/bin/pip" install --upgrade pip
-"${VENV}/bin/pip" install "${REPO}"
+"${VENV}/bin/pip" install "${REPO}[dev]"
 
 mkdir -p "${BIN}"
 ln -sf "${VENV}/bin/graphPlot" "${BIN}/graphPlot"
