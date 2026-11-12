@@ -242,6 +242,12 @@ Use when direction and topology matter more than magnitude. Place seeds inside
 the flow region. For a recirculating flow, `integration_direction="both"` often
 gives the most complete picture. Set `arrowsize=0` to remove direction arrows.
 
+Direction arrows are oriented using the **local velocity vector**, not the
+order in which VTK stored the polyline points. In a unidirectional flow, all
+arrows therefore point downstream. In a recirculating flow such as the
+placeholder `zNormal.vtp`, the upper and lower branches follow the local return
+flow and can point opposite to the central jet.
+
 ### `line` — 1D curves
 
 ```python

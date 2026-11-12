@@ -110,12 +110,23 @@ def plot_streamlines(
     axes.add_collection(collection)
 
     if arrowsize > 0:
+        zmid = 0.5 * (data.bounds[4] + data.bounds[5])
         for segment in segments:
             if len(segment) < 4:
                 continue
             middle = len(segment) // 2
             p0 = segment[middle - 1]
             p1 = segment[middle]
+            direction = p1 - p0
+
+            # Polyline point order depends on the integration direction. Use
+            # the local velocity to orient the arrow, so backward-integrated
+            # segments do not show reversed arrows.
+            point_id = mesh.find_closest_point((p1[0], p1[1], zmid))
+            velocity = np.asarray(mesh.point_data[field][point_id])[:2]
+            if np.dot(direction, velocity) < 0:
+                p0, p1 = p1, p0
+
             axes.annotate(
                 "",
                 xy=p1,
