@@ -170,6 +170,31 @@ The current development focus is:
 2. 2D line plots, multi-axis layouts, grouped legends and table legends.
 3. Vectors, streamlines, annotations and extra plot types.
 
+## Paths in scripts
+
+When you run a script with `graphPlot`, the command temporarily changes to the
+project root — the nearest directory containing `pyproject.toml` or `.git` — and
+restores your original directory afterwards. This means relative paths in a
+figure script are always project-relative:
+
+```python
+fig.contour("data/zNormal.vtp", "gammaDV")
+fig.save("output/vtpContours")
+```
+
+works whether you invoke:
+
+```bash
+graphPlot examples/vtpContours.py
+```
+
+from the repository root, from `examples/`, or from `/tmp` with an absolute
+script path.
+
+If no project root is found, the command keeps the invocation directory. When
+running a script with plain `python script.py`, normal Python path rules apply.
+Use `Path(__file__)` only when a path must be relative to the script file itself.
+
 ## Run all examples
 
 One command runs every file in `examples/` and writes the figures under

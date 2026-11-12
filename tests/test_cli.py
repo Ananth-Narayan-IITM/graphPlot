@@ -25,6 +25,24 @@ def test_missing_script(tmp_path, capsys):
     assert "not found" in capsys.readouterr().err
 
 
+def test_script_runs_from_project_root(tmp_path, monkeypatch):
+    (tmp_path / "pyproject.toml").write_text("", encoding="utf-8")
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "value.txt").write_text("42", encoding="utf-8")
+    (tmp_path / "scripts").mkdir()
+    script = tmp_path / "scripts" / "figure.py"
+    script.write_text(
+        "from pathlib import Path\n"
+        "Path('result.txt').write_text(Path('data/value.txt').read_text(), "
+        "encoding='utf-8')\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path / "scripts")
+    assert main([str(script)]) == 0
+    assert (tmp_path / "result.txt").read_text(encoding="utf-8") == "42"
+
+
 def test_check_command(capsys):
     assert main(["check"]) == 0
     output = capsys.readouterr().out

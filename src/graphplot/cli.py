@@ -62,9 +62,16 @@ def run_script(filename: str | Path, args: list[str] | None = None) -> int:
     os.environ.setdefault("MPLBACKEND", "Agg")
     old_argv = list(sys.argv)
     old_path = list(sys.path)
+    old_cwd = Path.cwd()
+    project_root = _find_project_root(path.parent)
     try:
+        if project_root is not None:
+            os.chdir(project_root)
+
         sys.argv = [str(path), *(args or [])]
         sys.path.insert(0, str(path.parent))
+        if project_root is not None:
+            sys.path.insert(0, str(project_root))
         runpy.run_path(str(path), run_name="__main__")
     except SystemExit as exc:
         code = exc.code
@@ -77,7 +84,17 @@ def run_script(filename: str | Path, args: list[str] | None = None) -> int:
     finally:
         sys.argv = old_argv
         sys.path[:] = old_path
+        os.chdir(old_cwd)
     return 0
+
+
+def _find_project_root(start: Path) -> Path | None:
+    """Find the nearest directory containing pyproject.toml or .git."""
+    directory = start
+    for candidate in (directory, *directory.parents):
+        if (candidate / "pyproject.toml").is_file() or (candidate / ".git").exists():
+            return candidate
+    return None
 
 
 def _info(args: list[str]) -> int:

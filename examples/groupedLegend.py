@@ -5,13 +5,10 @@ Run from anywhere:
     graphPlot examples/groupedLegend.py
 """
 
-from pathlib import Path
-
 import numpy as np
 
 import graphplot as gp
 
-ROOT = Path(__file__).resolve().parents[1]
 x = np.linspace(0.0, 1.0, 120)
 
 fig = (
@@ -41,5 +38,5 @@ fig.legend(
     ncol=2,
     loc="upper right",
 )
-fig.save(ROOT / "output" / "groupedLegend", formats=["png", "pdf_tex"])
+fig.save("output/groupedLegend", formats=["png", "pdf_tex"])
 fig.close()
