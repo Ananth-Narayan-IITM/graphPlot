@@ -11,7 +11,7 @@ from graphplot.data.field import FieldData
 from graphplot.data.series import Data1D
 from graphplot.data.table import Table
 from graphplot.io.load import load
-from graphplot.plots.contour import plot_field_contour
+from graphplot.plots.contour import plot_field_contour, plot_table_contour
 from graphplot.plots.legend import grouped_legend, table_legend
 from graphplot.plots.mesh import plot_mesh
 from graphplot.plots.streamline import plot_streamlines
@@ -148,6 +148,8 @@ class Panel:
         data,
         field: str | None = None,
         *,
+        x=None,
+        y=None,
         association: str = "auto",
         component: str | int | None = None,
         levels: int | list[float] | None = 32,
@@ -156,26 +158,95 @@ class Panel:
         vmax: float | None = None,
         norm=None,
         extend: str = "neither",
+        xscale: str = "linear",
+        yscale: str = "linear",
+        grid: str = "auto",
+        max_triangle_edge: float | None = None,
+        show_points: bool = False,
+        show_lines: bool = False,
+        contour_labels: bool = False,
+        point_size: float = 20,
+        point_color: str = "white",
+        point_edgecolor: str = "black",
+        line_color: str = "black",
+        line_width: float = 0.7,
+        label_fontsize: float = 8,
+        label_format: str | None = None,
         rasterize: bool | str = "auto",
         **kwargs,
     ) -> Panel:
-        """Draw a filled scalar contour from a VTP/VTU field."""
-        field_data = self._as_field(data)
-        if field is None:
-            if len(field_data.fields) != 1:
-                available = ", ".join(field_data.fields) or "<none>"
-                raise ValueError(
-                    "field is required when the dataset contains multiple fields. "
-                    f"Available fields: {available}"
-                )
-            field = next(iter(field_data.fields))
+        """Draw a scalar contour from a VTK field or a tabular table.
+
+        For a table, pass ``x``, ``y`` and ``field`` column names (or indices).
+        For a VTK field, ``x`` and ``y`` are not used.
+        """
+        if isinstance(data, (str, Path)):
+            data = load(data)
 
         if cmap is None:
             cmap = self.figure.style.contour_cmap
 
+        if isinstance(data, Table):
+            if field is None:
+                raise ValueError(
+                    "field is required for a tabular contour, e.g. "
+                    'contour(table, x="Ra", y="Pr", field="Nu").'
+                )
+            x = data.columns[0] if x is None else x
+            y = data.columns[1] if y is None else y
+            collection = plot_table_contour(
+                self.ax,
+                data,
+                x=x,
+                y=y,
+                field=field,
+                xscale=xscale,
+                yscale=yscale,
+                grid=grid,
+                levels=levels,
+                cmap=cmap,
+                vmin=vmin,
+                vmax=vmax,
+                norm=norm,
+                extend=extend,
+                show_points=show_points,
+                show_lines=show_lines,
+                contour_labels=contour_labels,
+                max_triangle_edge=max_triangle_edge,
+                point_size=point_size,
+                point_color=point_color,
+                point_edgecolor=point_edgecolor,
+                line_color=line_color,
+                line_width=line_width,
+                label_fontsize=label_fontsize,
+                label_format=label_format,
+                rasterize=rasterize,
+                rasterize_threshold=self.figure.style.rasterize_threshold,
+                **kwargs,
+            )
+            self._register(collection, mappable=True)
+            return self
+
+        if not isinstance(data, FieldData):
+            raise TypeError(
+                "contour expects a VTP/VTU path, a FieldData object or a Table, "
+                f"got {type(data).__name__}."
+            )
+        if x is not None or y is not None:
+            raise ValueError("x and y are only used for tabular contours.")
+
+        if field is None:
+            if len(data.fields) != 1:
+                available = ", ".join(data.fields) or "<none>"
+                raise ValueError(
+                    "field is required when the dataset contains multiple fields. "
+                    f"Available fields: {available}"
+                )
+            field = next(iter(data.fields))
+
         collection = plot_field_contour(
             self.ax,
-            field_data,
+            data,
             field,
             association=association,
             component=component,
@@ -185,7 +256,14 @@ class Panel:
             vmax=vmax,
             norm=norm,
             extend=extend,
+            show_lines=show_lines,
+            contour_labels=contour_labels,
+            line_color=line_color,
+            line_width=line_width,
+            label_fontsize=label_fontsize,
+            label_format=label_format,
             rasterize=rasterize,
+            rasterize_threshold=self.figure.style.rasterize_threshold,
             **kwargs,
         )
         self._register(collection, mappable=True)

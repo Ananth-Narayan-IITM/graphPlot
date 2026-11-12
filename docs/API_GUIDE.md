@@ -165,6 +165,53 @@ fig.contour(
 Use when the data is a 2D scalar field on a mesh. With `association="auto"`,
 cell data is preferred when a field exists in both cell and point data.
 
+Contour lines and labels are optional:
+
+```python
+fig.contour(
+    data,
+    "gammaDV",
+    levels=8,
+    show_lines=True,
+    contour_labels=True,
+    line_width=0.6,
+    label_fontsize=7,
+)
+```
+
+For cell-centred VTK data, isolines are approximated from a triangulation of
+the cell centres; the filled bands remain the exact cell values.
+
+### `contour` — tabular or scattered data
+
+```python
+fig.contour(
+    table,
+    x="Ra",
+    y="Pr",
+    field="nusseltNumber",
+    *,
+    xscale="log",           # "linear" or "log"
+    yscale="log",
+    grid="auto",            # "auto", "regular" or "triangulate"
+    levels=8,
+    cmap="plasma",
+    show_points=True,
+    show_lines=True,
+    contour_labels=True,
+    max_triangle_edge=None,
+)
+```
+
+- `grid="auto"` uses a regular grid when the samples form one, otherwise
+  triangulates.
+- Log axes are interpolated in log space and labelled as `10^n`.
+- `show_points=True` marks the sample locations.
+- `show_lines` and `contour_labels` add isolines and inline values.
+- `max_triangle_edge` masks triangles that bridge large gaps in sparse data.
+
+`data/contour.dat` and `examples/tabularContour.py` demonstrate this path.
+
 ### `mesh` — computational mesh
 
 ```python
@@ -817,6 +864,8 @@ graphPlot info data/zNormal.vtp
 Already implemented:
 
 - VTP/VTU cell and point contours
+- tabular and scattered contours with log axes
+- contour isolines and inline labels
 - mesh overlays
 - velocity vectors with automatic scaling
 - streamlines with seed control and direction arrows
@@ -829,9 +878,9 @@ Already implemented:
 
 Planned:
 
-- tabular/scattered contour plots
 - annotations and dimensions
 - shared colorbar helpers for complex layouts
+- reproducibility manifest export
 
 For generated class and method pages, run:
 

@@ -98,6 +98,35 @@ Include it in a paper with:
 \end{figure}
 ```
 
+## Tabular / scattered contours
+
+```python
+table = gp.load("data/contour.dat")
+
+fig = (
+    project.figure(width=4.2, height=3.4)
+    .contour(
+        table,
+        x="Ra",
+        y="Pr",
+        field="nusseltNumber",
+        xscale="log",
+        yscale="log",
+        levels=8,
+        show_points=True,
+        show_lines=True,
+        contour_labels=True,
+    )
+    .xlabel("$Ra$")
+    .ylabel("$Pr$")
+)
+fig.colorbar(label="$Nu$")
+project.save(fig, "tabularContour")
+```
+
+`grid="auto"` uses a regular grid when possible and triangulates otherwise.
+`max_triangle_edge` masks triangles that bridge large gaps.
+
 ## Quick start: line plots and grouped legends
 
 ```python
@@ -318,6 +347,7 @@ graphPlot examples/comparisonTable.py
 graphPlot examples/velocityVectors.py
 graphPlot examples/streamlines.py
 graphPlot examples/colorSchemes.py
+graphPlot examples/tabularContour.py
 ```
 
 Diagnostics:

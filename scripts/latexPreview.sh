@@ -52,6 +52,9 @@ description_for() {
         *colorSchemes*)
             echo "Categorical color-scheme comparison: colorblind, grayscale and black-and-white. Check that curves remain distinguishable without color."
             ;;
+        *tabularContour*)
+            echo "Tabular contour on logarithmic axes with sample points, isolines and labels. Check the 10-power tick labels and contour annotations."
+            ;;
         *)
             echo "Generated figure. Compare all text with the reference paragraphs on the previous page."
             ;;

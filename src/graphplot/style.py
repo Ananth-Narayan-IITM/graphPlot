@@ -92,6 +92,7 @@ class Style:
     dpi: int = 600
     grid: bool = False
     mathtext: str = "stix"
+    rasterize_threshold: int = 50_000
 
     def __post_init__(self) -> None:
         if self.colors is None:

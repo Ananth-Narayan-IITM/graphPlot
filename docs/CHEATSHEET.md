@@ -73,6 +73,39 @@ fig.contour(
 )
 ```
 
+### Tabular / scattered contour
+
+```python
+table = gp.load("data/contour.dat")
+
+fig.contour(
+    table,
+    x="Ra",
+    y="Pr",
+    field="nusseltNumber",
+    xscale="log",
+    yscale="log",
+    levels=8,
+    show_points=True,
+    show_lines=True,
+    contour_labels=True,
+)
+```
+
+### Contour lines and labels
+
+```python
+fig.contour(
+    data,
+    "gammaDV",
+    levels=8,
+    show_lines=True,
+    contour_labels=True,
+    line_width=0.6,
+    label_fontsize=7,
+)
+```
+
 ### Velocity arrows
 
 ```python
