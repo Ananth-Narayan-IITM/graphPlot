@@ -1,124 +1,19 @@
-"""
-Example 01 — VTP Contour
-========================
+"""VTP contour with a publication colorbar.
 
-Create a publication-ready contour plot from a VTP file.
+Run from the repository root:
 
-Workflow
---------
-VTP
- ↓
-read_vtp()
- ↓
-ContourPlot
- ↓
-PublicationFigure
- ↓
-labels + title + colorbar
- ↓
-PDF + PDF_TeX
+    python examples/01_vtp_contour.py
 """
 
-from postprocess.io.vtp import read_vtp
-from postprocess.layout.figure import (
-    FigureConfig,
-    PublicationFigure,
-)
-from postprocess.plots.contour import (
-    ContourPlot,
-)
+import graphplot as gp
 
-# =========================================================
-# User configuration
-# =========================================================
-
-INPUT_FILE = "data/zNormal.vtp"
-
-FIELD = "gammaDV"
-
-TITLE = r"$\gamma_{\mathrm{DV}}$ distribution"
-
-X_LABEL = r"$x\;(m)$"
-
-Y_LABEL = r"$y\;(m)$"
-
-COLORBAR_LABEL = r"$\gamma_{\mathrm{DV}}\;(1/s)$"
-
-OUTPUT_FILE = "output/example_01_vtp_contour"
-
-
-# =========================================================
-# Read VTP
-# =========================================================
-
-data = read_vtp(INPUT_FILE)
-
-
-# =========================================================
-# Create publication figure
-# =========================================================
-
-figure_config = FigureConfig(
-    width=3.4,
-    height=3.0,
+fig = (
+    gp.Figure(width=3.4, height=3.0)
+    .contour("data/zNormal.vtp", "gammaDV", levels=32, cmap="viridis")
+    .xlabel("$x$", unit="m")
+    .ylabel("$y$", unit="m")
 )
 
-figure = PublicationFigure(figure_config)
-
-
-# =========================================================
-# Contour
-# =========================================================
-
-contour_plot = ContourPlot(
-    data,
-    field=FIELD,
-)
-
-contour = contour_plot.plot(
-    figure.axes,
-    rasterize=True,
-)
-
-
-# =========================================================
-# Axis labels
-# =========================================================
-
-figure.set_labels(
-    xlabel=X_LABEL,
-    ylabel=Y_LABEL,
-)
-
-
-# =========================================================
-# Title
-# =========================================================
-
-figure.set_title(TITLE)
-
-
-# =========================================================
-# Colorbar
-# =========================================================
-
-figure.add_colorbar(
-    contour,
-    label=COLORBAR_LABEL,
-)
-
-
-# =========================================================
-# Export
-# =========================================================
-
-figure.export(
-    OUTPUT_FILE,
-    formats=[
-        "png",
-        "pdf_tex",
-    ],
-)
-
-
-print("Example 01 completed successfully.")
+fig.colorbar(label=r"$\gamma_{\mathrm{DV}}$ [1/s]")
+fig.save("output/01_vtp_contour", formats=["png", "pdf_tex"])
+fig.close()

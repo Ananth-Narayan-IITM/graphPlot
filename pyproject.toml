@@ -1,168 +1,53 @@
 [build-system]
-requires = [
-    "setuptools>=61",
-]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
-
-
-# ============================================================
-# Project metadata
-# ============================================================
 
 [project]
 name = "graphPlot"
-version = "1.1"
-
-description = "Publication-quality scientific post-processing and visualization"
-
+version = "2.0.0.dev0"
+description = "Compact publication-quality figures from OpenFOAM VTP and tabular data"
 readme = "README.md"
-
-requires-python = ">=3.8"
-
+requires-python = ">=3.10"
 license = { text = "MIT" }
-
-authors = [
-    { name = "Ananth Narayan" },
-]
-
-keywords = [
-    "scientific visualization",
-    "scientific plotting",
-    "CFD",
-    "post-processing",
-    "OpenFOAM",
-    "DAFoam",
-    "VTP",
-    "PyVista",
-    "Matplotlib",
-]
-
-
-# ============================================================
-# Runtime dependencies
-# ============================================================
+authors = [{ name = "Ananth Narayan" }]
+keywords = ["CFD", "OpenFOAM", "VTP", "contour", "matplotlib", "publication", "PDF_TeX"]
 
 dependencies = [
-    "numpy>=1.21",
-    "matplotlib>=3.5",
-    "pyvista>=0.34",
-    "pyyaml>=6.0",
+    "numpy>=1.23",
+    "matplotlib>=3.7",
+    "pyvista>=0.43",
 ]
-
-
-# ============================================================
-# Optional dependencies
-# ============================================================
 
 [project.optional-dependencies]
-
 dev = [
-    "pytest>=7.0",
-    "ruff>=0.6",
+    "pytest>=7",
+    "ruff>=0.5",
 ]
 
-docs = [
-    "sphinx>=7.0",
-]
-
-
-# ============================================================
-# Package discovery
-# ============================================================
+[project.scripts]
+graphplot = "graphplot.cli:main"
 
 [tool.setuptools.packages.find]
-where = [
-    "src",
-]
-
-
-# ============================================================
-# Pytest
-# ============================================================
+where = ["src"]
 
 [tool.pytest.ini_options]
-
-testpaths = [
-    "tests",
-]
-
-python_files = [
-    "test_*.py",
-]
-
-python_functions = [
-    "test_*",
-]
-
-addopts = [
-    "-ra",
-]
-
+testpaths = ["tests"]
+addopts = "-ra"
 filterwarnings = [
     "error",
+    "ignore::DeprecationWarning:pyvista.*",
+    "ignore::DeprecationWarning:vtk.*",
 ]
-
-
-# ============================================================
-# Ruff
-# ============================================================
 
 [tool.ruff]
-
 line-length = 88
-
-target-version = "py38"
-
-exclude = [
-    ".git",
-    ".pytest_cache",
-    "__pycache__",
-    "build",
-    "dist",
-    "*.egg-info",
-    "docs",
-]
-
-
-# ============================================================
-# Ruff linting
-# ============================================================
+target-version = "py310"
+exclude = [".git", ".venv", "build", "dist", "docs", "*.egg-info"]
 
 [tool.ruff.lint]
-
-select = [
-    "E",
-    "F",
-    "W",
-    "I",
-    "UP",
-    "B",
-]
-
-ignore = [
-    "E501",
-]
-
-
-# ============================================================
-# Ruff import sorting
-# ============================================================
-
-[tool.ruff.lint.isort]
-
-combine-as-imports = true
-
-force-single-line = false
-
-
-# ============================================================
-# Ruff formatter
-# ============================================================
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "PTH"]
+ignore = ["E501"]
 
 [tool.ruff.format]
-
 quote-style = "double"
 indent-style = "space"
-line-ending = "auto"
-skip-magic-trailing-comma = false
-docstring-code-format = true

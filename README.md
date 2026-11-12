@@ -1,146 +1,118 @@
-# Installation and Verification
+# graphPlot
 
-## Requirements
+Compact, publication-quality figures from OpenFOAM VTP files and tabular data.
 
-`graphPlot` requires:
+`graphPlot` is a Python 3.10+ package built on Matplotlib and PyVista. It is
+designed for papers: figures export as vector PDF plus a `.pdf_tex` file whose
+text is typeset by LaTeX, so labels, ticks, legends and math match the document.
 
-- Python 3.8 or newer
-- `pip`
-- A working C/C++/system environment is not required for the Python package itself.
-- Doxygen and LaTeX are only required if you want to build the developer documentation.
-
-The Python runtime dependencies are installed automatically from `pyproject.toml`.
-
----
-
-## 1. Clone or copy the repository
-
-Obtain the `graphPlot` repository and enter its root directory:
+## Install
 
 ```bash
 cd graphPlot
+python3 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
 ```
 
-The repository root should contain at least:
-
-```text
-graphPlot/
-├── pyproject.toml
-├── README.md
-├── src/
-├── tests/
-├── examples/
-└── data/
-```
-
----
-
-## 2. Recommended installation
-
-Install `graphPlot` together with its development dependencies:
+Normal installation:
 
 ```bash
-python3 -m pip install --upgrade pip
-python3 -m pip install -e ".[dev]"
+pip install .
 ```
 
-The `-e` option installs the package in editable mode. Changes made under `src/` are therefore immediately available without reinstalling the package.
+## Quick start: VTP contour
 
-The `[dev]` extra installs development tools such as:
+```python
+import graphplot as gp
 
-- `pytest`
-- `ruff`
+fig = (
+    gp.Figure(width=3.4, height=3.0)
+    .contour("data/zNormal.vtp", "gammaDV", levels=32)
+    .xlabel("$x$", unit="m")
+    .ylabel("$y$", unit="m")
+)
 
-Runtime dependencies such as NumPy, Matplotlib, PyVista, and PyYAML are installed automatically from `pyproject.toml`.
+fig.colorbar(label=r"$\gamma_{\mathrm{DV}}$ [1/s]")
+fig.save("output/01_vtp_contour", formats=["png", "pdf_tex"])
+fig.close()
+```
 
----
+The export writes:
 
-## 3. Verify the installation
+- `01_vtp_contour.png` — quick preview
+- `01_vtp_contour.pdf` — text-free graphics layer
+- `01_vtp_contour.pdf_tex` — LaTeX text overlay
 
-Check that the package can be imported:
+Include it in a paper with:
+
+```latex
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\begin{figure}[htbp]
+  \centering
+  \def\svgwidth{\columnwidth}
+  \input{output/01_vtp_contour.pdf_tex}
+  \caption{...}
+\end{figure}
+```
+
+## Design
+
+```python
+import graphplot as gp
+
+data = gp.load("case.vtp")     # FieldData
+table = gp.load("data.dat")    # Table
+series = table.series("x", "y")
+
+fig = gp.Figure(width=3.4, height=2.6)
+fig.contour(data, "gammaDV")
+fig.colorbar(label=r"$\gamma_{\mathrm{DV}}$ [1/s]")
+fig.save("figures/gamma")
+```
+
+- One `Figure`, one `Panel`, one `load()`.
+- Single-panel figures forward plotting methods directly to the panel.
+- Multi-panel figures use `fig[0, 0]`.
+- Plot methods return the panel, so calls chain.
+- Extra keyword arguments pass through to Matplotlib.
+- Figures are written as Python scripts; there is no YAML configuration layer.
+
+## Contours first
+
+The current development focus is:
+
+1. VTP/VTU contours, mesh overlays, colorbars and PDF+TeX export.
+2. 2D line plots, multi-axis layouts, grouped legends and table legends.
+3. Vectors, streamlines, annotations and extra plot types.
+
+## CLI
 
 ```bash
-python3 -c "import postprocess; print('graphPlot import: OK')"
+graphplot check
+graphplot info data/zNormal.vtp
+graphplot --version
 ```
 
-Check the installed development tools:
+`graphplot check` reports Python, NumPy, Matplotlib, PyVista, LaTeX and Doxygen
+availability.
 
-```bash
-python3 -m pytest --version
-ruff --version
-```
+## Documentation
 
----
-
-## 4. Run the complete test suite
-
-Run:
-
-```bash
-python3 -m pytest -v
-```
-
-A successful installation should finish with all tests passing and no collection errors.
-
-You can also check test collection independently:
-
-```bash
-python3 -m pytest --collect-only -q
-```
-
----
-
-## 5. Run an example
-
-The examples progressively demonstrate the capabilities of `graphPlot`.
-
-For example:
-
-```bash
-python3 examples/19_final_publication_figure.py
-```
-
-The generated output is written under:
-
-```text
-output/
-```
-
-Example 19 is the final integrated publication-figure example.
-
----
-
-## 6. Verify all examples
-
-To run every example from the repository:
-
-```bash
-for f in examples/*.py; do
-    echo "========================================"
-    echo "Running $f"
-    python3 "$f" || exit 1
-done
-```
-
-If an example requires a special environment or external input, run that example separately.
-
----
-
-## 7. Build the Doxygen documentation
-
-Doxygen is not a Python dependency and is not installed by `pip`.
-
-If Doxygen is installed:
+API documentation is generated with Doxygen:
 
 ```bash
 doxygen Doxyfile
 ```
 
-If the Doxygen configuration generates a LaTeX directory:
+The generated site is written to `docs/html/index.html`.
+
+## Tests
 
 ```bash
-cd docs/latex
-make
+.venv/bin/python -m pytest
 ```
 
-The exact documentation output location is determined by `Doxyfile`.
+The PDF+TeX test compiles a small LaTeX document when `pdflatex` is available.
