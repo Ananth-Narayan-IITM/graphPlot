@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,7 +8,7 @@ version = "2.0.0.dev0"
 description = "Compact publication-quality figures from OpenFOAM VTP and tabular data"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "Ananth Narayan" }]
 keywords = ["CFD", "OpenFOAM", "VTP", "contour", "matplotlib", "publication", "PDF_TeX"]
 

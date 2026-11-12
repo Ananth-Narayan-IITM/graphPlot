@@ -115,4 +115,10 @@ The generated site is written to `docs/html/index.html`.
 .venv/bin/python -m pytest
 ```
 
-The PDF+TeX test compiles a small LaTeX document when `pdflatex` is available.
+The PDF+TeX test compiles a small LaTeX document when `pdflatex` is available
+and checks that the rendered figure contains actual graphics.
+
+## Legacy v1
+
+The complete previous implementation is preserved on the local `v1` branch
+(tag `v1-final`). The `master` branch is the clean v2 rewrite.
