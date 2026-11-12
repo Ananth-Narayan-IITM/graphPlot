@@ -83,3 +83,11 @@ class Project:
     def with_(self, **overrides) -> Project:
         """Return a copy with selected fields changed."""
         return replace(self, **overrides)
+
+    def __getattr__(self, name: str):
+        if name.startswith("_"):
+            raise AttributeError(name)
+        raise AttributeError(
+            "Project is a settings object, not a figure. "
+            f"Use project.figure() before calling {name!r}."
+        )

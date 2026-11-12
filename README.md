@@ -332,6 +332,18 @@ bash scripts/runExamples.sh --clean
 The script uses the persistent `~/.venvs/graphPlot` installation and prints the
 list of generated files when it finishes.
 
+## Standalone examples
+
+The scripts in `examples/standalone/` do not import `figureSettings.py`. They are
+useful when you want to copy one file and change it directly.
+
+```bash
+bash scripts/runStandaloneExamples.sh
+```
+
+See [`examples/standalone/README.md`](examples/standalone/README.md) for the
+`Project` versus `Figure` distinction and the standalone patterns.
+
 ## CLI
 
 The `graphPlot` command runs a figure script directly. No environment

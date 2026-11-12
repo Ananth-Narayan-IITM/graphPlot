@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 import graphplot as gp
 
 
@@ -34,3 +36,8 @@ def test_project_with_returns_copy():
     assert project.formats == ("png",)
     assert other.formats == ("pdf_tex",)
     assert other.output_dir.name == "figures"
+
+
+def test_project_is_not_a_figure():
+    with pytest.raises(AttributeError, match="project.figure"):
+        gp.Project().contour("data/zNormal.vtp", "gammaDV")
