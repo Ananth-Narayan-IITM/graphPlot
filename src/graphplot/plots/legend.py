@@ -27,11 +27,12 @@ def grouped_legend(
 ):
     """Create a legend with optional group headings."""
     handles, labels = axes.get_legend_handles_labels()
-    available = {
-        label: (handle, getattr(handle, "_graphplot_latex", None))
-        for handle, label in zip(handles, labels, strict=False)
-        if label and not label.startswith("_")
-    }
+    available: dict[str, list[tuple[object, str | None]]] = {}
+    for handle, label in zip(handles, labels, strict=False):
+        if label and not label.startswith("_"):
+            available.setdefault(label, []).append(
+                (handle, getattr(handle, "_graphplot_latex", None))
+            )
 
     if isinstance(groups, dict):
         groups = [
@@ -51,11 +52,12 @@ def grouped_legend(
             legend_latex.append(as_latex(heading))
         for label in group.get("labels", []):
             label_text = as_plain(label)
-            if label_text not in available:
+            matches = available.get(label_text)
+            if not matches:
                 raise ValueError(
                     f"Legend label {label_text!r} was not found among plotted artists."
                 )
-            handle, handle_latex = available[label_text]
+            handle, handle_latex = matches.pop(0)
             legend_handles.append(handle)
             legend_labels.append(label_text)
             legend_latex.append(as_latex(label) or handle_latex)

@@ -49,6 +49,24 @@ def test_grouped_legend():
     fig.close()
 
 
+def test_grouped_legend_duplicate_labels_keep_plotted_order():
+    fig = gp.Figure()
+    x = np.linspace(0.0, 1.0, 10)
+    fig.line(x, x, label="RaE = 0", linestyle="-")
+    fig.line(x, x**2, label="RaE = 0", linestyle="none", marker="s")
+    fig.legend(
+        groups=[
+            {"title": "Present", "labels": ["RaE = 0"]},
+            {"title": "Reference", "labels": ["RaE = 0"]},
+        ],
+        ncol=1,
+    )
+    handles = fig.last_legend.legend_handles
+    assert handles[1].get_linestyle() == "-"
+    assert handles[3].get_marker() == "s"
+    fig.close()
+
+
 def test_twinx_and_table_legend(tmp_path):
     fig = gp.Figure(width=4.0, height=3.0)
     x = np.linspace(0.0, 1.0, 10)
