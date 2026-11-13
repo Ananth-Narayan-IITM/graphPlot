@@ -16,6 +16,7 @@ from graphplot.plots.legend import grouped_legend, table_legend
 from graphplot.plots.mesh import plot_mesh
 from graphplot.plots.streamline import plot_streamlines
 from graphplot.plots.vector import plot_vectors
+from graphplot.tex import TeX, as_plain, tag_latex, with_unit
 
 
 class Panel:
@@ -135,7 +136,14 @@ class Panel:
         **kwargs,
     ) -> Panel:
         """Fill the area between two curves."""
-        artist = self.ax.fill_between(x, y1, y2, label=label, **kwargs)
+        artist = self.ax.fill_between(
+            x,
+            y1,
+            y2,
+            label=None if label is None else as_plain(label),
+            **kwargs,
+        )
+        tag_latex(artist, label)
         self._register(artist)
         return self
 
@@ -294,19 +302,24 @@ class Panel:
     # Labels and axes
     # ------------------------------------------------------------------
 
-    def xlabel(self, label: str, unit: str | None = None, **kwargs) -> Panel:
+    def xlabel(self, label, unit: str | None = None, **kwargs) -> Panel:
         """Set the x-axis label, optionally appending a unit."""
-        self.ax.set_xlabel(_with_unit(label, unit), **kwargs)
+        value = with_unit(label, unit)
+        self.ax.set_xlabel(as_plain(value), **kwargs)
+        tag_latex(self.ax.xaxis.label, value)
         return self
 
-    def ylabel(self, label: str, unit: str | None = None, **kwargs) -> Panel:
+    def ylabel(self, label, unit: str | None = None, **kwargs) -> Panel:
         """Set the y-axis label, optionally appending a unit."""
-        self.ax.set_ylabel(_with_unit(label, unit), **kwargs)
+        value = with_unit(label, unit)
+        self.ax.set_ylabel(as_plain(value), **kwargs)
+        tag_latex(self.ax.yaxis.label, value)
         return self
 
-    def title(self, title: str, **kwargs) -> Panel:
+    def title(self, title, **kwargs) -> Panel:
         """Set the axes title."""
-        self.ax.set_title(title, **kwargs)
+        artist = self.ax.set_title(as_plain(title), **kwargs)
+        tag_latex(artist, title)
         return self
 
     def xlim(self, *limits) -> Panel:
@@ -388,14 +401,28 @@ class Panel:
                 **kwargs,
             )
         else:
+            handles, labels = self.ax.get_legend_handles_labels()
             legend = self.ax.legend(
                 loc=loc,
                 ncol=ncol,
                 frameon=frameon,
                 fontsize=fontsize,
-                title=title,
+                title=None if title is None else as_plain(title),
                 **kwargs,
             )
+            if legend is not None:
+                entries = [
+                    handle
+                    for handle, label in zip(handles, labels, strict=False)
+                    if label and not label.startswith("_")
+                ]
+                for text_artist, handle in zip(
+                    legend.get_texts(), entries, strict=False
+                ):
+                    raw = getattr(handle, "_graphplot_latex", None)
+                    if raw is not None:
+                        tag_latex(text_artist, TeX(raw, text_artist.get_text()))
+                tag_latex(legend.get_title(), title)
         self.last_legend = legend
         return self
 
@@ -448,12 +475,14 @@ class Panel:
         kwargs.setdefault("ha", "left")
         kwargs.setdefault("va", "top")
         kwargs.setdefault("transform", self.ax.transAxes)
-        self.ax.text(x, y, text, **kwargs)
+        artist = self.ax.text(x, y, as_plain(text), **kwargs)
+        tag_latex(artist, text)
         return self
 
-    def text(self, x: float, y: float, text: str, **kwargs):
+    def text(self, x: float, y: float, text, **kwargs):
         """Add text in data coordinates."""
-        artist = self.ax.text(x, y, text, **kwargs)
+        artist = self.ax.text(x, y, as_plain(text), **kwargs)
+        tag_latex(artist, text)
         self._register(artist)
         return self
 
@@ -550,15 +579,17 @@ class Panel:
         if marker is None:
             marker = style.marker(index) if role == "experimental" else None
 
+        label_value = label if label is not None else series.label
         artist = self.ax.plot(
             series.x,
             series.y,
-            label=label or series.label,
+            label=None if label_value is None else as_plain(label_value),
             color=color,
             linestyle=linestyle,
             marker=marker,
             **kwargs,
         )[0]
+        tag_latex(artist, label_value)
         self._line_count += 1
         self._register(artist)
         return self
@@ -579,18 +610,20 @@ class Panel:
         style = self.figure.style
         index = self._line_count
         color = kwargs.pop("c", color) or style.color(index)
+        label_value = label if label is not None else series.label
         container = self.ax.errorbar(
             series.x,
             series.y,
             yerr=series.yerr if yerr is None else yerr,
             xerr=series.xerr if xerr is None else xerr,
-            label=label or series.label,
+            label=None if label_value is None else as_plain(label_value),
             color=color,
             marker=marker,
             linestyle=linestyle,
             capsize=capsize,
             **kwargs,
         )
+        tag_latex(container, label_value)
         self._line_count += 1
         self._register(container)
         return self
@@ -614,14 +647,6 @@ class Panel:
 
     def __repr__(self) -> str:
         return f"Panel(row={self.row}, column={self.column})"
-
-
-def _with_unit(label: str, unit: str | None) -> str:
-    if unit is None:
-        return label
-    if label.endswith("]"):
-        return label
-    return f"{label} [{unit}]"
 
 
 def _default_column(table: Table, key, preferred: str, index: int):

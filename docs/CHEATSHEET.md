@@ -181,6 +181,32 @@ fig.legend(
 )
 ```
 
+### LaTeX macros and citations
+
+Document macros and `\cite` cannot be rendered by Matplotlib. Pass them through
+with `gp.tex`:
+
+```python
+# LaTeX preamble:
+# \newcommand{\Nu}{\mathbb{Nu}}
+# \newcommand{\RaE}{\text{Ra}_E}
+
+fig.ylabel(gp.tex(r"\Nu", math=True))
+fig.line(..., label=gp.tex(r"\RaE = 0", plain="RaE = 0", math=True))
+fig.legend(
+    groups=[
+        {"title": "Present work", "labels": [...]},
+        {
+            "title": gp.tex(r"Wu et al.\ \cite{Wu2015}", "Wu et al. [Wu2015]"),
+            "labels": [...],
+        },
+    ]
+)
+```
+
+`plain=` is the PNG fallback. Use `r"..."` so Python does not warn about
+`\R` or `\N`.
+
 ### Dual axis
 
 ```python
@@ -285,6 +311,9 @@ Contours automatically use `Greys` for `grayscale` and `blackwhite`, and
 | Wrong canvas size | Edit `width`/`height` in `figureSettings.py`. |
 | Text size changes in PDF | `pdf_tex` inherits the LaTeX font size; wrap the include in a small-font group or set a local font size. |
 | PDF_TeX file looks empty | Include the generated graphics PDF next to it; do not delete it. |
+| `SyntaxWarning: invalid escape sequence '\R'` | Write the label as a raw string: `r"\RaE = 0"`. |
+| `\RaE` or `\cite` missing from PDF | Use `gp.tex(...)`; matplotlib text cannot pass custom macros through. |
+| `\mathbb` is used outside math mode | Add `math=True` to `gp.tex(...)`, or wrap the macro in `$...$`. |
 
 ---
 

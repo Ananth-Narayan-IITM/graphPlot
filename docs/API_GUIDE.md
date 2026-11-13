@@ -364,6 +364,48 @@ If `yerr` is omitted, `Data1D.yerr` is used.
 fig.fill_between(x, y1, y2=0.0, label=None, **matplotlib_kwargs)
 ```
 
+### Raw LaTeX labels: document macros and citations
+
+Matplotlib can only render its own mathtext subset. Macros defined in the
+surrounding LaTeX document, and commands such as `\cite`, must be passed
+through unchanged to the `.pdf_tex` file. Wrap those labels in `gp.tex(...)`:
+
+```python
+# In the LaTeX document:
+# \newcommand{\Nu}{\mathbb{Nu}}
+# \newcommand{\RaE}{\text{Ra}_E}
+
+fig.ylabel(gp.tex(r"\Nu", math=True))
+fig.line(
+    data,
+    label=gp.tex(r"\RaE = 0", plain="RaE = 0", math=True),
+)
+fig.legend(
+    groups=[
+        {"title": "Present work", "labels": [...]},
+        {
+            "title": gp.tex(r"Wu et al.\ \cite{Wu2015}", "Wu et al. [Wu2015]"),
+            "labels": [...],
+        },
+    ]
+)
+```
+
+The first argument is written verbatim to PDF_TeX. The optional `plain=`
+fallback is used for PNG, SVG and native PDF output. If it is omitted, a
+readable approximation is derived from the LaTeX source. Use `math=True` for
+macros that expand to math-mode commands such as `\mathbb`, `\frac` or `\text`;
+leave it off for text-mode material and `\cite`.
+
+Always use raw Python strings (`r"..."`) for LaTeX. Without the `r` prefix,
+Python interprets `\R`, `\N`, `\c` and similar sequences and emits a
+`SyntaxWarning` for an invalid escape sequence.
+
+Because the PDF_TeX file is `\input` into your document, `\cite` keys resolve
+against that document's bibliography, and the macros resolve against its
+preamble. The PNG preview cannot show the final citation number; its fallback
+text is only a placeholder.
+
 ---
 
 ## 5. Legends: which style and when
@@ -868,8 +910,11 @@ graphPlot info data/zNormal.vtp
 - **2D is the current focus.** VTP/VTU contours, mesh overlays, vectors and
   streamlines are supported; tabular contours and annotations are on the
   roadmap.
-- **PDF_TeX text is LaTeX text.** Use `$...$` for math. Plain text is escaped
-  automatically.
+- **PDF_TeX text is LaTeX text.** Use `$...$` for standard math. Plain text is
+  escaped automatically. For document macros and `\cite`, use
+  `gp.tex(r"...", plain="...")` and add `math=True` for math-mode macros.
+- **Use raw strings for LaTeX.** `r"\RaE = 0"` avoids the Python
+  `SyntaxWarning` for invalid escape sequences.
 
 ---
 

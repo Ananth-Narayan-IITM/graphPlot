@@ -11,6 +11,7 @@ from graphplot.io.load import load, load_field, load_table
 from graphplot.panel import Panel
 from graphplot.project import Project
 from graphplot.style import Style
+from graphplot.tex import TeX, tex
 
 __version__ = "2.0.0"
 
@@ -22,8 +23,10 @@ __all__ = [
     "Project",
     "Style",
     "Table",
+    "TeX",
     "check",
     "load",
     "load_field",
     "load_table",
+    "tex",
 ]

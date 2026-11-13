@@ -98,6 +98,36 @@ Include it in a paper with:
 \end{figure}
 ```
 
+## LaTeX macros and citations
+
+Matplotlib cannot render macros defined in your LaTeX preamble, or `\cite`.
+Pass those labels through with `gp.tex(...)`:
+
+```python
+# LaTeX document:
+# \newcommand{\Nu}{\mathbb{Nu}}
+# \newcommand{\RaE}{\text{Ra}_E}
+
+fig.ylabel(gp.tex(r"\Nu", math=True))
+fig.line(
+    "data/case.xy",
+    label=gp.tex(r"\RaE = 0", plain="RaE = 0", math=True),
+)
+fig.legend(
+    groups=[
+        {"title": "Present work", "labels": [...]},
+        {
+            "title": gp.tex(r"Wu et al.\ \cite{Wu2015}", "Wu et al. [Wu2015]"),
+            "labels": [...],
+        },
+    ]
+)
+```
+
+`plain=` is the fallback for PNG, SVG and native PDF output. Use `math=True`
+for macros that expand to math-mode commands. Always use raw Python strings
+(`r"..."`) for LaTeX, otherwise `"\RaE"` triggers a `SyntaxWarning`.
+
 ## Tabular / scattered contours
 
 ```python

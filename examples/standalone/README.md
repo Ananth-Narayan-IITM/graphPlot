@@ -12,6 +12,7 @@ graphPlot examples/standalone/velocityVectors.py
 graphPlot examples/standalone/tabularContour.py
 graphPlot examples/standalone/streamlines.py
 graphPlot examples/standalone/referenceComparison.py
+graphPlot examples/standalone/texLabels.py
 ```
 
 Or run all of them:

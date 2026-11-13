@@ -11,6 +11,8 @@ from matplotlib.offsetbox import (
     VPacker,
 )
 
+from graphplot.tex import TeX, as_latex, as_plain, tag_latex
+
 
 def grouped_legend(
     axes,
@@ -26,7 +28,7 @@ def grouped_legend(
     """Create a legend with optional group headings."""
     handles, labels = axes.get_legend_handles_labels()
     available = {
-        label: handle
+        label: (handle, getattr(handle, "_graphplot_latex", None))
         for handle, label in zip(handles, labels, strict=False)
         if label and not label.startswith("_")
     }
@@ -39,31 +41,42 @@ def grouped_legend(
 
     legend_handles = []
     legend_labels = []
+    legend_latex = []
     for group in groups:
         heading = group.get("title")
-        if heading:
+        heading_text = "" if heading is None else as_plain(heading)
+        if heading_text:
             legend_handles.append(Line2D([], [], linestyle="none", marker=None))
-            legend_labels.append(heading)
+            legend_labels.append(heading_text)
+            legend_latex.append(as_latex(heading))
         for label in group.get("labels", []):
-            if label not in available:
+            label_text = as_plain(label)
+            if label_text not in available:
                 raise ValueError(
-                    f"Legend label {label!r} was not found among plotted artists."
+                    f"Legend label {label_text!r} was not found among plotted artists."
                 )
-            legend_handles.append(available[label])
-            legend_labels.append(label)
+            handle, handle_latex = available[label_text]
+            legend_handles.append(handle)
+            legend_labels.append(label_text)
+            legend_latex.append(as_latex(label) or handle_latex)
 
     if not legend_handles:
         return None
-    return axes.legend(
+    legend = axes.legend(
         legend_handles,
         legend_labels,
         loc=loc,
         ncol=ncol,
         frameon=frameon,
         fontsize=fontsize,
-        title=title,
+        title=None if title is None else as_plain(title),
         **kwargs,
     )
+    for text_artist, raw in zip(legend.get_texts(), legend_latex, strict=False):
+        if raw is not None:
+            tag_latex(text_artist, TeX(raw, text_artist.get_text()))
+    tag_latex(legend.get_title(), title)
+    return legend
 
 
 def table_legend(
@@ -87,16 +100,20 @@ def table_legend(
 
     group_names = list(groups)
     first_group = groups[group_names[0]]
-    case_names = list(first_group)
+    case_keys = list(first_group)
+    case_names = [as_plain(case) for case in case_keys]
+    mappings = {}
     for group_name in group_names:
-        if list(groups[group_name]) != case_names:
+        mapping = {as_plain(case): value for case, value in groups[group_name].items()}
+        if list(mapping) != case_names:
             raise ValueError(
                 "All legend groups must contain the same case names in the same order."
             )
+        mappings[group_name] = mapping
 
-    def make_text(text, bold=False):
-        return TextArea(
-            str(text),
+    def make_text(value, bold=False):
+        area = TextArea(
+            as_plain(value),
             textprops={
                 "fontsize": fontsize,
                 "fontweight": "bold" if bold else "normal",
@@ -104,6 +121,8 @@ def table_legend(
                 "va": "center",
             },
         )
+        tag_latex(area._text, value)
+        return area
 
     def make_handle(handle):
         drawing = DrawingArea(handle_length, 12, 0, 0)
@@ -130,10 +149,10 @@ def table_legend(
     header = HPacker(children=header_cells, align="center", sep=column_spacing)
 
     rows = []
-    for case_name in case_names:
-        cells = [make_text(case_name)]
+    for case_key, case_name in zip(case_keys, case_names, strict=True):
+        cells = [make_text(case_key)]
         cells.extend(
-            make_handle(groups[group_name][case_name]) for group_name in group_names
+            make_handle(mappings[group_name][case_name]) for group_name in group_names
         )
         rows.append(HPacker(children=cells, align="center", sep=column_spacing))
 

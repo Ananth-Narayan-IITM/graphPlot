@@ -10,6 +10,7 @@ import numpy as np
 from graphplot.export import save_figure
 from graphplot.panel import Panel
 from graphplot.style import Style
+from graphplot.tex import as_plain, tag_latex, with_unit
 
 
 class Figure:
@@ -125,9 +126,13 @@ class Figure:
     ) -> Figure:
         """Add figure-level x/y labels."""
         if x is not None:
-            self.figure.supxlabel(_with_unit(x, x_unit), **kwargs)
+            value = with_unit(x, x_unit)
+            artist = self.figure.supxlabel(as_plain(value), **kwargs)
+            tag_latex(artist, value)
         if y is not None:
-            self.figure.supylabel(_with_unit(y, y_unit), **kwargs)
+            value = with_unit(y, y_unit)
+            artist = self.figure.supylabel(as_plain(value), **kwargs)
+            tag_latex(artist, value)
         return self
 
     def label_panels(
@@ -163,9 +168,10 @@ class Figure:
         self.figure.subplots_adjust(**kwargs)
         return self
 
-    def suptitle(self, title: str, **kwargs) -> Figure:
+    def suptitle(self, title, **kwargs) -> Figure:
         """Add a figure-level title."""
-        self.figure.suptitle(title, **kwargs)
+        artist = self.figure.suptitle(as_plain(title), **kwargs)
+        tag_latex(artist, title)
         return self
 
     # ------------------------------------------------------------------
@@ -176,7 +182,7 @@ class Figure:
         self,
         mappable=None,
         *,
-        label: str | None = None,
+        label=None,
         axes=None,
         location: str = "right",
         **kwargs,
@@ -197,7 +203,10 @@ class Figure:
 
         colorbar = self.figure.colorbar(mappable, ax=axes, location=location, **kwargs)
         if label is not None:
-            colorbar.set_label(label)
+            colorbar.set_label(as_plain(label))
+            for axis in (colorbar.ax.yaxis, colorbar.ax.xaxis):
+                if axis.label.get_text():
+                    tag_latex(axis.label, label)
         return colorbar
 
     # ------------------------------------------------------------------
@@ -251,11 +260,3 @@ class Figure:
             f"Figure(rows={self.nrows}, columns={self.ncols}, "
             f"size={self.figure.get_size_inches().tolist()})"
         )
-
-
-def _with_unit(label: str, unit: str | None) -> str:
-    if unit is None:
-        return label
-    if label.endswith("]"):
-        return label
-    return f"{label} [{unit}]"
