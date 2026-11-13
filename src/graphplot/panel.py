@@ -457,6 +457,18 @@ class Panel:
         self._register(artist)
         return self
 
+    def image(self, source, *, extent=None, show_axes: bool = False, **kwargs) -> Panel:
+        """Place an image, such as a reference figure, in the panel."""
+        import matplotlib.image as mpimg
+
+        image = mpimg.imread(source) if isinstance(source, (str, Path)) else source
+        artist = self.ax.imshow(image, extent=extent, **kwargs)
+        self.ax.set_aspect("equal", adjustable="box")
+        if not show_axes:
+            self.ax.set_axis_off()
+        self._register(artist)
+        return self
+
     # ------------------------------------------------------------------
     # Figure-level convenience
     # ------------------------------------------------------------------

@@ -370,6 +370,7 @@ graphPlot examples/velocityVectors.py
 graphPlot examples/streamlines.py
 graphPlot examples/colorSchemes.py
 graphPlot examples/tabularContour.py
+graphPlot examples/referenceComparison.py
 ```
 
 Diagnostics:

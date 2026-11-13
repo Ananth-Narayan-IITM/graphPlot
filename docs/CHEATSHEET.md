@@ -106,6 +106,22 @@ fig.contour(
 )
 ```
 
+### Reference image
+
+```python
+fig.image("data/ref1.jpg", show_axes=False)
+```
+
+Side-by-side comparison with a reference figure:
+
+```python
+fig = project.figure(nrows=1, ncols=2)
+fig[0, 0].contour(data, "gammaDV")
+fig[0, 1].image("data/ref1.jpg")
+fig[0, 0].title("(a) Present work", loc="left")
+fig[0, 1].title("(b) Reference", loc="left")
+```
+
 ### Velocity arrows
 
 ```python

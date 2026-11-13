@@ -55,6 +55,9 @@ description_for() {
         *tabularContour*)
             echo "Tabular contour on logarithmic axes with sample points, isolines and labels. Check the 10-power tick labels and contour annotations."
             ;;
+        *referenceComparison*)
+            echo "Reference comparison grid: comment, present work and reference image. Check the panel labels (a)-(d) and the image alignment."
+            ;;
         *)
             echo "Generated figure. Compare all text with the reference paragraphs on the previous page."
             ;;

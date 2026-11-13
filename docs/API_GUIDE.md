@@ -227,6 +227,20 @@ fig.mesh(
 
 Use as an overlay after `contour`, or alone to inspect the mesh.
 
+### `image` — reference image
+
+```python
+fig.image(
+    "data/ref1.jpg",
+    show_axes=False,      # hide the image axes
+    extent=None,          # optional (xmin, xmax, ymin, ymax)
+)
+```
+
+Useful for side-by-side comparison with a reference figure from a paper or
+experiment. The image is placed with equal aspect; with `show_axes=False` the
+ticks and frame are hidden.
+
 ### `vectors` — velocity arrows
 
 ```python
